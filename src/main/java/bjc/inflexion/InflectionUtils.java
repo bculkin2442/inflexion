@@ -16,93 +16,33 @@
 package bjc.inflexion;
 
 /**
- * Utility functions for inflections.
- * 
- * Whenever a suffix is mentioned, it should be provided in the format of a
- * leading '-', followed by a regular expression.
- * 
- * @author bjculkin
+ * @author EVE
  *
  */
 public class InflectionUtils {
 	/**
-	 * Returns true if the given word ends in the given suffix.
+	 * Inflect a word, replacing the singular suffix with the plural suffix.
 	 * 
 	 * @param word
-	 *            The word to check.
-	 * 
-	 * @param suffix
-	 *            The suffix to check for.
-	 * 
-	 * @return Whether or not the provided word ends in the provided suffix.
-	 */
-	public static boolean suffix(String word, String suffix) {
-		/*
-		 * TODO implement me.
-		 */
-		return false;
-	}
-
-	/**
-	 * Check if the given word inflects from the given singular suffix to the
-	 * given plural suffix.
-	 * 
-	 * @param word
-	 *            The word to check.
+	 *                The word to inflect.
 	 * 
 	 * @param singular
-	 *            The singular suffix.
+	 *                The singular prefix for the word.
 	 * 
 	 * @param plural
-	 *            The plural suffix.
+	 *                The plural prefix for the word.
 	 * 
-	 * @return Whether or not the provided word is in that inflection category.
-	 */
-	public static boolean category(String word, String singular, String plural) {
-		/*
-		 * TODO implement me.
-		 */
-		return false;
-	}
-
-	/**
-	 * Replace the provided singular suffix in the word with the given plural
-	 * suffix.
-	 * 
-	 * @param word
-	 *            The word to inflect.
-	 * 
-	 * @param singular
-	 *            The singular suffix to remove.
-	 * 
-	 * @param plural
-	 *            The plural suffix to add. Unlike normal suffixes, this must be
-	 *            a '-' followed by a string.
-	 * 
-	 * @return The word with the suffix replaced.
+	 * @return The word, with the singular prefix replaced with the plural
+	 *         prefix.
 	 */
 	public static String inflect(String word, String singular, String plural) {
 		/*
-		 * TODO implement me.
+		 * Remove leading '-' from the patterns.
 		 */
-		return null;
+		return replaceLast(word, singular.substring(1), plural.substring(1));
 	}
 
-	/**
-	 * Remove the specified suffix from the word.
-	 * 
-	 * @param word
-	 *            The word to stem.
-	 * 
-	 * @param suffix
-	 *            The suffix to remove from the word.
-	 * 
-	 * @return The word with the suffix removed.
-	 */
-	public static String stem(String word, String suffix) {
-		/*
-		 * TODO implement me.
-		 */
-		return null;
+	private static String replaceLast(String text, String regex, String replacement) {
+		return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement);
 	}
 }
