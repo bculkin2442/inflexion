@@ -29,10 +29,10 @@ public class InflectionUtils {
 	 * Returns true if the given word ends in the given suffix.
 	 * 
 	 * @param word
-	 *                The word to check.
+	 *            The word to check.
 	 * 
 	 * @param suffix
-	 *                The suffix to check for.
+	 *            The suffix to check for.
 	 * 
 	 * @return Whether or not the provided word ends in the provided suffix.
 	 */
@@ -44,20 +44,19 @@ public class InflectionUtils {
 	}
 
 	/**
-	 * Check if the given word inflects from the given singular suffix to
-	 * the given plural suffix.
+	 * Check if the given word inflects from the given singular suffix to the
+	 * given plural suffix.
 	 * 
 	 * @param word
-	 *                The word to check.
+	 *            The word to check.
 	 * 
 	 * @param singular
-	 *                The singular suffix.
+	 *            The singular suffix.
 	 * 
 	 * @param plural
-	 *                The plural suffix.
+	 *            The plural suffix.
 	 * 
-	 * @return Whether or not the provided word is in that inflection
-	 *         category.
+	 * @return Whether or not the provided word is in that inflection category.
 	 */
 	public static boolean category(String word, String singular, String plural) {
 		/*
@@ -67,13 +66,40 @@ public class InflectionUtils {
 	}
 
 	/**
+	 * Replace the provided singular suffix in the word with the given plural
+	 * suffix.
 	 * 
 	 * @param word
+	 *            The word to inflect.
+	 * 
 	 * @param singular
+	 *            The singular suffix to remove.
+	 * 
 	 * @param plural
-	 * @return
+	 *            The plural suffix to add. Unlike normal suffixes, this must be
+	 *            a '-' followed by a string.
+	 * 
+	 * @return The word with the suffix replaced.
 	 */
 	public static String inflect(String word, String singular, String plural) {
+		/*
+		 * TODO implement me.
+		 */
+		return null;
+	}
+
+	/**
+	 * Remove the specified suffix from the word.
+	 * 
+	 * @param word
+	 *            The word to stem.
+	 * 
+	 * @param suffix
+	 *            The suffix to remove from the word.
+	 * 
+	 * @return The word with the suffix removed.
+	 */
+	public static String stem(String word, String suffix) {
 		/*
 		 * TODO implement me.
 		 */
