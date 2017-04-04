@@ -126,7 +126,7 @@ yes              =>  yeses       |
 
 # Latin imports ending in "-us" that classically inflect to "-era"...
 
-*genus       =>        | genera
+*genus      =>        | *genera
 glomus      =>        | glomera
 opus        => opuses | opera
 # Classical should be "opera", but it's ambiguous
@@ -318,7 +318,7 @@ onager          =>  onagers          |  onagri
 otomi           =>  otomies          |  otomi
 pecten          =>  pectens          |  pectines
 penni           =>                   |  pennia
-*person          =>  people           |  persons
+*person         =>  *people          |  *persons
 plankter        =>  plankton         |
 platypus        =>  platypuses       |  platypodes
 ploshchadka     =>                   |  ploshchadki
@@ -350,9 +350,9 @@ zloty           =>  zlotys           |  zloty
 
 # Units that don't inflect...
 
-*hertz    =>  hertz
-*lux      =>  lux
-*siemens  =>  siemens
+*hertz    =>  *hertz
+*lux      =>  *lux
+*siemens  =>  *siemens
 
 
 # Currencies that don't inflect...
@@ -388,15 +388,15 @@ veg         => veges       | veg
 anlage      =>  anlages     |  anlagen
 auslese     =>  ausleses    |  auslesen
 autobahn    =>  autobahns   |  autobahnen
-*brother     =>  brothers    |  brethren
-*child       =>              |  children
-*cow         =>  cows        |  kine
+*brother    =>  *brothers   |  *brethren
+*child      =>              |  *children
+*cow        =>  *cows        |  *kine
 erf         =>  erfs        |  erven
 knopper     =>  knoppers    |  knoppern
 konditorei  =>  konditorei  |  konditoreien
 manchild    =>              |  menchildren
 ox          =>              |  oxen
---ox         =>              |  --oxen
+--ox        =>              |  --oxen
 romanze     =>              |  romanzen
 terp        =>  terps       |  terpen
 vlakte      =>  vlaktes     |  vlakten
@@ -411,7 +411,7 @@ bursch                =>  burschen
 geisteswissenschaft   =>  geisteswissenschaften
 herr                  =>  herren
 lebensform            =>  lebensformen
-*mensch                =>  *menschen
+*mensch               =>  *menschen
 Spaetlese             =>  Spaetlesen
 trockenbeerenauslese  =>  trockenbeerenauslesen
 umwelt                =>  umwelten
@@ -427,19 +427,19 @@ subbotnik => subbotniks | subbotniki
 
 # Words ending in unvoiced fricatives that classically inflect to voiced...
 
-beef  => beefs  | beeves
-*elf   =>        | elves
-*hoof  => hoofs  | hooves
-*knife =>        | knives
-*leaf  =>        | leaves
-*life  =>        | lives
-*loaf  =>        | loaves
-*shelf =>        | shelves
-*thief =>        | thieves
-turf  => turfs  | turves
-wharf => wharfs | wharves
-*wife  =>        | wives
-*wolf  =>        | wolves
+beef   => beefs   | beeves
+*elf   =>         | *elves
+*hoof  => *hoofs  | *hooves
+*knife =>         | *knives
+*leaf  =>         | *leaves
+*life  =>         | *lives
+*loaf  =>         | *loaves
+*shelf =>         | *shelves
+*thief =>         | *thieves
+turf   => turfs   | turves
+wharf  => wharfs  | wharves
+*wife  =>         | *wives
+*wolf  =>         | *wolves
 
 
 # Words whose suffixes are normally ablaut, but not in these words...
@@ -460,7 +460,7 @@ German      =>  Germans
 harman      =>  harmans
 hetman      =>  hetmans
 Hiroshiman  =>  Hiroshimans
-*human       =>  humans
+*human      =>  *humans
 leman       =>  lemans
 Liman       =>  Limans
 lowlife     =>  lowlifes
@@ -491,13 +491,13 @@ dragoman   => dragomen | dragomans
 
 # Words with ablaut plurals...
 
-*foot       =>  feet
-*goose      =>  geese
-*louse      =>  lice
-*man        =>  men
-manservant  =>  menservants
-*mouse      =>  mice
-*tooth      =>  teeth
+*foot       =>  *feet
+*goose      =>  *geese
+*louse      =>  *lice
+*man        =>  *men
+manservant  =>  *menservants
+*mouse      =>  *mice
+*tooth      =>  *teeth
 
 
 # Words ending in "-z" and "-ze" that don't double the "z" for the plural...
@@ -514,15 +514,15 @@ waltz   =>  waltzes
 
 # Words whose plurals end in "-zzes" but whose singulars end in "-zz"...
 
-*buzz   => buzzes
-*fizz   => fizzes
-*frizz  => frizzes
-*fuzz   => fuzzes
-*jazz   => jazzes
-muzz   => muzzes
-razz   => razzes
-sizz   => sizzes
-zizz   => zizzes
+*buzz   => *buzzes
+*fizz   => *fizzes
+*frizz  => *frizzes
+*fuzz   => *fuzzes
+*jazz   => *jazzes
+muzz    => *muzzes
+razz    => *razzes
+sizz    => *sizzes
+zizz    => *zizzes
 
 
 # Greek imports ending in "-x" that classically inflect to "-kes"
@@ -569,7 +569,7 @@ oxyuris     =>                |  oxyurides
 parapsis    =>                |  parapsides
 pes         =>                |  pedes
 pholas      =>                |  pholades
-*proboscis   =>  proboscises   |  proboscides
+*proboscis  =>  *proboscises  |  *proboscides
 proglottis  =>                |  proglottides
 pycnis      =>                |  pycnides
 pyralis     =>                |  pyralides
@@ -590,7 +590,7 @@ acroama          =>                    |  acroamata
 anathema         =>  anathemas         |  anathemata
 angioma          =>                    |  angiomata
 astrocytoma      =>  astrocytomas      |  astrocytomata
-*bema             =>  bemas             |  bemata
+*bema            =>  *bemas            |  *bemata
 blastema         =>                    |  blastemata
 bregma           =>                    |  bregmata
 carcinoma        =>  carcinomas        |  carcinomata
@@ -603,8 +603,8 @@ desma            =>  desmas            |  desmata
 diastema         =>                    |  diastemata
 diploma          =>  diplomas          |  diplomata
 dogma            =>  dogmas            |  dogmata
-*drama            =>  dramas            |
-*edema            =>  edemas            |  edemata
+*drama           =>  *dramas           |  *dramata
+*edema           =>  *edemas           |  *edemata
 emblema          =>                    |  emblememata
 embryoma         =>                    |  embryomata
 endothelioma     =>                    |  endotheliomata
@@ -620,7 +620,7 @@ haemangioma      =>  haemangiomas      |  haemangiomata
 hemangeioma      =>  hemangeiomas      |  hemangeiomata
 hemangioma       =>  hemangiomas       |  hemangiomata
 hypoderma        =>                    |  hypodermata
-*lemma            =>  lemmas            |  lemmata
+*lemma           =>  *lemmas           |  *lemmata
 leproma          =>  lepromas          |  lepromata
 lipoma           =>                    |  lipomata
 loma             =>                    |  lomata
@@ -662,7 +662,7 @@ pteroma          =>                    |  pteromata
 regma            =>                    |  regmata
 rhinophyma       =>  rhinophymas       |  rhinophymata
 rhizoma          =>  rhizomas          |  rhizomata
-*sarcoma          =>  sarcomas          |  sarcomata
+*sarcoma         =>  *sarcomas         |  *sarcomata
 schema           =>  schemas           |  schemata
 schisma          =>                    |  schismata
 scotoma          =>  scotomas          |  scotomata
@@ -672,7 +672,7 @@ sperma           =>                    |  spermata
 stemma           =>                    |  stemmata
 sterigma         =>                    |  sterigmata
 stigma           =>  stigmas           |  stigmata
-*stoma            =>  stomas            |  stomata
+*stoma           =>  *stomas           |  *stomata
 stroma           =>                    |  stromata
 symplasma        =>                    |  symplasmata
 syntagma         =>  syntagmas         |  syntagmata
@@ -800,7 +800,7 @@ nebula          =>  nebulas          |  nebulae
 nerita          =>  neritas          |  neritae
 neurula         =>                   |  neurulae
 noctiluca       =>                   |  noctilucae
-*nova            =>  novas            |  novae
+*nova           =>  *novas          |  *novae
 noxa            =>                   |  noxae
 nubecula        =>                   |  nubeculae
 nympha          =>                   |  nymphae
@@ -912,7 +912,7 @@ trabea          =>                   |  trabeae
 trabecula       =>                   |  trabeculae
 trachea         =>                   |  tracheae
 trichina        =>  trichine         |  trichinae
-*umbra           =>  umbras           |  umbrae
+*umbra          =>  *umbras          |  *umbrae
 uncia           =>                   |  unciae
 usnea           =>  usneas           |  usneae
 utricularia     =>                   |  utriculariae
@@ -937,7 +937,7 @@ zooea           =>                   |  zooeae
 foramen       => foramens       | foramina
 gravamen      =>                | gravamina
 legumen       => legumens       | legumina
-*lumen         => lumens         | lumina
+*lumen        => *lumens        | *lumina
 molimen       =>                | molimina
 numen         =>                | numina
 representamen => representamens | representamina
@@ -1014,7 +1014,7 @@ craspedum        =>                 |  craspeda
 cubiculum        =>                 |  cubicula
 curriculum       =>  curriculums    |  curricula
 cystidium        =>                 |  cystidia
-*datum            =>                 |  data
+*datum           =>                 |  *data
 decennium        =>                 |  decennia
 delirium         =>  deliriums      |  deliria
 denotatum        =>                 |  denotata
@@ -1243,7 +1243,7 @@ sternum          =>  sternums       |  sterna
 stichidium       =>                 |  stichidia
 stillicidium     =>                 |  stillicidia
 stomatium        =>                 |  stomatia
-*stratum          =>  stratums       |  strata
+*stratum         =>  *stratums      |  *strata
 striatum         =>                 |  striata
 stylopodium      =>                 |  stylopodia
 subsellium       =>                 |  subsellia
@@ -1321,7 +1321,7 @@ alumnus         =>                  |  alumni
 alveolus        =>                  |  alveoli
 aptychus        =>                  |  aptychi
 aureus          =>                  |  aurei
-*bacillus        =>                  |  bacilli
+*bacillus       =>                 |  *bacilli
 bronchus        =>                  |  bronchi
 bulimus         =>                  |  bulimi
 cactus          =>  cactuses        |  cacti
@@ -1401,7 +1401,7 @@ nidus           =>  niduses         |  nidi
 nimbus          =>  nimbuses        |  nimbi
 nodus           =>                  |  nodi
 nucleolus       =>  nucleoluses     |  nucleoli
-*nucleus         =>                  |  nuclei
+*nucleus        =>                  |  *nuclei
 nucleus         =>  nucleuses       |  nuclei
 nuntius         =>                  |  nuntii
 obelus          =>                  |  obeli
@@ -1569,14 +1569,14 @@ epyllion           =>                  |  epyllia
 euporiston         =>                  |  euporista
 ganglion           =>  ganglions       |  ganglia
 hapteron           =>                  |  haptera
-*hedron             =>  hedrons         |  hedra
-*helion             =>  helions         |  helia
+*hedron            =>  *hedrons        |  *hedra
+*helion            =>  *helions        |  *helia
 hydraulicon        =>                  |  hydraulica
 hyperbaton         =>                  |  hyperbata
 hypolimnion        =>                  |  hypolimnia
 idolon             =>                  |  idola
 interphenomenon    =>                  |  interphenomena
-*legomenon          =>                  |  legomena
+*legomenon         =>                  |  *legomena
 lepton             =>                  |  lepta
 lithophyton        =>                  |  lithophyta
 logion             =>                  |  logia
@@ -1599,7 +1599,7 @@ parhelion          =>  parhelions      |  parhelia
 parison            =>                  |  parisa
 pedion             =>                  |  pedia
 perikaryon         =>                  |  perikarya
-*phenomenon         =>                  |  phenomena
+*phenomenon         =>                 | *phenomena
 pleuron            =>                  |  pleura
 podion             =>                  |  podia
 porion             =>                  |  poria
@@ -2089,7 +2089,7 @@ extispex      =>                  |  extispices
 falx          =>                  |  falces
 hallux        =>                  |  halluces
 haruspex      =>                  |  haruspices
-*helix         =>                  |  helices
+*helix        =>                  |  *helices
 imbrex        =>                  |  imbrices
 index         =>  indexes         |  indices
 latex         =>  latexes         |  latices
@@ -2259,9 +2259,9 @@ trousseau    =>  trousseaus    |  trousseaux
 # Names of diseases that don't inflect...
 
 diabetes  => diabetes
-*measles   => measles
+*measles  => *measles
 mumps     => mumps
-*pox       => pox
+*pox      => *pox
 rabies    => rabies
 
 
@@ -2279,7 +2279,7 @@ species       => species
 
 # Herd/cluster lifeforms that classically don't inflect...
 
-*bass        =>  basses        |  bass
+*bass       =>  *basses       |  *bass
 bison       =>  bisons        |  bison
 bream       =>                |  bream
 buffalo     =>  buffalos      |  buffalo
@@ -2287,12 +2287,12 @@ caribou     =>  caribous      |  caribou
 carp        =>                |  carp
 cod         =>                |  cod
 dace        =>  daces         |  dace
-*deer        =>                |  deer
+*deer       =>                |  *deer
 eland       =>  elands        |  eland
 elk         =>  elks          |  elk
-*fish        =>                |  fish
+*fish       =>                |  *fish
 flounder    =>                |  flounder
-*fowl        =>  fowls         |  fowl
+*fowl       =>  *fowls        |  *fowl
 grouse      =>  grouses       |  grouse
 haddock     =>  haddocks      |  haddock
 hake        =>  hakes         |  hake
@@ -2307,7 +2307,7 @@ roe         =>  roes          |  roe
 salmon      =>                |  salmon
 seed        =>  seeds         |  seed
 shad        =>  shads         |  shad
-*sheep       =>                |  sheep
+*sheep      =>                |  *sheep
 snipe       =>  snipes        |  snipe
 starfish    =>  starfishes    |  starfish
 swine       =>  swine         |  swines
@@ -2316,13 +2316,13 @@ trout       =>                |  trout
 tuna        =>                |  tuna
 turbot      =>  turbots       |  turbot
 whiting     =>                |  whiting
-*wildebeest  =>  wildebeests   |  wildebeest
+*wildebeest =>  *wildebeests  |  *wildebeest
 zucchini    =>  zucchinis     |  zucchini
 
 
 # Vehicles that don't inflect...
 
-*craft          => craft
+*craft          => *craft
 
 # Other imports that don't inflect...
 
