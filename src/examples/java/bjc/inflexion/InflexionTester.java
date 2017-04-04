@@ -28,6 +28,9 @@ import java.util.Scanner;
  *
  */
 public class InflexionTester {
+	private static final String OUTPUT_FMT = "Word: %s\n\tSingular: %s\n\tModern Plural: %s"
+			+ "\n\tClassical Plural: %s\n\n";
+
 	/**
 	 * Main method.
 	 * 
@@ -38,7 +41,7 @@ public class InflexionTester {
 		Prepositions prepositionDB = new Prepositions();
 		prepositionDB.loadFromStream(InflexionTester.class.getResourceAsStream("/prepositions.txt"));
 
-		Nouns nounDB = new Nouns();
+		Nouns nounDB = new Nouns(prepositionDB);
 		nounDB.loadFromStream(InflexionTester.class.getResourceAsStream("/nouns.txt"));
 
 		Scanner scn = new Scanner(System.in);
@@ -54,11 +57,11 @@ public class InflexionTester {
 			if(noun == null) {
 				System.out.println("No inflection available for noun " + ln);
 			} else {
-				System.out.printf("Word: %s\nSingular: %s\nModern Plural: %s\tClassical Plural: %s\n\n",
-						ln, noun.singular(), noun.modernPlural(), noun.classicalPlural());
+				System.out.printf(OUTPUT_FMT, ln, noun.singular(), noun.modernPlural(),
+						noun.classicalPlural());
 			}
 
-			System.out.print("Enter a noun to inflect (blank line to quit: ");
+			System.out.print("Enter a noun to inflect (blank line to quit): ");
 			ln = scn.nextLine().trim();
 		}
 

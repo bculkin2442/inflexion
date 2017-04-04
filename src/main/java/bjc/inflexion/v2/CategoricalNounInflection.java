@@ -31,23 +31,20 @@ public class CategoricalNounInflection implements NounInflection {
 	private InflectionAffix	modernPlural;
 	private InflectionAffix	classicalPlural;
 
-	private boolean preferClassical;
-
 	/**
 	 * Create a new categorical inflection.
 	 * 
 	 * @param singlar
 	 *                The affix for the singular form.
+	 * 
 	 * @param modrnPlural
 	 *                The affix for the modern plural.
+	 * 
 	 * @param classiclPlural
 	 *                The affix for the classical plural.
-	 * @param prefrClassical
-	 *                Whether or not the classical plural should be
-	 *                preferred.
 	 */
 	public CategoricalNounInflection(InflectionAffix singlar, InflectionAffix modrnPlural,
-			InflectionAffix classiclPlural, boolean prefrClassical) {
+			InflectionAffix classiclPlural) {
 		if(singlar == null)
 			throw new NullPointerException("Singular form must not be null");
 		else if(modrnPlural == null && classiclPlural == null)
@@ -56,7 +53,6 @@ public class CategoricalNounInflection implements NounInflection {
 		singular = singlar;
 		modernPlural = modrnPlural;
 		classicalPlural = classiclPlural;
-		preferClassical = prefrClassical;
 	}
 
 	@Override
@@ -115,18 +111,10 @@ public class CategoricalNounInflection implements NounInflection {
 	@Override
 	public String pluralize(String singlar) {
 		if(singular.hasAffix(singlar)) {
-			if(preferClassical) {
-				if(classicalPlural == null) {
-					return modernPlural.affix(singular.deaffix(singlar));
-				} else {
-					return classicalPlural.affix(singular.deaffix(singlar));
-				}
+			if(modernPlural == null) {
+				return classicalPlural.affix(singular.deaffix(singlar));
 			} else {
-				if(modernPlural == null) {
-					return classicalPlural.affix(singular.deaffix(singlar));
-				} else {
-					return modernPlural.affix(singular.deaffix(singlar));
-				}
+				return modernPlural.affix(singular.deaffix(singlar));
 			}
 		} else if(matchesPlural(singlar)) {
 			return singlar;

@@ -2677,7 +2677,8 @@ major general       =>   major generals
 # Compound postfix forms require recursive inflection of the core noun(s)...
 # ['(SING)-general' is non-indicative because it includes the above '-star general' form]
 
-(SING)-general   =>  (PL)-general      # E.g. Consul General --> Consuls General
+# E.g. Consul General --> Consuls General
+(SING)-general   =>  (PL)-general      
 
 # E.g. son-of-a-gun   --> sons-of-guns
 son-of-a-(SING)  =>  sons-of-(PL)
@@ -2740,7 +2741,8 @@ its     => theirs
 -[aiy]nx  =>  -[aiy]nxes |  -[aiy]nges
 -arf      =>             |  -arves
 -ceps     =>  -ceps      |
--[cs]h    =>  -[cs]hes   |
+-ch       =>  -ches      |
+-sh       =>  -shes      |
 -eaf      =>  -eaves     |
 -eau      =>  -eaus      |  -eaux
 -ieu      =>  -ieus      |  -ieux
