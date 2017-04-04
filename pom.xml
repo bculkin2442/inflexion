@@ -1,11 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>inflexion</groupId>
+	<groupId>bjc</groupId>
 	<artifactId>inflexion</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Inflexion</name>
-	<description>Java based implementation of Damian Conway's pluralization algorithm.</description>
+	<description>Java based implementation of Damian Conway's Lingua::EN::Inflexion module for perl</description>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:https://github.com/bculkin2442/Inflexion.git</connection>
+		<url>https://github.com/atteo/Inflexion</url>
+	</scm>
 
 	<build>
 		<plugins>
@@ -26,4 +39,11 @@
 			</resource>
 		</resources>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>1.13</version>
+		</dependency>
+	</dependencies>
 </project>
