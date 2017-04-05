@@ -58,26 +58,24 @@ public class InflexionTester {
 
 		Scanner scn = new Scanner(System.in);
 
-		wikitest(scn, nounDB);
+		System.out.print("Enter a noun to inflect (blank line to quit): ");
+		String ln = scn.nextLine().trim();
 
-		/*
-		 * System.out.
-		 * print("Enter a noun to inflect (blank line to quit): ");
-		 * String ln = scn.nextLine().trim();
-		 * 
-		 * while(!ln.equals("")) { System.out.println();
-		 * 
-		 * Noun noun = nounDB.getNoun(ln);
-		 * 
-		 * if(noun == null) {
-		 * System.out.println("No inflection available for noun " + ln);
-		 * } else { System.out.printf(OUTPUT_FMT, ln, noun.singular(),
-		 * noun.modernPlural(), noun.classicalPlural()); }
-		 * 
-		 * System.out.
-		 * print("Enter a noun to inflect (blank line to quit): "); ln =
-		 * scn.nextLine().trim(); }
-		 */
+		while(!ln.equals("")) {
+			System.out.println();
+
+			Noun noun = nounDB.getNoun(ln);
+
+			if(noun == null) {
+				System.out.println("No inflection available for noun " + ln);
+			} else {
+				System.out.printf(OUTPUT_FMT, ln, noun.singular(), noun.modernPlural(),
+						noun.classicalPlural());
+			}
+
+			System.out.print("Enter a noun to inflect (blank line to quit): ");
+			ln = scn.nextLine().trim();
+		}
 
 		scn.close();
 	}

@@ -6,7 +6,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Inflexion</name>
 	<description>Java based implementation of Damian Conway's Lingua::EN::Inflexion module for perl</description>
-
+	<properties>
+		<main.class>bjc.dicelang.DiceLangConsole</main.class>
+	</properties>
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -27,6 +29,21 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.5.0</version>
+				<configuration>
+					<executable>java</executable>
+					<arguments>
+						<argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n</argument>
+						<argument>-classpath</argument>
+						<classpath />
+						<argument>${main.class}</argument>
+					</arguments>
+					<mainClass>${main.class}</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
