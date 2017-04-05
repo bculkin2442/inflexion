@@ -32,7 +32,7 @@ public class InflectionAffixes {
 	 * 
 	 * The word is in a capturing group named 'stem'.
 	 */
-	private static final String COMPLETE_PATT_FMT = "^(?<stem>\\w*)%s$";
+	private static final String COMPLETE_PATT_FMT = "(?<stem>\\w*)%s$";
 
 	/*
 	 * Template for 'incomplete' affix patterns.
@@ -42,7 +42,7 @@ public class InflectionAffixes {
 	 * 
 	 * The word is in a capturing group named 'stem'.
 	 */
-	private static final String INCOMPLETE_PATT_FMT = "^(?<stem>\\w+)%s$";
+	private static final String INCOMPLETE_PATT_FMT = "(?<stem>\\w+)%s$";
 
 	/**
 	 * Create an affix that's a word by itself.

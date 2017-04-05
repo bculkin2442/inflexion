@@ -60,24 +60,24 @@ public class InflexionTester {
 
 		wikitest(scn, nounDB);
 
-		/*System.out.print("Enter a noun to inflect (blank line to quit): ");
-		String ln = scn.nextLine().trim();
-
-		while(!ln.equals("")) {
-			System.out.println();
-
-			Noun noun = nounDB.getNoun(ln);
-
-			if(noun == null) {
-				System.out.println("No inflection available for noun " + ln);
-			} else {
-				System.out.printf(OUTPUT_FMT, ln, noun.singular(), noun.modernPlural(),
-						noun.classicalPlural());
-			}
-
-			System.out.print("Enter a noun to inflect (blank line to quit): ");
-			ln = scn.nextLine().trim();
-		}*/
+		/*
+		 * System.out.
+		 * print("Enter a noun to inflect (blank line to quit): ");
+		 * String ln = scn.nextLine().trim();
+		 * 
+		 * while(!ln.equals("")) { System.out.println();
+		 * 
+		 * Noun noun = nounDB.getNoun(ln);
+		 * 
+		 * if(noun == null) {
+		 * System.out.println("No inflection available for noun " + ln);
+		 * } else { System.out.printf(OUTPUT_FMT, ln, noun.singular(),
+		 * noun.modernPlural(), noun.classicalPlural()); }
+		 * 
+		 * System.out.
+		 * print("Enter a noun to inflect (blank line to quit): "); ln =
+		 * scn.nextLine().trim(); }
+		 */
 
 		scn.close();
 	}
@@ -199,7 +199,7 @@ public class InflexionTester {
 					}
 
 					if(!ok) {
-						wrong++;
+						if(!uncountable) wrong++;
 						if(uncountable) {
 							wrongUncountable++;
 						} else if(noPlural) {
@@ -210,7 +210,7 @@ public class InflexionTester {
 									+ calculatedPlural + ", but expected "
 									+ enNounMatcher.group(1));
 							basicWrong++;
-						} else {
+						} else if(!uncountable) {
 							System.out.println(word + " got: " + calculatedPlural
 									+ ", but expected " + enNounMatcher.group(1));
 						}
@@ -222,15 +222,12 @@ public class InflexionTester {
 
 			float correct = (count - wrong) * 100 / (float) count;
 			float basicCorrect = (basicCount - basicWrong) * 100 / (float) basicCount;
-			float wrongUncountablePercent = wrongUncountable * 100 / (float) count;
 			float wrongNoPluralPercent = wrongNoPlural * 100 / (float) count;
-			int justPlainWrong = wrong - wrongUncountable - wrongNoPlural;
+			int justPlainWrong = wrong - wrongNoPlural;
 			float justPlainWrongPercent = justPlainWrong * 100 / (float) count;
 			System.out.println("Words checked: " + count + " (" + basicCount + " basic words)");
 			System.out.println("Correct: " + correct + "% (" + basicCorrect + "% basic words)");
 			System.out.println("Errors: ");
-			System.out.println(
-					"    Uncountable: " + wrongUncountable + " (" + wrongUncountablePercent + "%)");
 			System.out.println("    No plural form specified: " + wrongNoPlural + " ("
 					+ wrongNoPluralPercent + "%)");
 			System.out.println("    Incorrect answer: " + justPlainWrong + " (" + justPlainWrongPercent
