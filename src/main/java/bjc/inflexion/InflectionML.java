@@ -17,6 +17,7 @@ package bjc.inflexion;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,16 +31,21 @@ import bjc.inflexion.nouns.Nouns;
  *
  */
 public class InflectionML {
-	private static Pattern FORM_MARKER = Pattern.compile("<(?<command>[#A])(?<options>[^:]*):(?<text>[^>]*)>");
+	/**
+	 * 
+	 */
+	private static final List<String>	ESUB_OPT	= Arrays.asList("a", "s", "w");
+	private static Pattern			FORM_MARKER	= Pattern
+			.compile("<(?<command>[#N])(?<options>[^:]*):(?<text>[^>]*)>");
 
 	/**
 	 * Apply inflection to marked forms in the string.
 	 * 
 	 * @param form
-	 *            The string to inflect.
+	 *                The string to inflect.
 	 * 
 	 * @param nounDB
-	 *            The source to load nouns from.
+	 *                The source to load nouns from.
 	 * 
 	 * @return The inflected string.
 	 */
@@ -51,69 +57,87 @@ public class InflectionML {
 		int curCount = 1;
 		boolean inflectSingular = true;
 
-		while (formMatcher.find()) {
+		while(formMatcher.find()) {
 			String command = formMatcher.group("command");
 			String options = formMatcher.group("options");
 			String text = formMatcher.group("text");
 
 			Set<String> optionSet = new HashSet<>();
-			for (int i = 1; i <= options.length(); i++) {
+			for(int i = 1; i <= options.length(); i++) {
 				optionSet.add(options.substring(i - 1, i));
 			}
 
-			switch (command) {
+			switch(command) {
 			case "#":
 				try {
+					if(optionSet.contains("e")) {
+						optionSet.remove("e");
+						optionSet.addAll(ESUB_OPT);
+					}
 					curCount = Integer.parseInt(text);
 
-					if (curCount != 1)
+					if(optionSet.contains("i")) {
+						curCount += 1;
+					}
+
+					if(curCount != 1)
 						inflectSingular = false;
 					else
 						inflectSingular = true;
 
+					/*
+					 * Break out of switch.
+					 */
+					if(optionSet.contains("d")) break;
+
 					String rep = text;
 
-					if (optionSet.contains("n")) {
-						if (curCount == 0)
-							rep = "no";
+					if(optionSet.contains("n")) {
+						if(curCount == 0) rep = "no";
 					}
 
-					if (optionSet.contains("s")) {
-						if (curCount == 0) {
+					if(optionSet.contains("s")) {
+						if(curCount == 0) {
 							rep = "no";
 							inflectSingular = true;
 						}
 					}
 
-					if (optionSet.contains("a")) {
+					if(optionSet.contains("a")) {
 						/*
 						 * TODO implement a/an for nouns
 						 */
 					}
 
-					boolean shouldOverride = !(rep.equals("no") || rep.equals("a") || rep.equals("an"));
-					if (optionSet.contains("w") && shouldOverride) {
+					boolean shouldOverride = !(rep.equals("no") || rep.equals("a")
+							|| rep.equals("an"));
+
+					if(optionSet.contains("w") && shouldOverride) {
 						rep = EnglishUtils.smallIntToWord(curCount);
-					} else if (optionSet.contains("f")) {
+					}
+
+					if(optionSet.contains("f") && shouldOverride) {
 						rep = EnglishUtils.intSummarize(curCount, false);
 					}
 
 					formMatcher.appendReplacement(formBuffer, rep);
-				} catch (NumberFormatException nfex) {
-					throw new InflectionException("Count setter must take a number as a parameter", nfex);
+				} catch(NumberFormatException nfex) {
+					throw new InflectionException("Count setter must take a number as a parameter",
+							nfex);
 				}
-
+				break;
 			case "N":
 				Noun noun = nounDB.getNoun(text);
-				if (inflectSingular || optionSet.contains("s")) {
-					formMatcher.appendReplacement(formBuffer, noun.singular());
-				} else if (optionSet.contains("p")) {
-					if (optionSet.contains("c")) {
+				if(optionSet.contains("p") || !inflectSingular) {
+					if(optionSet.contains("c")) {
 						formMatcher.appendReplacement(formBuffer, noun.classicalPlural());
 					} else {
 						formMatcher.appendReplacement(formBuffer, noun.modernPlural());
 					}
+				} else {
+					formMatcher.appendReplacement(formBuffer, noun.singular());
 				}
+				break;
 			default:
 				String msg = String.format("Unknown command '%s'", command);
 

@@ -20,11 +20,11 @@ package bjc.inflexion;
  *
  */
 public class EnglishUtils {
-	private static String[] smallNums = new String[] { "zero", "one", "two", "three", "four", "five", "six", "seven",
-			"eight", "nine", "ten" };
+	private static String[] smallNums = new String[] { "zero", "one", "two", "three", "four", "five", "six",
+			"seven", "eight", "nine", "ten" };
 
-	private static String[] summaryNums = new String[] { "no", "one", "a couple of", "a few", "several" };
-	private static String[] endSummaryNums = new String[] { "no", "one", "a couple of", "a few", "several" };
+	private static String[]	summaryNums	= new String[] { "no", "one", "a couple of", "a few", "several" };
+	private static String[]	endSummaryNums	= new String[] { "no", "one", "a couple of", "a few", "several" };
 
 	private static int[] summaryMap = new int[] {
 			/*
@@ -49,7 +49,7 @@ public class EnglishUtils {
 			4, 4, 4, 4 };
 
 	public static String smallIntToWord(int num) {
-		if (num >= 0 && num <= 10) {
+		if(num >= 0 && num <= 10) {
 			return smallNums[num];
 		}
 
@@ -59,7 +59,7 @@ public class EnglishUtils {
 	public static String intSummarize(int num, boolean atEnd) {
 		String[] nums = atEnd ? endSummaryNums : summaryNums;
 
-		if (num >= 0 && num < 10) {
+		if(num >= 0 && num < 10) {
 			return nums[summaryMap[num]];
 		} else
 			return "many";

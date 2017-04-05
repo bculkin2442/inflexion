@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 
-import bjc.inflexion.nouns.Noun;
+import bjc.inflexion.InflectionML;
 import bjc.inflexion.nouns.Nouns;
 import bjc.inflexion.nouns.Prepositions;
 
@@ -40,9 +40,6 @@ import bjc.inflexion.nouns.Prepositions;
  *
  */
 public class InflexionTester {
-	private static final String OUTPUT_FMT = "Word: %s\n\tSingular: %s\n\tModern Plural: %s"
-			+ "\n\tClassical Plural: %s\n\n";
-
 	/**
 	 * Main method.
 	 * 
@@ -58,22 +55,17 @@ public class InflexionTester {
 
 		Scanner scn = new Scanner(System.in);
 
-		System.out.print("Enter a noun to inflect (blank line to quit): ");
+		System.out.print("Enter a string to inflect (blank line to quit): ");
 		String ln = scn.nextLine().trim();
 
 		while(!ln.equals("")) {
 			System.out.println();
 
-			Noun noun = nounDB.getNoun(ln);
+			String inflected = InflectionML.inflect(ln, nounDB);
 
-			if(noun == null) {
-				System.out.println("No inflection available for noun " + ln);
-			} else {
-				System.out.printf(OUTPUT_FMT, ln, noun.singular(), noun.modernPlural(),
-						noun.classicalPlural());
-			}
+			System.out.println("Inflected string: " + inflected);
 
-			System.out.print("Enter a noun to inflect (blank line to quit): ");
+			System.out.print("\nEnter a noun to inflect (blank line to quit): ");
 			ln = scn.nextLine().trim();
 		}
 
