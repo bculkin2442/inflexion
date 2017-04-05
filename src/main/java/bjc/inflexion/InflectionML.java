@@ -22,21 +22,30 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import bjc.inflexion.examples.InflexionTester;
 import bjc.inflexion.nouns.InflectionException;
 import bjc.inflexion.nouns.Noun;
 import bjc.inflexion.nouns.Nouns;
+import bjc.inflexion.nouns.Prepositions;
 
 /**
  * @author student
  *
  */
 public class InflectionML {
-	/**
-	 * 
-	 */
 	private static final List<String>	ESUB_OPT	= Arrays.asList("a", "s", "w");
 	private static Pattern			FORM_MARKER	= Pattern
 			.compile("<(?<command>[#N])(?<options>[^:]*):(?<text>[^>]*)>");
+
+	private static Nouns nounDB;
+
+	static {
+		Prepositions prepositionDB = new Prepositions();
+		prepositionDB.loadFromStream(InflexionTester.class.getResourceAsStream("/prepositions.txt"));
+
+		nounDB = new Nouns(prepositionDB);
+		nounDB.loadFromStream(InflexionTester.class.getResourceAsStream("/nouns.txt"));
+	}
 
 	/**
 	 * Apply inflection to marked forms in the string.
@@ -49,7 +58,7 @@ public class InflectionML {
 	 * 
 	 * @return The inflected string.
 	 */
-	public static String inflect(String form, Nouns nounDB) {
+	public static String inflect(String form) {
 		Matcher formMatcher = FORM_MARKER.matcher(form);
 
 		StringBuffer formBuffer = new StringBuffer();
@@ -80,15 +89,22 @@ public class InflectionML {
 						curCount += 1;
 					}
 
-					if(curCount != 1)
-						inflectSingular = false;
-					else
+					if(curCount != 1) {
+						if(curCount == 0 && optionSet.contains("s"))
+							inflectSingular = true;
+						else
+							inflectSingular = false;
+					} else {
 						inflectSingular = true;
+					}
 
 					/*
 					 * Break out of switch.
 					 */
-					if(optionSet.contains("d")) break;
+					if(optionSet.contains("d")) {
+						formMatcher.appendReplacement(formBuffer, "");
+						break;
+					}
 
 					String rep = text;
 
@@ -99,7 +115,6 @@ public class InflectionML {
 					if(optionSet.contains("s")) {
 						if(curCount == 0) {
 							rep = "no";
-							inflectSingular = true;
 						}
 					}
 
@@ -148,5 +163,20 @@ public class InflectionML {
 		formMatcher.appendTail(formBuffer);
 
 		return formBuffer.toString();
+	}
+
+	/**
+	 * Alias method to format a string, then inflect it.
+	 * 
+	 * @param format
+	 *                The combined format/inflection string.
+	 * 
+	 * @param objects
+	 *                The parameters for the format string.
+	 * 
+	 * @return The string, formatted & inflected.
+	 */
+	public static String iprintf(String format, Object... objects) {
+		return inflect(String.format(format, objects));
 	}
 }

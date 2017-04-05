@@ -61,7 +61,7 @@ public class InflexionTester {
 		while(!ln.equals("")) {
 			System.out.println();
 
-			String inflected = InflectionML.inflect(ln, nounDB);
+			String inflected = InflectionML.inflect(ln);
 
 			System.out.println("Inflected string: " + inflected);
 
