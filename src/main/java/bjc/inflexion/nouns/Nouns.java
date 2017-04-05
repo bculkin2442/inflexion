@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bjc.inflexion;
+package bjc.inflexion.nouns;
 
-import static bjc.inflexion.InflectionAffixes.*;
+import static bjc.inflexion.nouns.InflectionAffixes.*;
 
 import java.io.InputStream;
 import java.util.ArrayList;

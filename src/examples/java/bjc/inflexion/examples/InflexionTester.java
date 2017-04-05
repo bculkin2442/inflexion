@@ -29,9 +29,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 
-import bjc.inflexion.Noun;
-import bjc.inflexion.Nouns;
-import bjc.inflexion.Prepositions;
+import bjc.inflexion.nouns.Noun;
+import bjc.inflexion.nouns.Nouns;
+import bjc.inflexion.nouns.Prepositions;
 
 /**
  * Test inflecting words.
