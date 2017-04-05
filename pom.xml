@@ -7,7 +7,7 @@
 	<name>Inflexion</name>
 	<description>Java based implementation of Damian Conway's Lingua::EN::Inflexion module for perl</description>
 	<properties>
-		<main.class>bjc.dicelang.DiceLangConsole</main.class>
+		<main.class>bjc.inflexion.examples.InflexionTester</main.class>
 	</properties>
 	<licenses>
 		<license>
@@ -19,7 +19,7 @@
 
 	<scm>
 		<connection>scm:git:https://github.com/bculkin2442/Inflexion.git</connection>
-		<url>https://github.com/atteo/Inflexion</url>
+		<url>https://github.com/bculkin2442/Inflexion</url>
 	</scm>
 
 	<build>

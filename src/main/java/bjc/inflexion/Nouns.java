@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bjc.inflexion.v2;
+package bjc.inflexion;
+
+import static bjc.inflexion.InflectionAffixes.*;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-
-import static bjc.inflexion.v2.InflectionAffixes.*;
 
 /**
  * @author EVE

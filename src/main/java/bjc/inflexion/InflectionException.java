@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bjc.inflexion.v2;
+package bjc.inflexion;
 
 /**
  * Exception thrown when something goes wrong with inflection.

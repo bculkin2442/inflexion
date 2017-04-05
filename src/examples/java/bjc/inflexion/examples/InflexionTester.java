@@ -13,11 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bjc.inflexion;
-
-import bjc.inflexion.v2.Noun;
-import bjc.inflexion.v2.Nouns;
-import bjc.inflexion.v2.Prepositions;
+package bjc.inflexion.examples;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -32,6 +28,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+
+import bjc.inflexion.Noun;
+import bjc.inflexion.Nouns;
+import bjc.inflexion.Prepositions;
 
 /**
  * Test inflecting words.

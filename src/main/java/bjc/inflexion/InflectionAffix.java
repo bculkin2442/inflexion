@@ -16,21 +16,41 @@
 package bjc.inflexion;
 
 /**
- * Inflect singular nouns to plural nouns.
+ * An affix attached to a word and used for inflection.
  * 
  * @author EVE
  *
  */
-public class NounInflector {
+public interface InflectionAffix {
+
 	/**
-	 * Inflect a singular noun to a plural form.
+	 * Check if a word has this affix.
 	 * 
-	 * @param noun
-	 *                The singular noun.
+	 * @param word
+	 *                The word to check.
 	 * 
-	 * @return The plural form of the noun.
+	 * @return Whether or not the word has the affix.
 	 */
-	public static String inflectNoun(String noun) {
-		return null;
-	}
+	boolean hasAffix(String word);
+
+	/**
+	 * Remove the affix from a word.
+	 * 
+	 * @param word
+	 *                The word to remove the affix from.
+	 * 
+	 * @return The word with the affix removed.
+	 */
+	String deaffix(String word);
+
+	/**
+	 * Apply this affix to a word.
+	 * 
+	 * @param word
+	 *                The word to apply the affix to.
+	 * 
+	 * @return The word with the affix applied.
+	 */
+	String affix(String word);
+
 }
