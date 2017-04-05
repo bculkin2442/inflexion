@@ -10,6 +10,9 @@ agend       =>  agends  |  agenda
 axe         => axes
 ax          => axes
 
+bacterium   => bacteria
+bacteria    => bacteriae
+
 base        => bases
 basis       => bases
 
@@ -489,6 +492,9 @@ Yuman       =>  Yumans
 yarraman   => yarramen | yarramans
 dragoman   => dragomen | dragomans
 
+# Words with non-ablaut plurals, but ablaut postfixes
+accomplice      =>  accomplices
+
 # Words with ablaut plurals...
 
 *foot       =>  *feet
@@ -549,6 +555,7 @@ topos      =>  topoi
 
 # Greek imports ending in "-s" that classically inflect to "-des"
 
+absis       =>                |  absides
 aphis       =>                |  aphides
 apsis       =>                |  apsides
 caryopsis   =>                |  caryopsides
@@ -573,6 +580,7 @@ pholas      =>                |  pholades
 proglottis  =>                |  proglottides
 pycnis      =>                |  pycnides
 pyralis     =>                |  pyralides
+pyramis     =>                |  pyramides
 tropis      =>                |  tropides
 vasculitis  =>  vasculitises  |  vasculitides
 
@@ -844,6 +852,7 @@ protoma         =>  protomas         |  protomae
 pteryla         =>                   |  pterylae
 pupa            =>                   |  pupae
 pyla            =>                   |  pylae
+pyrena          =>                   |  pyrenae
 pyrexia         =>                   |  pyrexiae
 redia           =>                   |  rediae
 retinula        =>                   |  retinulae
@@ -934,6 +943,7 @@ zooea           =>                   |  zooeae
 
 # Latin imports ending in "-men" that classically inflect to "-mina"...
 
+abdomen       => abdomens       | abdomina
 foramen       => foramens       | foramina
 gravamen      =>                | gravamina
 legumen       => legumens       | legumina
@@ -960,6 +970,7 @@ triumvir   =>  triumvirs  |  triumviri
 
 # Latin imports ending in "-um" that classically inflect to "-a"...
 
+abomasum         =>                 |  abomasa
 abortorium       =>                 |  abortoria
 abstractum       =>                 |  abstracta
 addendum         =>  addendums      |  addenda
@@ -1010,6 +1021,7 @@ contagium        =>                 |  contagia
 contrafactum     =>                 |  contrafacta
 corpusculum      =>                 |  corpuscula
 corrigendum      =>                 |  corrigenda
+credendum        =>                 |  credenda
 cranium          =>  craniums       |  crania
 craspedum        =>                 |  craspeda
 cubiculum        =>                 |  cubicula
@@ -1129,6 +1141,7 @@ ostium           =>                 |  ostia
 ovarium          =>                 |  ovaria
 ovulum           =>                 |  ovula
 ovum             =>                 |  ova
+palladium        =>                 |  palladia
 pallium          =>                 |  pallia
 parapleurum      =>                 |  parapleura
 patagium         =>                 |  patagia
@@ -1315,6 +1328,8 @@ zygantrum        =>                 |  zygantra
 
 # Latin imports ending in "-us" that classically inflect to "-i"
 
+abaculus        =>                  |  abaculi
+abomasus        =>                  |  abomasi
 acarus          =>                  |  acari
 acinus          =>                  |  acini
 aculeus         =>                  |  aculei
@@ -1346,6 +1361,7 @@ cysticercus     =>                  |  cysticerci
 denarius        =>                  |  denarii
 diplococcus     =>                  |  diplococci
 entrochus       =>                  |  entrochi
+esophagus       =>                  |  esophagi
 eucalyptus      =>  eucalyptuses    |  eucalypti
 exencephalus    =>                  |  exencephali
 famulus         =>                  |  famuli
@@ -1811,6 +1827,7 @@ canto          =>  cantos
 cappuccino     =>  cappuccinos
 casino         =>  casinos
 cello          =>  cellos
+centavo        =>  centavos
 Chicago        =>  Chicagos
 Chimango       =>  Chimangos
 cilantro       =>  cilantros
@@ -1870,6 +1887,7 @@ Kinkimavo      =>  Kinkimavos
 Kokako         =>  Kokakos
 Kosovo         =>  Kosovos
 Lesotho        =>  Lesothos
+Lemko          =>  Lemkos
 libero         =>  liberos
 libido         =>  libidos
 lido           =>  lidos
@@ -1917,6 +1935,7 @@ panto          =>  pantos
 Paramaribo     =>  Paramaribos
 Pardusco       =>  Parduscos
 pedalo         =>  pedalos
+peso           =>  pesos
 photo          =>  photos
 pimento        =>  pimentos
 pinto          =>  pintos
@@ -1928,6 +1947,7 @@ poncho         =>  ponchos
 Porto          =>  Portos
 Porto-Novo     =>  Porto-Novos
 pro            =>  pros
+pseduo         =>  pseudos
 psycho         =>  psychos
 pueblo         =>  pueblos
 quarto         =>  quartos
@@ -1970,6 +1990,7 @@ Torino         =>  Torinos
 Toronto        =>  Torontos
 torso          =>  torsos
 tremolo        =>  tremolos
+two            =>  twos
 typo           =>  typos
 tyro           =>  tyros
 vaquero        =>  vaqueros
@@ -2020,6 +2041,8 @@ tomato       =>                |  tomatoes
 volcano      =>  volcanos      |  volcanoes
 waldo        =>  waldos        |  waldoes
 
+# Words ending in '-os' that inflect to '-ossa' or '-ora'
+os => ossa | ora
 
 # Words ending in "-ch" that inflect to "-chs" (instead of "-ches")...
 
@@ -2132,6 +2155,7 @@ vortex        =>  vortexes        |  vortices
 afrit   => afrits  | afriti
 afreet  => afreets | afreeti
 efreet  => efreets | efreeti
+sent    =>         | senti
 
 
 # Hebrew imports that classically inflect by adding "-im"...
@@ -2230,6 +2254,9 @@ superficies  =>            |  superficies
 menu     =>  menus
 parvenu  =>  parvenus
 
+# French imports ending in "-oix" that don't inflect
+
+abatvoix => abatvoix
 
 # French imports ending in "-ieu" that inflect to "-ieus" or "-ieux"
 
@@ -2278,6 +2305,9 @@ schizostylis  => schizostylis
 series        => series
 species       => species
 
+# Words that pluralize with '-es' instead of '-s'
+i   => ies
+SMS => SMSes
 
 # Herd/cluster lifeforms that classically don't inflect...
 
@@ -2292,7 +2322,7 @@ dace        =>  daces         |  dace
 *deer       =>                |  *deer
 eland       =>  elands        |  eland
 elk         =>  elks          |  elk
-*fish       =>                |  *fish
+*fish       =>  *fishes       |  *fish
 flounder    =>                |  flounder
 *fowl       =>  *fowls        |  *fowl
 grouse      =>  grouses       |  grouse
@@ -2520,6 +2550,8 @@ polis       =>  polises
 sassafras   =>  sassafrases
 trellis     =>  trellises
 
+# Greek words ending in '-ipses' that inflect to '-eipses'
+paralipsis => paraleipses
 
 # Miscellaneous uncategorized imported words with native inflexions...
 # (Some of these should probably be under earlier classifications. Patches welcome!)
@@ -2546,6 +2578,7 @@ interleaf     =>  leaves
 interrex      =>  interreges
 juelet        =>  iueles
 kletterschuh  =>  kletterschuhe
+krona         =>  kronor
 lied          =>  lieder
 macaroni      =>  macaronies
 matin         =>  matins
@@ -2679,6 +2712,12 @@ major general       =>   major generals
 # Compound postfix forms require recursive inflection of the core noun(s)...
 # ['(SING)-general' is non-indicative because it includes the above '-star general' form]
 
+# SING-PREP forms where prep is pluralized, not singular
+put-(SING)   => put-(PL)
+kick-(SING)  => kick-(PL)
+hold-(SING)  => hold-(PL)
+power-(SING) => power-(PL)
+
 # E.g. Consul General --> Consuls General
 (SING)-general   =>  (PL)-general      
 
@@ -2692,6 +2731,8 @@ son-of-a-(SING)  =>  sons-of-(PL)
 (SING)-errant    =>  (PL)-errant
 # E.g. passer-by      --> passers-by
 (SING)-(PREP)    =>  (PL)-(PREP)
+# E.g Frankenstein complex --> Frankenstein complexes
+*-(SING)         =>  *-(PL)
 
 # Pronouns in the nominative...
 

@@ -182,18 +182,38 @@ public class Nouns {
 
 	private void handleCompound(String actSingular, String actModern, String actClassical, String singularPatt,
 			String modernPatt, String classicalPatt, List<CompoundNounInflection> inflections) {
+		if(singularPatt.contains("*")) {
+			singularPatt = singularPatt.replaceAll(Pattern.quote("*"), "(?<scratch>\\\\w+)");
+			modernPatt = modernPatt.replaceAll(Pattern.quote("*"), "(?<scratch>\\\\w+)");
+			classicalPatt = classicalPatt.replaceAll(Pattern.quote("*"), "(?<scratch>\\\\w+)");
+
+			actSingular = actSingular.replaceAll(Pattern.quote("*"), "%2\\$s");
+			actModern = actModern.replaceAll(Pattern.quote("*"), "%2\\$s");
+			actClassical = actClassical.replaceAll(Pattern.quote("*"), "%2\\$s");
+
+			handleNonpluralCompound(actSingular, actModern, actClassical, singularPatt, modernPatt,
+					classicalPatt, inflections, true);
+		} else {
+			handleNonpluralCompound(actSingular, actModern, actClassical, singularPatt, modernPatt,
+					classicalPatt, inflections, false);
+		}
+	}
+
+	private void handleNonpluralCompound(String actSingular, String actModern, String actClassical,
+			String singularPatt, String modernPatt, String classicalPatt,
+			List<CompoundNounInflection> inflections, boolean hasScratch) {
 		actModern = actModern.equals("") ? null : actModern;
 		actClassical = actClassical.equals("") ? null : actClassical;
 
 		CompoundNounInflection singularInflection = new CompoundNounInflection(this, prepositionDB,
-				Pattern.compile(singularPatt), actSingular, actModern, actClassical, false, false);
+				Pattern.compile(singularPatt), actSingular, actModern, actClassical, false, hasScratch);
 
 		inflections.add(singularInflection);
 
 		if(!modernPatt.equals("")) {
 			CompoundNounInflection modernInflection = new CompoundNounInflection(this, prepositionDB,
 					Pattern.compile(modernPatt), actSingular, actModern, actClassical, false,
-					false);
+					hasScratch);
 
 			inflections.add(modernInflection);
 		}
@@ -201,7 +221,7 @@ public class Nouns {
 		if(!classicalPatt.equals("")) {
 			CompoundNounInflection classicalInflection = new CompoundNounInflection(this, prepositionDB,
 					Pattern.compile(classicalPatt), actSingular, actModern, actClassical, false,
-					false);
+					hasScratch);
 
 			inflections.add(classicalInflection);
 		}
