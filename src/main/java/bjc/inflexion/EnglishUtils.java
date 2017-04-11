@@ -48,20 +48,40 @@ public class EnglishUtils {
 			 */
 			4, 4, 4, 4 };
 
+	/**
+	 * Convert small integers to words.
+	 * 
+	 * @param num
+	 *                The number to convert.
+	 * 
+	 * @return The word for the number, if it's less than ten.
+	 */
 	public static String smallIntToWord(int num) {
-		if(num >= 0 && num <= 10) {
+		if (num >= 0 && num <= 10) {
 			return smallNums[num];
 		}
 
 		return Integer.toString(num);
 	}
 
+	/**
+	 * Summarize an integer.
+	 * 
+	 * @param num
+	 *                The number to summarize.
+	 * 
+	 * @param atEnd
+	 *                Whether or not the integer is at the end of a string.
+	 * 
+	 * @return A string summarizing the integer.
+	 */
 	public static String intSummarize(int num, boolean atEnd) {
 		String[] nums = atEnd ? endSummaryNums : summaryNums;
 
-		if(num >= 0 && num < 10) {
+		if (num >= 0 && num < 10) {
 			return nums[summaryMap[num]];
-		} else
-			return "many";
+		}
+
+		return "many";
 	}
 }

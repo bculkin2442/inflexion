@@ -53,9 +53,6 @@ public class InflectionML {
 	 * @param form
 	 *                The string to inflect.
 	 * 
-	 * @param nounDB
-	 *                The source to load nouns from.
-	 * 
 	 * @return The inflected string.
 	 */
 	public static String inflect(String form) {
@@ -66,34 +63,33 @@ public class InflectionML {
 		int curCount = 1;
 		boolean inflectSingular = true;
 
-		while(formMatcher.find()) {
+		while (formMatcher.find()) {
 			String command = formMatcher.group("command");
 			String options = formMatcher.group("options");
 			String text = formMatcher.group("text");
 
 			Set<String> optionSet = new HashSet<>();
-			for(int i = 1; i <= options.length(); i++) {
+			for (int i = 1; i <= options.length(); i++) {
 				optionSet.add(options.substring(i - 1, i));
 			}
 
-			switch(command) {
+			switch (command) {
 			case "#":
 				try {
-					if(optionSet.contains("e")) {
+					if (optionSet.contains("e")) {
 						optionSet.remove("e");
 						optionSet.addAll(ESUB_OPT);
 					}
 					curCount = Integer.parseInt(text);
 
-					if(optionSet.contains("i")) {
+					if (optionSet.contains("i")) {
 						curCount += 1;
 					}
 
-					if(curCount != 1) {
-						if(curCount == 0 && optionSet.contains("s"))
+					if (curCount != 1) {
+						if (curCount == 0 && optionSet.contains("s"))
 							inflectSingular = true;
-						else
-							inflectSingular = false;
+						else inflectSingular = false;
 					} else {
 						inflectSingular = true;
 					}
@@ -101,24 +97,24 @@ public class InflectionML {
 					/*
 					 * Break out of switch.
 					 */
-					if(optionSet.contains("d")) {
+					if (optionSet.contains("d")) {
 						formMatcher.appendReplacement(formBuffer, "");
 						break;
 					}
 
 					String rep = text;
 
-					if(optionSet.contains("n")) {
-						if(curCount == 0) rep = "no";
+					if (optionSet.contains("n")) {
+						if (curCount == 0) rep = "no";
 					}
 
-					if(optionSet.contains("s")) {
-						if(curCount == 0) {
+					if (optionSet.contains("s")) {
+						if (curCount == 0) {
 							rep = "no";
 						}
 					}
 
-					if(optionSet.contains("a")) {
+					if (optionSet.contains("a")) {
 						/*
 						 * TODO implement a/an for nouns
 						 */
@@ -127,24 +123,24 @@ public class InflectionML {
 					boolean shouldOverride = !(rep.equals("no") || rep.equals("a")
 							|| rep.equals("an"));
 
-					if(optionSet.contains("w") && shouldOverride) {
+					if (optionSet.contains("w") && shouldOverride) {
 						rep = EnglishUtils.smallIntToWord(curCount);
 					}
 
-					if(optionSet.contains("f") && shouldOverride) {
+					if (optionSet.contains("f") && shouldOverride) {
 						rep = EnglishUtils.intSummarize(curCount, false);
 					}
 
 					formMatcher.appendReplacement(formBuffer, rep);
-				} catch(NumberFormatException nfex) {
+				} catch (NumberFormatException nfex) {
 					throw new InflectionException("Count setter must take a number as a parameter",
 							nfex);
 				}
 				break;
 			case "N":
 				Noun noun = nounDB.getNoun(text);
-				if(optionSet.contains("p") || !inflectSingular) {
-					if(optionSet.contains("c")) {
+				if (optionSet.contains("p") || !inflectSingular) {
+					if (optionSet.contains("c")) {
 						formMatcher.appendReplacement(formBuffer, noun.classicalPlural());
 					} else {
 						formMatcher.appendReplacement(formBuffer, noun.modernPlural());
