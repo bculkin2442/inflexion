@@ -15,7 +15,8 @@
  */
 package bjc.inflexion.nouns;
 
-import static bjc.inflexion.nouns.InflectionAffixes.*;
+import static bjc.inflexion.nouns.InflectionAffixes.complete;
+import static bjc.inflexion.nouns.InflectionAffixes.incomplete;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -33,21 +34,21 @@ import java.util.regex.Pattern;
 public class Nouns {
 	private static final DefaultNounInflection DEFAULT_INFLECTION = new DefaultNounInflection();
 
-	private Prepositions prepositionDB;
+	private final Prepositions prepositionDB;
 
-	private Map<String, NounInflection>	userIrregulars;
-	private List<NounInflection>		userInflections;
+	private final Map<String, NounInflection>	userIrregulars;
+	private final List<NounInflection>		userInflections;
 
-	private Map<String, NounInflection>	predefinedIrregulars;
-	private List<NounInflection>		predefinedInflections;
+	private final Map<String, NounInflection>	predefinedIrregulars;
+	private final List<NounInflection>		predefinedInflections;
 
 	/**
 	 * Create a new empty noun DB.
-	 * 
+	 *
 	 * @param prepDB
 	 *                The source for prepositions.
 	 */
-	public Nouns(Prepositions prepDB) {
+	public Nouns(final Prepositions prepDB) {
 		prepositionDB = prepDB;
 
 		userIrregulars = new HashMap<>();
@@ -59,23 +60,23 @@ public class Nouns {
 
 	/**
 	 * Retrieve a noun with its inflection from the database of inflections.
-	 * 
+	 *
 	 * @param noun
 	 *                The noun to retrieve.
-	 * 
+	 *
 	 * @return The noun with its inflection.
-	 * 
+	 *
 	 * @throws InflectionException
 	 *                 If the noun matched no inflection.
 	 */
-	public Noun getNoun(String noun) {
+	public Noun getNoun(final String noun) {
 		if (userIrregulars.containsKey(noun)) return new Noun(noun, userIrregulars.get(noun));
-		for (NounInflection inflect : userInflections) {
+		for (final NounInflection inflect : userInflections) {
 			if (inflect.matches(noun)) return new Noun(noun, inflect);
 		}
 
 		if (predefinedIrregulars.containsKey(noun)) return new Noun(noun, predefinedIrregulars.get(noun));
-		for (NounInflection inflect : predefinedInflections) {
+		for (final NounInflection inflect : predefinedInflections) {
 			if (inflect.matches(noun)) return new Noun(noun, inflect);
 		}
 
@@ -84,20 +85,24 @@ public class Nouns {
 
 	/**
 	 * Load the contents of the stream into this DB.
-	 * 
+	 *
 	 * @param stream
 	 *                The stream to load from.
 	 */
-	public void loadFromStream(InputStream stream) {
+	public void loadFromStream(final InputStream stream) {
 		try (Scanner scn = new Scanner(stream)) {
 			while (scn.hasNextLine()) {
-				String ln = scn.nextLine().trim();
+				final String ln = scn.nextLine().trim();
 
 				/*
 				 * Ignore comments and blank lines.
 				 */
-				if (ln.startsWith("#")) continue;
-				if (ln.equals("")) continue;
+				if (ln.startsWith("#")) {
+					continue;
+				}
+				if (ln.equals("")) {
+					continue;
+				}
 
 				if (ln.contains("-")) {
 					handleLine(ln);
@@ -109,23 +114,23 @@ public class Nouns {
 		}
 	}
 
-	private void handleLine(String ln) {
-		String[] parts = ln.split(Pattern.quote("=>"));
+	private void handleLine(final String ln) {
+		final String[] parts = ln.split(Pattern.quote("=>"));
 
 		if (parts.length != 2) {
-			String msg = String.format("Improperly formatted noun defn '%s'", ln);
+			final String msg = String.format("Improperly formatted noun defn '%s'", ln);
 
 			throw new InflectionException(msg);
 		}
 
-		String singular = parts[0].trim();
-		String plural = parts[1].trim();
+		final String singular = parts[0].trim();
+		final String plural = parts[1].trim();
 
 		String modernPlural = "";
 		String classicalPlural = "";
 
 		if (plural.contains("|")) {
-			String[] plurals = plural.split(Pattern.quote("|"));
+			final String[] plurals = plural.split(Pattern.quote("|"));
 
 			if (plurals.length == 1) {
 				modernPlural = plurals[0].trim();
@@ -134,8 +139,12 @@ public class Nouns {
 				classicalPlural = plurals[1].trim();
 			}
 
-			if (modernPlural.equals("")) modernPlural = null;
-			if (classicalPlural.equals("")) classicalPlural = null;
+			if (modernPlural.equals("")) {
+				modernPlural = null;
+			}
+			if (classicalPlural.equals("")) {
+				classicalPlural = null;
+			}
 		} else {
 			modernPlural = plural;
 			classicalPlural = null;
@@ -152,20 +161,21 @@ public class Nouns {
 		}
 	}
 
-	private void handleCompoundPlural(String singular, String modernPlural, String classicalPlural) {
+	private void handleCompoundPlural(final String singular, final String modernPlural,
+			final String classicalPlural) {
 		String actSingular = singular;
 		String actModern = modernPlural == null ? "" : modernPlural;
 		String actClassical = classicalPlural == null ? "" : classicalPlural;
 
-		String singularPatt = actSingular.replaceAll(Pattern.quote("(SING)"), "(?<noun>\\\\w+)");
-		String modernPatt = actModern.replaceAll(Pattern.quote("(PL)"), "(?<noun>\\\\w+)");
-		String classicalPatt = actClassical.replaceAll(Pattern.quote("(PL)"), "(?<noun>\\\\w+)");
+		final String singularPatt = actSingular.replaceAll(Pattern.quote("(SING)"), "(?<noun>\\\\w+)");
+		final String modernPatt = actModern.replaceAll(Pattern.quote("(PL)"), "(?<noun>\\\\w+)");
+		final String classicalPatt = actClassical.replaceAll(Pattern.quote("(PL)"), "(?<noun>\\\\w+)");
 
 		actSingular = actSingular.replaceAll(Pattern.quote("(SING)"), "%1\\$s");
 		actModern = actModern.replaceAll(Pattern.quote("(PL)"), "%1\\$s");
 		actClassical = actClassical.replaceAll(Pattern.quote("(PL)"), "%1\\$s");
 
-		List<CompoundNounInflection> inflections = new ArrayList<>(3);
+		final List<CompoundNounInflection> inflections = new ArrayList<>(3);
 
 		if (singular.contains("(PREP)")) {
 			handleCompoundPreposition(actSingular, actModern, actClassical, singularPatt, modernPatt,
@@ -175,21 +185,22 @@ public class Nouns {
 					inflections);
 		}
 
-		for (NounInflection inf : inflections) {
+		for (final NounInflection inf : inflections) {
 			predefinedInflections.add(inf);
 		}
 	}
 
-	private void handleCompound(String actSinglar, String actModrn, String actClasscal, String singularPtt,
-			String modernPtt, String classicalPtt, List<CompoundNounInflection> inflections) {
+	private void handleCompound(final String actSinglar, final String actModrn, final String actClasscal,
+			final String singularPtt, final String modernPtt, final String classicalPtt,
+			final List<CompoundNounInflection> inflections) {
 		if (singularPtt.contains("*")) {
-			String singularPatt = singularPtt.replaceAll(Pattern.quote("*"), "(?<scratch>\\\\w+)");
-			String modernPatt = modernPtt.replaceAll(Pattern.quote("*"), "(?<scratch>\\\\w+)");
-			String classicalPatt = classicalPtt.replaceAll(Pattern.quote("*"), "(?<scratch>\\\\w+)");
+			final String singularPatt = singularPtt.replaceAll(Pattern.quote("*"), "(?<scratch>\\\\w+)");
+			final String modernPatt = modernPtt.replaceAll(Pattern.quote("*"), "(?<scratch>\\\\w+)");
+			final String classicalPatt = classicalPtt.replaceAll(Pattern.quote("*"), "(?<scratch>\\\\w+)");
 
-			String actSingular = actSinglar.replaceAll(Pattern.quote("*"), "%2\\$s");
-			String actModern = actModrn.replaceAll(Pattern.quote("*"), "%2\\$s");
-			String actClassical = actClasscal.replaceAll(Pattern.quote("*"), "%2\\$s");
+			final String actSingular = actSinglar.replaceAll(Pattern.quote("*"), "%2\\$s");
+			final String actModern = actModrn.replaceAll(Pattern.quote("*"), "%2\\$s");
+			final String actClassical = actClasscal.replaceAll(Pattern.quote("*"), "%2\\$s");
 
 			handleNonpluralCompound(actSingular, actModern, actClassical, singularPatt, modernPatt,
 					classicalPatt, inflections, true);
@@ -199,19 +210,19 @@ public class Nouns {
 		}
 	}
 
-	private void handleNonpluralCompound(String actSinglar, String actModrn, String actClasscal,
-			String singularPatt, String modernPatt, String classicalPatt,
-			List<CompoundNounInflection> inflections, boolean hasScratch) {
-		String actModern = actModrn.equals("") ? null : actModrn;
-		String actClassical = actClasscal.equals("") ? null : actClasscal;
+	private void handleNonpluralCompound(final String actSinglar, final String actModrn, final String actClasscal,
+			final String singularPatt, final String modernPatt, final String classicalPatt,
+			final List<CompoundNounInflection> inflections, final boolean hasScratch) {
+		final String actModern = actModrn.equals("") ? null : actModrn;
+		final String actClassical = actClasscal.equals("") ? null : actClasscal;
 
-		CompoundNounInflection singularInflection = new CompoundNounInflection(this, prepositionDB,
+		final CompoundNounInflection singularInflection = new CompoundNounInflection(this, prepositionDB,
 				Pattern.compile(singularPatt), actSinglar, actModern, actClassical, false, hasScratch);
 
 		inflections.add(singularInflection);
 
 		if (!modernPatt.equals("")) {
-			CompoundNounInflection modernInflection = new CompoundNounInflection(this, prepositionDB,
+			final CompoundNounInflection modernInflection = new CompoundNounInflection(this, prepositionDB,
 					Pattern.compile(modernPatt), actSinglar, actModern, actClassical, false,
 					hasScratch);
 
@@ -219,17 +230,17 @@ public class Nouns {
 		}
 
 		if (!classicalPatt.equals("")) {
-			CompoundNounInflection classicalInflection = new CompoundNounInflection(this, prepositionDB,
-					Pattern.compile(classicalPatt), actSinglar, actModern, actClassical, false,
-					hasScratch);
+			final CompoundNounInflection classicalInflection = new CompoundNounInflection(this,
+					prepositionDB, Pattern.compile(classicalPatt), actSinglar, actModern,
+					actClassical, false, hasScratch);
 
 			inflections.add(classicalInflection);
 		}
 	}
 
-	private void handleCompoundPreposition(String actSinglar, String actModrn, String actClasscal,
-			String singularPtt, String modernPtt, String classicalPtt,
-			List<CompoundNounInflection> inflections) {
+	private void handleCompoundPreposition(final String actSinglar, final String actModrn, final String actClasscal,
+			final String singularPtt, final String modernPtt, final String classicalPtt,
+			final List<CompoundNounInflection> inflections) {
 		String singularPatt = singularPtt.replaceAll(Pattern.quote("(PREP)"), "(?<preposition>\\\\w+)");
 		String modernPatt = modernPtt.replaceAll(Pattern.quote("(PREP)"), "(?<preposition>\\\\w+)");
 		String classicalPatt = classicalPtt.replaceAll(Pattern.quote("(PREP)"), "(?<preposition>\\\\w+)");
@@ -258,16 +269,16 @@ public class Nouns {
 		}
 	}
 
-	private void addCompoundInflections(String actSingular, String actModern, String actClassical,
-			String singularPatt, String modernPatt, String classicalPatt,
-			List<CompoundNounInflection> inflections, boolean hasScratch) {
-		CompoundNounInflection singularInflection = new CompoundNounInflection(this, prepositionDB,
+	private void addCompoundInflections(final String actSingular, final String actModern, final String actClassical,
+			final String singularPatt, final String modernPatt, final String classicalPatt,
+			final List<CompoundNounInflection> inflections, final boolean hasScratch) {
+		final CompoundNounInflection singularInflection = new CompoundNounInflection(this, prepositionDB,
 				Pattern.compile(singularPatt), actSingular, actModern, actClassical, true, hasScratch);
 
 		inflections.add(singularInflection);
 
 		if (!modernPatt.equals("")) {
-			CompoundNounInflection modernInflection = new CompoundNounInflection(this, prepositionDB,
+			final CompoundNounInflection modernInflection = new CompoundNounInflection(this, prepositionDB,
 					Pattern.compile(modernPatt), actSingular, actModern, actClassical, true,
 					hasScratch);
 
@@ -275,55 +286,68 @@ public class Nouns {
 		}
 
 		if (!classicalPatt.equals("")) {
-			CompoundNounInflection classicalInflection = new CompoundNounInflection(this, prepositionDB,
-					Pattern.compile(classicalPatt), actSingular, actModern, actClassical, true,
-					hasScratch);
+			final CompoundNounInflection classicalInflection = new CompoundNounInflection(this,
+					prepositionDB, Pattern.compile(classicalPatt), actSingular, actModern,
+					actClassical, true, hasScratch);
 
 			inflections.add(classicalInflection);
 		}
 	}
 
-	private void handleIncompletePlural(String singular, String modernPlural, String classicalPlural) {
-		InflectionAffix singularAffix = incomplete(singular.substring(1));
+	private void handleIncompletePlural(final String singular, final String modernPlural,
+			final String classicalPlural) {
+		final InflectionAffix singularAffix = incomplete(singular.substring(1));
 
 		InflectionAffix modernAffix = null;
 		InflectionAffix classicalAffix = null;
 
-		if (modernPlural != null) modernAffix = incomplete(modernPlural.substring(1));
-		if (classicalPlural != null) classicalAffix = incomplete(classicalPlural.substring(1));
+		if (modernPlural != null) {
+			modernAffix = incomplete(modernPlural.substring(1));
+		}
+		if (classicalPlural != null) {
+			classicalAffix = incomplete(classicalPlural.substring(1));
+		}
 
-		CategoricalNounInflection inflection = new CategoricalNounInflection(singularAffix, modernAffix,
+		final CategoricalNounInflection inflection = new CategoricalNounInflection(singularAffix, modernAffix,
 				classicalAffix);
 
 		predefinedInflections.add(inflection);
 	}
 
-	private void handleCompletePlural(String singular, String modernPlural, String classicalPlural) {
-		InflectionAffix singularAffix = complete(singular.substring(1));
+	private void handleCompletePlural(final String singular, final String modernPlural,
+			final String classicalPlural) {
+		final InflectionAffix singularAffix = complete(singular.substring(1));
 
 		InflectionAffix modernAffix = null;
 		InflectionAffix classicalAffix = null;
 
-		if (modernPlural != null) modernAffix = complete(modernPlural.substring(1));
-		if (classicalPlural != null) classicalAffix = complete(classicalPlural.substring(1));
+		if (modernPlural != null) {
+			modernAffix = complete(modernPlural.substring(1));
+		}
+		if (classicalPlural != null) {
+			classicalAffix = complete(classicalPlural.substring(1));
+		}
 
-		CategoricalNounInflection inflection = new CategoricalNounInflection(singularAffix, modernAffix,
+		final CategoricalNounInflection inflection = new CategoricalNounInflection(singularAffix, modernAffix,
 				classicalAffix);
 
 		predefinedInflections.add(inflection);
 	}
 
-	private void handleIrregularPlural(String singular, String modernPlural, String classicalPlural) {
-		IrregularNounInflection inflection = new IrregularNounInflection(singular, modernPlural,
+	private void handleIrregularPlural(final String singular, final String modernPlural,
+			final String classicalPlural) {
+		final IrregularNounInflection inflection = new IrregularNounInflection(singular, modernPlural,
 				classicalPlural, false);
 
 		if (!predefinedIrregulars.containsKey(singular)) {
 			predefinedIrregulars.put(singular, inflection);
 		}
 
-		if (modernPlural != null && !predefinedIrregulars.containsKey(modernPlural))
+		if (modernPlural != null && !predefinedIrregulars.containsKey(modernPlural)) {
 			predefinedIrregulars.put(modernPlural, inflection);
-		if (classicalPlural != null && !predefinedIrregulars.containsKey(classicalPlural))
+		}
+		if (classicalPlural != null && !predefinedIrregulars.containsKey(classicalPlural)) {
 			predefinedIrregulars.put(classicalPlural, inflection);
+		}
 	}
 }

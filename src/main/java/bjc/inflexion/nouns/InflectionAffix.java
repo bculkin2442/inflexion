@@ -17,7 +17,7 @@ package bjc.inflexion.nouns;
 
 /**
  * An affix attached to a word and used for inflection.
- * 
+ *
  * @author EVE
  *
  */
@@ -25,30 +25,30 @@ public interface InflectionAffix {
 
 	/**
 	 * Check if a word has this affix.
-	 * 
+	 *
 	 * @param word
 	 *                The word to check.
-	 * 
+	 *
 	 * @return Whether or not the word has the affix.
 	 */
 	boolean hasAffix(String word);
 
 	/**
 	 * Remove the affix from a word.
-	 * 
+	 *
 	 * @param word
 	 *                The word to remove the affix from.
-	 * 
+	 *
 	 * @return The word with the affix removed.
 	 */
 	String deaffix(String word);
 
 	/**
 	 * Apply this affix to a word.
-	 * 
+	 *
 	 * @param word
 	 *                The word to apply the affix to.
-	 * 
+	 *
 	 * @return The word with the affix applied.
 	 */
 	String affix(String word);

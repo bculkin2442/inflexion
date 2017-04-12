@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 /**
  * Implementation of {@link NounInflection} for words that don't inflect at the
  * end.
- * 
+ *
  * @author EVE
  *
  */
@@ -31,29 +31,29 @@ public class CompoundNounInflection implements NounInflection {
 	/*
 	 * Data stores for use.
 	 */
-	private Nouns		nounDB;
-	private Prepositions	prepositionDB;
+	private final Nouns		nunDB;
+	private final Prepositions	pepositionDB;
 
-	private Pattern compoundMatcher;
+	private final Pattern cmpoundMatcher;
 
-	private String singularPattern;
+	private final String sigularPattern;
 
-	private String	modernPluralPattern;
-	private String	classicalPluralPattern;
+	private final String	mdernPluralPattern;
+	private final String	clasicalPluralPattern;
 
 	/*
 	 * Whether or not this inflection takes a preposition.
 	 */
-	private boolean hasPreposition;
+	private final boolean haPreposition;
 
 	/*
 	 * Whether or not there is a scratch word in place.
 	 */
-	private boolean hasScratch;
+	private final boolean hasScratch;
 
 	/**
 	 * TODO fill in documentation.
-	 * 
+	 *
 	 * @param nounDB
 	 * @param prepositionDB
 	 * @param compoundMatcher
@@ -63,133 +63,124 @@ public class CompoundNounInflection implements NounInflection {
 	 * @param hasPreposition
 	 * @param hasScrtch
 	 */
-	public CompoundNounInflection(Nouns nounDB, Prepositions prepositionDB, Pattern compoundMatcher,
-			String singularPattern, String modernPluralPattern, String classicalPluralPattern,
-			boolean hasPreposition, boolean hasScrtch) {
-		this.nounDB = nounDB;
-		this.prepositionDB = prepositionDB;
-		this.compoundMatcher = compoundMatcher;
-		this.singularPattern = singularPattern;
-		this.modernPluralPattern = modernPluralPattern;
-		this.classicalPluralPattern = classicalPluralPattern;
-		this.hasPreposition = hasPreposition;
+	public CompoundNounInflection(final Nouns nounDB, final Prepositions prepositionDB,
+			final Pattern compoundMatcher, final String singularPattern, final String modernPluralPattern,
+			final String classicalPluralPattern, final boolean hasPreposition, final boolean hasScrtch) {
+		nunDB = nounDB;
+		pepositionDB = prepositionDB;
+		cmpoundMatcher = compoundMatcher;
+		sigularPattern = singularPattern;
+		mdernPluralPattern = modernPluralPattern;
+		clasicalPluralPattern = classicalPluralPattern;
+		haPreposition = hasPreposition;
 		hasScratch = hasScrtch;
 	}
 
 	@Override
-	public boolean matches(String noun) {
-		Matcher matcher = compoundMatcher.matcher(noun);
+	public boolean matches(final String noun) {
+		final Matcher matcher = cmpoundMatcher.matcher(noun);
 
-		if(matcher.matches()) {
-			Noun actNoun = nounDB.getNoun(matcher.group("noun"));
+		if (matcher.matches()) {
+			final Noun actNoun = nunDB.getNoun(matcher.group("noun"));
 
-			if(actNoun == null) return false;
+			if (actNoun == null) return false;
 
-			if(hasPreposition) {
-				return prepositionDB.isPreposition(matcher.group("preposition"));
-			} else
-				return true;
-		} else {
-			return false;
+			if (haPreposition) return pepositionDB.isPreposition(matcher.group("preposition"));
+
+			return true;
 		}
+
+		return false;
 	}
 
 	@Override
-	public boolean isSingular(String noun) {
-		Matcher matcher = compoundMatcher.matcher(noun);
-		Noun actNoun = nounDB.getNoun(matcher.group("noun"));
+	public boolean isSingular(final String noun) {
+		final Matcher matcher = cmpoundMatcher.matcher(noun);
+		final Noun actNoun = nunDB.getNoun(matcher.group("noun"));
 
 		return actNoun.isSingular();
 	}
 
 	@Override
-	public boolean isPlural(String noun) {
-		Matcher matcher = compoundMatcher.matcher(noun);
-		Noun actNoun = nounDB.getNoun(matcher.group("noun"));
+	public boolean isPlural(final String noun) {
+		final Matcher matcher = cmpoundMatcher.matcher(noun);
+		final Noun actNoun = nunDB.getNoun(matcher.group("noun"));
 
 		return actNoun.isPlural();
 	}
 
 	@Override
-	public String singularize(String plural) {
-		Matcher matcher = compoundMatcher.matcher(plural);
-		Noun actNoun = getNoun(matcher);
+	public String singularize(final String plural) {
+		final Matcher matcher = cmpoundMatcher.matcher(plural);
+		final Noun actNoun = getNoun(matcher);
 
-		if(hasPreposition && hasScratch) {
-			return String.format(singularPattern, actNoun.singular(), matcher.group("preposition"),
+		if (haPreposition && hasScratch)
+			return String.format(sigularPattern, actNoun.singular(), matcher.group("preposition"),
 					matcher.group("scratch"));
-		} else if(hasScratch) {
-			return String.format(singularPattern, actNoun.singular(), matcher.group("scratch"));
-		} else if(hasPreposition) {
-			return String.format(singularPattern, actNoun.singular(), matcher.group("preposition"));
-		} else {
-			return String.format(singularPattern, actNoun.singular());
-		}
+		else if (hasScratch)
+			return String.format(sigularPattern, actNoun.singular(), matcher.group("scratch"));
+		else if (haPreposition)
+			return String.format(sigularPattern, actNoun.singular(), matcher.group("preposition"));
+		else return String.format(sigularPattern, actNoun.singular());
 	}
 
 	@Override
-	public String pluralize(String singular) {
-		Matcher matcher = compoundMatcher.matcher(singular);
-		Noun actNoun = getNoun(matcher);
+	public String pluralize(final String singular) {
+		final Matcher matcher = cmpoundMatcher.matcher(singular);
+		final Noun actNoun = getNoun(matcher);
 
-		String patt = modernPluralPattern == null ? classicalPluralPattern : modernPluralPattern;
+		final String patt = mdernPluralPattern == null ? clasicalPluralPattern : mdernPluralPattern;
 
-		if(hasPreposition && hasScratch) {
+		if (haPreposition && hasScratch)
 			return String.format(patt, actNoun.plural(), matcher.group("preposition"),
 					matcher.group("scratch"));
-		} else if(hasScratch) {
+		else if (hasScratch)
 			return String.format(patt, actNoun.plural(), matcher.group("scratch"));
-		} else if(hasPreposition) {
+		else if (haPreposition)
 			return String.format(patt, actNoun.plural(), matcher.group("preposition"));
-		} else {
-			return String.format(patt, actNoun.plural());
-		}
+		else return String.format(patt, actNoun.plural());
 	}
 
 	@Override
-	public String pluralizeModern(String singular) {
-		if(modernPluralPattern == null) return pluralizeClassical(singular);
+	public String pluralizeModern(final String singular) {
+		if (mdernPluralPattern == null) return pluralizeClassical(singular);
 
-		Matcher matcher = compoundMatcher.matcher(singular);
-		Noun actNoun = getNoun(matcher);
+		final Matcher matcher = cmpoundMatcher.matcher(singular);
+		final Noun actNoun = getNoun(matcher);
 
-		if(hasPreposition && hasScratch) {
-			return String.format(modernPluralPattern, actNoun.modernPlural(), matcher.group("preposition"),
+		if (haPreposition && hasScratch)
+			return String.format(mdernPluralPattern, actNoun.modernPlural(), matcher.group("preposition"),
 					matcher.group("scratch"));
-		} else if(hasScratch) {
-			return String.format(modernPluralPattern, actNoun.modernPlural(), matcher.group("scratch"));
-		} else if(hasPreposition) {
-			return String.format(modernPluralPattern, actNoun.modernPlural(), matcher.group("preposition"));
-		} else {
-			return String.format(modernPluralPattern, actNoun.modernPlural());
-		}
+		else if (hasScratch)
+			return String.format(mdernPluralPattern, actNoun.modernPlural(), matcher.group("scratch"));
+		else if (haPreposition)
+			return String.format(mdernPluralPattern, actNoun.modernPlural(), matcher.group("preposition"));
+		else return String.format(mdernPluralPattern, actNoun.modernPlural());
 	}
 
 	@Override
-	public String pluralizeClassical(String singular) {
-		if(classicalPluralPattern == null) return pluralizeModern(singular);
+	public String pluralizeClassical(final String singular) {
+		if (clasicalPluralPattern == null) return pluralizeModern(singular);
 
-		Matcher matcher = compoundMatcher.matcher(singular);
-		Noun actNoun = getNoun(matcher);
+		final Matcher matcher = cmpoundMatcher.matcher(singular);
+		final Noun actNoun = getNoun(matcher);
 
-		if(hasPreposition && hasScratch) {
-			return String.format(classicalPluralPattern, actNoun.classicalPlural(),
+		if (haPreposition && hasScratch)
+			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
 					matcher.group("preposition"), matcher.group("scratch"));
-		} else if(hasScratch) {
-			return String.format(classicalPluralPattern, actNoun.classicalPlural(),
+		else if (hasScratch)
+			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
 					matcher.group("scratch"));
-		} else if(hasPreposition) {
-			return String.format(classicalPluralPattern, actNoun.classicalPlural(),
+		else if (haPreposition)
+			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
 					matcher.group("preposition"));
-		} else {
-			return String.format(classicalPluralPattern, actNoun.classicalPlural());
-		}
+		else return String.format(clasicalPluralPattern, actNoun.classicalPlural());
 	}
 
-	private Noun getNoun(Matcher matcher) {
+	private Noun getNoun(final Matcher matcher) {
 		matcher.matches();
 
-		Noun actNoun = nounDB.getNoun(matcher.group("noun"));
+		final Noun actNoun = nunDB.getNoun(matcher.group("noun"));
 		return actNoun;
 	}
 
@@ -198,47 +189,47 @@ public class CompoundNounInflection implements NounInflection {
 		final int prime = 31;
 		int result = 1;
 
-		result = prime * result + ((classicalPluralPattern == null) ? 0 : classicalPluralPattern.hashCode());
-		result = prime * result + ((compoundMatcher == null) ? 0 : compoundMatcher.hashCode());
-		result = prime * result + (hasPreposition ? 1231 : 1237);
-		result = prime * result + ((modernPluralPattern == null) ? 0 : modernPluralPattern.hashCode());
-		result = prime * result + ((singularPattern == null) ? 0 : singularPattern.hashCode());
+		result = prime * result + (clasicalPluralPattern == null ? 0 : clasicalPluralPattern.hashCode());
+		result = prime * result + (cmpoundMatcher == null ? 0 : cmpoundMatcher.hashCode());
+		result = prime * result + (haPreposition ? 1231 : 1237);
+		result = prime * result + (mdernPluralPattern == null ? 0 : mdernPluralPattern.hashCode());
+		result = prime * result + (sigularPattern == null ? 0 : sigularPattern.hashCode());
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(!(obj instanceof CompoundNounInflection)) return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof CompoundNounInflection)) return false;
 
-		CompoundNounInflection other = (CompoundNounInflection) obj;
+		final CompoundNounInflection other = (CompoundNounInflection) obj;
 
-		if(singularPattern == null) {
-			if(other.singularPattern != null) return false;
-		} else if(!singularPattern.equals(other.singularPattern)) return false;
+		if (sigularPattern == null) {
+			if (other.sigularPattern != null) return false;
+		} else if (!sigularPattern.equals(other.sigularPattern)) return false;
 
-		if(classicalPluralPattern == null) {
-			if(other.classicalPluralPattern != null) return false;
-		} else if(!classicalPluralPattern.equals(other.classicalPluralPattern)) return false;
+		if (clasicalPluralPattern == null) {
+			if (other.clasicalPluralPattern != null) return false;
+		} else if (!clasicalPluralPattern.equals(other.clasicalPluralPattern)) return false;
 
-		if(hasPreposition != other.hasPreposition) return false;
+		if (haPreposition != other.haPreposition) return false;
 
-		if(modernPluralPattern == null) {
-			if(other.modernPluralPattern != null) return false;
-		} else if(!modernPluralPattern.equals(other.modernPluralPattern)) return false;
+		if (mdernPluralPattern == null) {
+			if (other.mdernPluralPattern != null) return false;
+		} else if (!mdernPluralPattern.equals(other.mdernPluralPattern)) return false;
 
-		if(compoundMatcher == null) {
-			if(other.compoundMatcher != null) return false;
-		} else if(!compoundMatcher.equals(other.compoundMatcher)) return false;
+		if (cmpoundMatcher == null) {
+			if (other.cmpoundMatcher != null) return false;
+		} else if (!cmpoundMatcher.equals(other.cmpoundMatcher)) return false;
 
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return String.format(TOSTRING_FMT, compoundMatcher, singularPattern, modernPluralPattern,
-				classicalPluralPattern, hasPreposition);
+		return String.format(TOSTRING_FMT, cmpoundMatcher, sigularPattern, mdernPluralPattern,
+				clasicalPluralPattern, haPreposition);
 	}
 }

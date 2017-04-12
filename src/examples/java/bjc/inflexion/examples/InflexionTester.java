@@ -35,33 +35,33 @@ import bjc.inflexion.nouns.Prepositions;
 
 /**
  * Test inflecting words.
- * 
+ *
  * @author EVE
  *
  */
 public class InflexionTester {
 	/**
 	 * Main method.
-	 * 
+	 *
 	 * @param args
 	 *                Unused CLI args.
 	 */
-	public static void main(String[] args) {
-		Prepositions prepositionDB = new Prepositions();
+	public static void main(final String[] args) {
+		final Prepositions prepositionDB = new Prepositions();
 		prepositionDB.loadFromStream(InflexionTester.class.getResourceAsStream("/prepositions.txt"));
 
-		Nouns nounDB = new Nouns(prepositionDB);
+		final Nouns nounDB = new Nouns(prepositionDB);
 		nounDB.loadFromStream(InflexionTester.class.getResourceAsStream("/nouns.txt"));
 
-		Scanner scn = new Scanner(System.in);
+		final Scanner scn = new Scanner(System.in);
 
 		System.out.print("Enter a string to inflect (blank line to quit): ");
 		String ln = scn.nextLine().trim();
 
-		while(!ln.equals("")) {
+		while (!ln.equals("")) {
 			System.out.println();
 
-			String inflected = InflectionML.inflect(ln);
+			final String inflected = InflectionML.inflect(ln);
 
 			System.out.println("Inflected string: " + inflected);
 
@@ -73,33 +73,34 @@ public class InflexionTester {
 	}
 
 	@SuppressWarnings("unused")
-	private static void wikitest(Scanner scn, Nouns nounDB) {
+	private static void wikitest(final Scanner scn, final Nouns nounDB) {
 		System.out.print("Enter name of dump file: ");
 
-		String fname = scn.nextLine().trim();
+		final String fname = scn.nextLine().trim();
 
-		try(InputStream compressedStream = new FileInputStream(fname)) {
-			InputStream stream = new BZip2CompressorInputStream(compressedStream);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		try (InputStream compressedStream = new FileInputStream(fname)) {
+			final InputStream stream = new BZip2CompressorInputStream(compressedStream);
+			final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
 			/*
 			 * Pattern find word name
 			 */
-			Pattern titlePattern = Pattern.compile("<title>([^<]+)</title>");
+			final Pattern titlePattern = Pattern.compile("<title>([^<]+)</title>");
 			/*
 			 * Pattern to find beginning of wiki text
 			 */
-			Pattern textPattern = Pattern.compile("<text");
+			final Pattern textPattern = Pattern.compile("<text");
 			/*
 			 * Pattern to find rank definition
 			 */
-			Pattern rankPattern = Pattern.compile("\\{\\{rank");
+			final Pattern rankPattern = Pattern.compile("\\{\\{rank");
 			/*
 			 * Pattern to find noun definition
 			 */
-			Pattern enNounPattern = Pattern.compile("\\{\\{en-noun([a-z0-9\\|\\-\\[\\]\\?\\!=]*)\\}\\}");
+			final Pattern enNounPattern = Pattern
+					.compile("\\{\\{en-noun([a-z0-9\\|\\-\\[\\]\\?\\!=]*)\\}\\}");
 
-			Pattern wordPattern = Pattern.compile("([a-zA-Z\\-]+)");
+			final Pattern wordPattern = Pattern.compile("([a-zA-Z\\-]+)");
 
 			String line;
 			String word = "";
@@ -111,96 +112,98 @@ public class InflexionTester {
 			int wrongNoPlural = 0;
 			int wrongUncountable = 0;
 			boolean basicWord = false;
-			while((line = reader.readLine()) != null) {
-				Matcher titleMatcher = titlePattern.matcher(line);
-				if(titleMatcher.find()) {
+			while ((line = reader.readLine()) != null) {
+				final Matcher titleMatcher = titlePattern.matcher(line);
+				if (titleMatcher.find()) {
 					word = titleMatcher.group(1);
-					if(word.startsWith("Wiktionary:")) {
+					if (word.startsWith("Wiktionary:")) {
 						continue;
 					}
 					basicWord = false;
 					text = 0;
 					continue;
 				}
-				Matcher textMatcher = textPattern.matcher(line);
-				if(textMatcher.find()) {
+				final Matcher textMatcher = textPattern.matcher(line);
+				if (textMatcher.find()) {
 					text++;
 					continue;
 				}
-				Matcher rankMatcher = rankPattern.matcher(line);
-				if(rankMatcher.find()) {
+				final Matcher rankMatcher = rankPattern.matcher(line);
+				if (rankMatcher.find()) {
 					basicWord = true;
 					basicCount++;
 				}
-				if(text != 1) {
+				if (text != 1) {
 					continue;
 				}
-				Matcher enNounMatcher = enNounPattern.matcher(line);
-				if(enNounMatcher.find()) {
+				final Matcher enNounMatcher = enNounPattern.matcher(line);
+				if (enNounMatcher.find()) {
 					// only first
 					/*
 					 * if (text != 1) { continue; }
 					 */
 					text++;
 					count++;
-					if(count % 5000 == 0) {
+					if (count % 5000 == 0) {
 						System.out.println(count);
 					}
-					String[] rules = enNounMatcher.group(1).split("\\|");
-					List<String> plurals = new ArrayList<>();
+					final String[] rules = enNounMatcher.group(1).split("\\|");
+					final List<String> plurals = new ArrayList<>();
 
 					boolean uncountable = false;
 					boolean noPlural = false;
-					for(String rule : rules) {
-						if(rule.isEmpty()) {
+					for (final String rule : rules) {
+						if (rule.isEmpty()) {
 							continue;
 						}
-						if("-".equals(rule)) {
+						if ("-".equals(rule)) {
 							plurals.add(word);
 							uncountable = true;
-						} else if("s".equals(rule)) {
+						} else if ("s".equals(rule)) {
 							plurals.add(word + "s");
-						} else if("es".equals(rule)) {
+						} else if ("es".equals(rule)) {
 							plurals.add(word + "es");
-						} else if("!".equals(rule)) {
+						} else if ("!".equals(rule)) {
 							plurals.add("plural not attested");
 							uncountable = true;
-						} else if("?".equals(rule)) {
+						} else if ("?".equals(rule)) {
 							plurals.add("unknown");
 							noPlural = true;
 						} else {
-							Matcher matcher = wordPattern.matcher(rule);
-							if(matcher.matches()) {
+							final Matcher matcher = wordPattern.matcher(rule);
+							if (matcher.matches()) {
 								plurals.add(rule);
 							}
 						}
 					}
-					if(plurals.isEmpty()) {
+					if (plurals.isEmpty()) {
 						plurals.add(word + "s");
 					}
 
-					String calculatedPlural = nounDB.getNoun(word).plural();
+					final String calculatedPlural = nounDB.getNoun(word).plural();
 					boolean ok = false;
-					for(String plural : plurals) {
-						if(plural.equals(calculatedPlural)) {
+					for (final String plural : plurals) {
+						if (plural.equals(calculatedPlural)) {
 							ok = true;
 							break;
 						}
 					}
 
-					if(!ok) {
-						if(!uncountable) wrong++;
-						if(uncountable) {
+					if (!ok) {
+						if (!uncountable) {
+							wrong++;
+						}
+						if (uncountable) {
 							wrongUncountable++;
-						} else if(noPlural) {
+						} else if (noPlural) {
 							wrongNoPlural++;
 						}
-						if(basicWord) {
+						if (basicWord) {
 							System.out.println("basic word: " + word + " got: "
 									+ calculatedPlural + ", but expected "
 									+ enNounMatcher.group(1));
 							basicWrong++;
-						} else if(!uncountable) {
+						} else if (!uncountable) {
 							System.out.println(word + " got: " + calculatedPlural
 									+ ", but expected " + enNounMatcher.group(1));
 						}
@@ -210,11 +213,11 @@ public class InflexionTester {
 			reader.close();
 			compressedStream.close();
 
-			float correct = (count - wrong) * 100 / (float) count;
-			float basicCorrect = (basicCount - basicWrong) * 100 / (float) basicCount;
-			float wrongNoPluralPercent = wrongNoPlural * 100 / (float) count;
-			int justPlainWrong = wrong - wrongNoPlural;
-			float justPlainWrongPercent = justPlainWrong * 100 / (float) count;
+			final float correct = (count - wrong) * 100 / (float) count;
+			final float basicCorrect = (basicCount - basicWrong) * 100 / (float) basicCount;
+			final float wrongNoPluralPercent = wrongNoPlural * 100 / (float) count;
+			final int justPlainWrong = wrong - wrongNoPlural;
+			final float justPlainWrongPercent = justPlainWrong * 100 / (float) count;
 			System.out.println("Words checked: " + count + " (" + basicCount + " basic words)");
 			System.out.println("Correct: " + correct + "% (" + basicCorrect + "% basic words)");
 			System.out.println("Errors: ");
@@ -222,9 +225,9 @@ public class InflexionTester {
 					+ wrongNoPluralPercent + "%)");
 			System.out.println("    Incorrect answer: " + justPlainWrong + " (" + justPlainWrongPercent
 					+ "%)");
-		} catch(FileNotFoundException fnfex) {
+		} catch (final FileNotFoundException fnfex) {
 			fnfex.printStackTrace();
-		} catch(IOException ioex) {
+		} catch (final IOException ioex) {
 			ioex.printStackTrace();
 		}
 	}

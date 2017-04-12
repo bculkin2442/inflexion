@@ -18,7 +18,7 @@ package bjc.inflexion.nouns;
 /**
  * Implementation of {@link NounInflection} for nouns matched by a regular
  * expression.
- * 
+ *
  * @author EVE
  *
  */
@@ -26,28 +26,28 @@ public class CategoricalNounInflection implements NounInflection {
 	private static final String TOSTRING_FMT = "CategoricalNounInflection [singular=%s, modernPlural=%s,"
 			+ " classicalPlural=%s]";
 
-	private InflectionAffix singular;
+	private final InflectionAffix singular;
 
-	private InflectionAffix	modernPlural;
-	private InflectionAffix	classicalPlural;
+	private final InflectionAffix	modernPlural;
+	private final InflectionAffix	classicalPlural;
 
 	/**
 	 * Create a new categorical inflection.
-	 * 
+	 *
 	 * @param singlar
 	 *                The affix for the singular form.
-	 * 
+	 *
 	 * @param modrnPlural
 	 *                The affix for the modern plural.
-	 * 
+	 *
 	 * @param classiclPlural
 	 *                The affix for the classical plural.
 	 */
-	public CategoricalNounInflection(InflectionAffix singlar, InflectionAffix modrnPlural,
-			InflectionAffix classiclPlural) {
-		if(singlar == null)
+	public CategoricalNounInflection(final InflectionAffix singlar, final InflectionAffix modrnPlural,
+			final InflectionAffix classiclPlural) {
+		if (singlar == null)
 			throw new NullPointerException("Singular form must not be null");
-		else if(modrnPlural == null && classiclPlural == null)
+		else if (modrnPlural == null && classiclPlural == null)
 			throw new NullPointerException("One of modern/classical plural forms must not be null");
 
 		singular = singlar;
@@ -56,79 +56,76 @@ public class CategoricalNounInflection implements NounInflection {
 	}
 
 	@Override
-	public boolean matches(String noun) {
-		if(singular.hasAffix(noun))
+	public boolean matches(final String noun) {
+		if (singular.hasAffix(noun))
 			return true;
-		else if(modernPlural != null && modernPlural.hasAffix(noun))
+		else if (modernPlural != null && modernPlural.hasAffix(noun))
 			return true;
-		else if(classicalPlural != null && classicalPlural.hasAffix(noun))
+		else if (classicalPlural != null && classicalPlural.hasAffix(noun))
 			return true;
-		else
-			return false;
+		else return false;
 	}
 
 	@Override
-	public boolean isSingular(String noun) {
-		if(singular.hasAffix(noun))
+	public boolean isSingular(final String noun) {
+		if (singular.hasAffix(noun))
 			return true;
-		else if(matchesPlural(noun))
+		else if (matchesPlural(noun))
 			return false;
 		else {
-			String msg = String.format("Noun '%s' doesn't belong to this inflection", noun, this);
+			final String msg = String.format("Noun '%s' doesn't belong to this inflection", noun, this);
 
 			throw new InflectionException(msg);
 		}
 	}
 
 	@Override
-	public boolean isPlural(String noun) {
-		if(singular.hasAffix(noun))
+	public boolean isPlural(final String noun) {
+		if (singular.hasAffix(noun))
 			return false;
-		else if(matchesPlural(noun))
+		else if (matchesPlural(noun))
 			return true;
 		else {
-			String msg = String.format("Noun '%s' doesn't belong to this inflection", noun, this);
+			final String msg = String.format("Noun '%s' doesn't belong to this inflection", noun, this);
 
 			throw new InflectionException(msg);
 		}
 	}
 
 	@Override
-	public String singularize(String plural) {
-		if(singular.hasAffix(plural))
+	public String singularize(final String plural) {
+		if (singular.hasAffix(plural))
 			return plural;
-		else if(modernPlural != null && modernPlural.hasAffix(plural))
+		else if (modernPlural != null && modernPlural.hasAffix(plural))
 			return singular.affix(modernPlural.deaffix(plural));
-		else if(classicalPlural != null && classicalPlural.hasAffix(plural))
+		else if (classicalPlural != null && classicalPlural.hasAffix(plural))
 			return singular.affix(classicalPlural.deaffix(plural));
 		else {
-			String msg = String.format("Noun '%s' doesn't belong to this inflection", plural, this);
+			final String msg = String.format("Noun '%s' doesn't belong to this inflection", plural, this);
 
 			throw new InflectionException(msg);
 		}
 	}
 
 	@Override
-	public String pluralize(String singlar) {
-		if(singular.hasAffix(singlar)) {
-			if(modernPlural == null) {
-				return classicalPlural.affix(singular.deaffix(singlar));
-			} else {
-				return modernPlural.affix(singular.deaffix(singlar));
-			}
-		} else if(matchesPlural(singlar)) {
+	public String pluralize(final String singlar) {
+		if (singular.hasAffix(singlar)) {
+			if (modernPlural == null) return classicalPlural.affix(singular.deaffix(singlar));
+
+			return modernPlural.affix(singular.deaffix(singlar));
+		} else if (matchesPlural(singlar))
 			return singlar;
-		} else {
-			String msg = String.format("Noun '%s' doesn't belong to this inflection", singlar, this);
+		else {
+			final String msg = String.format("Noun '%s' doesn't belong to this inflection", singlar, this);
 
 			throw new InflectionException(msg);
 		}
 	}
 
-	private boolean matchesPlural(String noun) {
-		boolean hasModernPlural = modernPlural != null && modernPlural.hasAffix(noun);
+	private boolean matchesPlural(final String noun) {
+		final boolean hasModernPlural = modernPlural != null && modernPlural.hasAffix(noun);
 
-		return hasModernPlural || (classicalPlural != null && classicalPlural.hasAffix(noun));
+		return hasModernPlural || classicalPlural != null && classicalPlural.hasAffix(noun);
 	}
 
 	@Override
@@ -141,37 +138,37 @@ public class CategoricalNounInflection implements NounInflection {
 		final int prime = 31;
 		int result = 1;
 
-		result = prime * result + ((classicalPlural == null) ? 0 : classicalPlural.hashCode());
-		result = prime * result + ((modernPlural == null) ? 0 : modernPlural.hashCode());
+		result = prime * result + (classicalPlural == null ? 0 : classicalPlural.hashCode());
+		result = prime * result + (modernPlural == null ? 0 : modernPlural.hashCode());
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(!(obj instanceof CategoricalNounInflection)) return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof CategoricalNounInflection)) return false;
 
-		CategoricalNounInflection other = (CategoricalNounInflection) obj;
+		final CategoricalNounInflection other = (CategoricalNounInflection) obj;
 
-		if(classicalPlural == null) {
-			if(other.classicalPlural != null) return false;
-		} else if(!classicalPlural.equals(other.classicalPlural)) return false;
+		if (classicalPlural == null) {
+			if (other.classicalPlural != null) return false;
+		} else if (!classicalPlural.equals(other.classicalPlural)) return false;
 
-		if(modernPlural == null) {
-			if(other.modernPlural != null) return false;
-		} else if(!modernPlural.equals(other.modernPlural)) return false;
+		if (modernPlural == null) {
+			if (other.modernPlural != null) return false;
+		} else if (!modernPlural.equals(other.modernPlural)) return false;
 
 		return true;
 	}
 
 	@Override
-	public String pluralizeModern(String singlar) {
-		if(modernPlural == null) return pluralizeClassical(singlar);
+	public String pluralizeModern(final String singlar) {
+		if (modernPlural == null) return pluralizeClassical(singlar);
 
 		String actSinglar = singlar;
-		if(isPlural(singlar)) {
+		if (isPlural(singlar)) {
 			actSinglar = singularize(singlar);
 		}
 
@@ -179,11 +176,11 @@ public class CategoricalNounInflection implements NounInflection {
 	}
 
 	@Override
-	public String pluralizeClassical(String singlar) {
-		if(classicalPlural == null) return pluralizeModern(singlar);
+	public String pluralizeClassical(final String singlar) {
+		if (classicalPlural == null) return pluralizeModern(singlar);
 
 		String actSinglar = singlar;
-		if(isPlural(singlar)) {
+		if (isPlural(singlar)) {
 			actSinglar = singularize(singlar);
 		}
 

@@ -17,52 +17,49 @@ package bjc.inflexion.nouns;
 
 /**
  * Default noun inflection for english nouns.
- * 
+ *
  * @author EVE
  *
  */
 public class DefaultNounInflection implements NounInflection {
 	@Override
-	public boolean matches(String noun) {
+	public boolean matches(final String noun) {
 		return true;
 	}
 
 	@Override
-	public boolean isSingular(String noun) {
+	public boolean isSingular(final String noun) {
 		return !noun.endsWith("s");
 	}
 
 	@Override
-	public boolean isPlural(String noun) {
+	public boolean isPlural(final String noun) {
 		return noun.endsWith("s");
 	}
 
 	@Override
-	public String singularize(String plural) {
-		if(plural.endsWith("ses")) {
+	public String singularize(final String plural) {
+		if (plural.endsWith("ses"))
 			return plural.substring(0, plural.length() - 3);
-		} else if(plural.endsWith("s")) {
+		else if (plural.endsWith("s"))
 			return plural.substring(0, plural.length() - 1);
-		} else
-			return plural;
+		else return plural;
 	}
 
 	@Override
-	public String pluralize(String singular) {
-		if(singular.endsWith("s")) {
-			return singular + "es";
-		}
+	public String pluralize(final String singular) {
+		if (singular.endsWith("s")) return singular + "es";
 
 		return singular + "s";
 	}
 
 	@Override
-	public String pluralizeModern(String singular) {
+	public String pluralizeModern(final String singular) {
 		return pluralize(singular);
 	}
 
 	@Override
-	public String pluralizeClassical(String singular) {
+	public String pluralizeClassical(final String singular) {
 		return pluralize(singular);
 	}
 }

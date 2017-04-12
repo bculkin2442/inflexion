@@ -17,7 +17,7 @@ package bjc.inflexion.nouns;
 
 /**
  * A noun attached to an inflection.
- * 
+ *
  * @author EVE
  *
  */
@@ -30,21 +30,21 @@ public class Noun {
 
 	/**
 	 * Create a new noun from a word and inflection.
-	 * 
+	 *
 	 * @param wrd
 	 *                The word for the noun.
-	 * 
+	 *
 	 * @param inflction
 	 *                The inflection for the word.
 	 */
-	public Noun(String wrd, NounInflection inflction) {
+	public Noun(final String wrd, final NounInflection inflction) {
 		word = wrd;
 		inflection = inflction;
 	}
 
 	/**
 	 * Get the input noun.
-	 * 
+	 *
 	 * @return The noun, as input.
 	 */
 	public String getWord() {
@@ -53,7 +53,7 @@ public class Noun {
 
 	/**
 	 * Get the inflection for this noun.
-	 * 
+	 *
 	 * @return The inflection for this noun.
 	 */
 	public NounInflection getInflection() {
@@ -62,7 +62,7 @@ public class Noun {
 
 	/**
 	 * Check if this noun is singular.
-	 * 
+	 *
 	 * @return Whether or not the noun is singular.
 	 */
 	public boolean isSingular() {
@@ -71,7 +71,7 @@ public class Noun {
 
 	/**
 	 * Check if this noun is plural.
-	 * 
+	 *
 	 * @return Whether or not this noun is plural.
 	 */
 	public boolean isPlural() {
@@ -80,7 +80,7 @@ public class Noun {
 
 	/**
 	 * Get the singular form of this noun.
-	 * 
+	 *
 	 * @return The singular form of this noun.
 	 */
 	public String singular() {
@@ -89,7 +89,7 @@ public class Noun {
 
 	/**
 	 * Get the plural form of this noun.
-	 * 
+	 *
 	 * @return The plural form of this noun.
 	 */
 	public String plural() {
@@ -103,7 +103,7 @@ public class Noun {
 
 	/**
 	 * Get the modern plural form of this noun.
-	 * 
+	 *
 	 * @return The modern plural form of this noun.
 	 */
 	public String modernPlural() {
@@ -112,7 +112,7 @@ public class Noun {
 
 	/**
 	 * Get the classical plural form of this noun.
-	 * 
+	 *
 	 * @return The classical plural form of this noun.
 	 */
 	public String classicalPlural() {

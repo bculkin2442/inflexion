@@ -17,7 +17,7 @@ package bjc.inflexion.nouns;
 
 /**
  * Exception thrown when something goes wrong with inflection.
- * 
+ *
  * @author EVE
  *
  */
@@ -26,24 +26,24 @@ public class InflectionException extends RuntimeException {
 
 	/**
 	 * Create a new inflection exception with the given message and cause.
-	 * 
+	 *
 	 * @param message
 	 *                The message of the exception.
-	 * 
+	 *
 	 * @param cause
 	 *                The cause of the exception.
 	 */
-	public InflectionException(String message, Throwable cause) {
+	public InflectionException(final String message, final Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
 	 * Create a new inflection exception with the given message.
-	 * 
+	 *
 	 * @param message
 	 *                The message of the exception.
 	 */
-	public InflectionException(String message) {
+	public InflectionException(final String message) {
 		super(message);
 	}
 }

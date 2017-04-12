@@ -20,55 +20,55 @@ import java.util.regex.Pattern;
 
 /**
  * Simple implementation of {@link InflectionAffix}
- * 
+ *
  * @author EVE
  *
  */
 public class SimpleInflectionAffix implements InflectionAffix {
 	private static final String TOSTRING_FMT = "SimpleInflectionAffix [affixTemplate=%s, affixMatcher=%s]";
 
-	private String affixTemplate;
+	private final String affixTmplate;
 
-	private Pattern affixMatcher;
+	private final Pattern affixMtcher;
 
 	/**
 	 * Create a new inflection affix.
-	 * 
+	 *
 	 * @param affixTemplate
 	 *                The template for applying the affix, Should be a
 	 *                printf-style format string with a single string blank.
-	 * 
+	 *
 	 * @param affixMatcher
 	 *                The regular expression that matches the affix on
 	 *                strings. The 'stem' or word should be placed in a
 	 *                named capturing group named 'stem'.
 	 */
-	public SimpleInflectionAffix(String affixTemplate, Pattern affixMatcher) {
-		this.affixTemplate = affixTemplate;
-		this.affixMatcher = affixMatcher;
+	public SimpleInflectionAffix(final String affixTemplate, final Pattern affixMatcher) {
+		affixTmplate = affixTemplate;
+		affixMtcher = affixMatcher;
 	}
 
 	@Override
-	public boolean hasAffix(String word) {
-		return affixMatcher.matcher(word).matches();
+	public boolean hasAffix(final String word) {
+		return affixMtcher.matcher(word).matches();
 	}
 
 	@Override
-	public String deaffix(String word) {
-		Matcher matcher = affixMatcher.matcher(word);
+	public String deaffix(final String word) {
+		final Matcher matcher = affixMtcher.matcher(word);
 		matcher.matches();
-		
+
 		return matcher.group("stem");
 	}
 
 	@Override
-	public String affix(String word) {
-		return String.format(affixTemplate, word);
+	public String affix(final String word) {
+		return String.format(affixTmplate, word);
 	}
 
 	@Override
 	public String toString() {
-		return String.format(TOSTRING_FMT, affixTemplate, affixMatcher);
+		return String.format(TOSTRING_FMT, affixTmplate, affixMtcher);
 	}
 
 	@Override
@@ -76,27 +76,27 @@ public class SimpleInflectionAffix implements InflectionAffix {
 		final int prime = 31;
 		int result = 1;
 
-		result = prime * result + ((affixMatcher == null) ? 0 : affixMatcher.hashCode());
-		result = prime * result + ((affixTemplate == null) ? 0 : affixTemplate.hashCode());
+		result = prime * result + (affixMtcher == null ? 0 : affixMtcher.hashCode());
+		result = prime * result + (affixTmplate == null ? 0 : affixTmplate.hashCode());
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(!(obj instanceof SimpleInflectionAffix)) return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof SimpleInflectionAffix)) return false;
 
-		SimpleInflectionAffix other = (SimpleInflectionAffix) obj;
+		final SimpleInflectionAffix other = (SimpleInflectionAffix) obj;
 
-		if(affixTemplate == null) {
-			if(other.affixTemplate != null) return false;
-		} else if(!affixTemplate.equals(other.affixTemplate)) return false;
+		if (affixTmplate == null) {
+			if (other.affixTmplate != null) return false;
+		} else if (!affixTmplate.equals(other.affixTmplate)) return false;
 
-		if(affixMatcher == null) {
-			if(other.affixMatcher != null) return false;
-		} else if(!affixMatcher.equals(other.affixMatcher)) return false;
+		if (affixMtcher == null) {
+			if (other.affixMtcher != null) return false;
+		} else if (!affixMtcher.equals(other.affixMtcher)) return false;
 
 		return true;
 	}

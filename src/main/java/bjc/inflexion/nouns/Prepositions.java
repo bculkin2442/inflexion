@@ -22,12 +22,12 @@ import java.util.Set;
 
 /**
  * List of prepositions.
- * 
+ *
  * @author EVE
  *
  */
 public class Prepositions {
-	private Set<String> prepositions;
+	private final Set<String> prepositions;
 
 	/**
 	 * Create an empty preposition DB.
@@ -38,31 +38,33 @@ public class Prepositions {
 
 	/**
 	 * Check if a word is a preposition.
-	 * 
+	 *
 	 * @param word
 	 *                The word as a preposition.
-	 * 
+	 *
 	 * @return Whether or not the word is a preposition.
 	 */
-	public boolean isPreposition(String word) {
+	public boolean isPreposition(final String word) {
 		return prepositions.contains(word);
 	}
 
 	/**
 	 * Load the contents of the stream into this DB.
-	 * 
+	 *
 	 * @param stream
 	 *                The stream to load from.
 	 */
-	public void loadFromStream(InputStream stream) {
-		try(Scanner scn = new Scanner(stream)) {
-			while(scn.hasNextLine()) {
-				String ln = scn.nextLine().trim();
+	public void loadFromStream(final InputStream stream) {
+		try (Scanner scn = new Scanner(stream)) {
+			while (scn.hasNextLine()) {
+				final String ln = scn.nextLine().trim();
 
 				/*
 				 * Ignore comments
 				 */
-				if(ln.startsWith("#")) continue;
+				if (ln.startsWith("#")) {
+					continue;
+				}
 
 				prepositions.add(ln);
 			}

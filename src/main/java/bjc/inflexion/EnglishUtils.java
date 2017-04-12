@@ -50,37 +50,33 @@ public class EnglishUtils {
 
 	/**
 	 * Convert small integers to words.
-	 * 
+	 *
 	 * @param num
 	 *                The number to convert.
-	 * 
+	 *
 	 * @return The word for the number, if it's less than ten.
 	 */
-	public static String smallIntToWord(int num) {
-		if (num >= 0 && num <= 10) {
-			return smallNums[num];
-		}
+	public static String smallIntToWord(final int num) {
+		if (num >= 0 && num <= 10) return smallNums[num];
 
 		return Integer.toString(num);
 	}
 
 	/**
 	 * Summarize an integer.
-	 * 
+	 *
 	 * @param num
 	 *                The number to summarize.
-	 * 
+	 *
 	 * @param atEnd
 	 *                Whether or not the integer is at the end of a string.
-	 * 
+	 *
 	 * @return A string summarizing the integer.
 	 */
-	public static String intSummarize(int num, boolean atEnd) {
-		String[] nums = atEnd ? endSummaryNums : summaryNums;
+	public static String intSummarize(final int num, final boolean atEnd) {
+		final String[] nums = atEnd ? endSummaryNums : summaryNums;
 
-		if (num >= 0 && num < 10) {
-			return nums[summaryMap[num]];
-		}
+		if (num >= 0 && num < 10) return nums[summaryMap[num]];
 
 		return "many";
 	}

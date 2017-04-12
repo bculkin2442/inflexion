@@ -40,7 +40,7 @@ public class InflectionML {
 	private static Nouns nounDB;
 
 	static {
-		Prepositions prepositionDB = new Prepositions();
+		final Prepositions prepositionDB = new Prepositions();
 		prepositionDB.loadFromStream(InflexionTester.class.getResourceAsStream("/prepositions.txt"));
 
 		nounDB = new Nouns(prepositionDB);
@@ -49,26 +49,26 @@ public class InflectionML {
 
 	/**
 	 * Apply inflection to marked forms in the string.
-	 * 
+	 *
 	 * @param form
 	 *                The string to inflect.
-	 * 
+	 *
 	 * @return The inflected string.
 	 */
-	public static String inflect(String form) {
-		Matcher formMatcher = FORM_MARKER.matcher(form);
+	public static String inflect(final String form) {
+		final Matcher formMatcher = FORM_MARKER.matcher(form);
 
-		StringBuffer formBuffer = new StringBuffer();
+		final StringBuffer formBuffer = new StringBuffer();
 
 		int curCount = 1;
 		boolean inflectSingular = true;
 
 		while (formMatcher.find()) {
-			String command = formMatcher.group("command");
-			String options = formMatcher.group("options");
-			String text = formMatcher.group("text");
+			final String command = formMatcher.group("command");
+			final String options = formMatcher.group("options");
+			final String text = formMatcher.group("text");
 
-			Set<String> optionSet = new HashSet<>();
+			final Set<String> optionSet = new HashSet<>();
 			for (int i = 1; i <= options.length(); i++) {
 				optionSet.add(options.substring(i - 1, i));
 			}
@@ -87,9 +87,11 @@ public class InflectionML {
 					}
 
 					if (curCount != 1) {
-						if (curCount == 0 && optionSet.contains("s"))
+						if (curCount == 0 && optionSet.contains("s")) {
 							inflectSingular = true;
-						else inflectSingular = false;
+						} else {
+							inflectSingular = false;
+						}
 					} else {
 						inflectSingular = true;
 					}
@@ -105,7 +107,9 @@ public class InflectionML {
 					String rep = text;
 
 					if (optionSet.contains("n")) {
-						if (curCount == 0) rep = "no";
+						if (curCount == 0) {
+							rep = "no";
+						}
 					}
 
 					if (optionSet.contains("s")) {
@@ -120,7 +124,7 @@ public class InflectionML {
 						 */
 					}
 
-					boolean shouldOverride = !(rep.equals("no") || rep.equals("a")
+					final boolean shouldOverride = !(rep.equals("no") || rep.equals("a")
 							|| rep.equals("an"));
 
 					if (optionSet.contains("w") && shouldOverride) {
@@ -132,13 +136,13 @@ public class InflectionML {
 					}
 
 					formMatcher.appendReplacement(formBuffer, rep);
-				} catch (NumberFormatException nfex) {
+				} catch (final NumberFormatException nfex) {
 					throw new InflectionException("Count setter must take a number as a parameter",
 							nfex);
 				}
 				break;
 			case "N":
-				Noun noun = nounDB.getNoun(text);
+				final Noun noun = nounDB.getNoun(text);
 				if (optionSet.contains("p") || !inflectSingular) {
 					if (optionSet.contains("c")) {
 						formMatcher.appendReplacement(formBuffer, noun.classicalPlural());
@@ -150,7 +154,7 @@ public class InflectionML {
 				}
 				break;
 			default:
-				String msg = String.format("Unknown command '%s'", command);
+				final String msg = String.format("Unknown command '%s'", command);
 
 				throw new InflectionException(msg);
 			}
@@ -163,16 +167,16 @@ public class InflectionML {
 
 	/**
 	 * Alias method to format a string, then inflect it.
-	 * 
+	 *
 	 * @param format
 	 *                The combined format/inflection string.
-	 * 
+	 *
 	 * @param objects
 	 *                The parameters for the format string.
-	 * 
+	 *
 	 * @return The string, formatted & inflected.
 	 */
-	public static String iprintf(String format, Object... objects) {
+	public static String iprintf(final String format, final Object... objects) {
 		return inflect(String.format(format, objects));
 	}
 }
