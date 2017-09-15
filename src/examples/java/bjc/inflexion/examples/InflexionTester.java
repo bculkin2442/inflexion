@@ -65,7 +65,7 @@ public class InflexionTester {
 
 			System.out.println("Inflected string: " + inflected);
 
-			System.out.print("\nEnter a noun to inflect (blank line to quit): ");
+			System.out.print("\nEnter a string to inflect (blank line to quit): ");
 			ln = scn.nextLine().trim();
 		}
 

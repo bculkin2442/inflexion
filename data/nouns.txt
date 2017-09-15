@@ -32,7 +32,7 @@ coney       => coneys  | conies
 cony        => conys   | conies
 
 doe         =>  does
-do          =>  does
+do          =>  dos
 
 ellipse     => ellipses
 ellipsis    => ellipses
@@ -191,6 +191,7 @@ ipse dixit             =>                  | ipse dixits
 lex humana             =>                  | leges humanae
 line-out               => line-outs        | lines-out
 lord-lieutenant        => lord-lieutenants | lords-lieutenant
+low-life               => low-lifes
 magnum opus            => magnum opuses    | magna opera
 malum in se            =>                  | mala in se
 man-child              => men-children     |
@@ -512,6 +513,7 @@ batz    =>  batzes
 blitz   =>  blitzes
 chintz  =>  chintzes
 coz     =>  cozes
+kibitz  =>  kibitzes
 quartz  =>  quartzes
 snooze  =>  snoozes
 topaz   =>  topazes
@@ -1677,6 +1679,7 @@ chitarrone      =>                  |  chitarroni
 cognoscente     =>                  |  cognoscenti
 concetto        =>                  |  concetti
 condottiere     =>                  |  condottieri
+confetto        =>                  |  confetti
 conoscente      =>                  |  conoscenti
 contadino       =>                  |  contadini
 conversazione   =>  conversaziones  |  conversazioni
@@ -1748,6 +1751,7 @@ fermata     => fermatas    | fermate
 fioritura   =>             | fioriture
 frottola    =>             | frottole
 granita     =>             | granite
+lasagna     => lasagnas    | lasagne
 loggia      => loggias     | loggie
 mafiosa     =>             | mafiose
 mantelletta =>             | mantellette
@@ -1826,7 +1830,7 @@ calypso        =>  calypsos
 canto          =>  cantos
 cappuccino     =>  cappuccinos
 casino         =>  casinos
-cello          =>  cellos
+cello          =>  cellos        | celli
 centavo        =>  centavos
 Chicago        =>  Chicagos
 Chimango       =>  Chimangos
@@ -2172,6 +2176,7 @@ minyan    =>           | minyanim
 parnas    =>           | parnassim
 parnass   =>           | parnassim
 seraph    => seraphs   | seraphim
+sheqel    => sheqels   | sheqalim
 shochet   =>           | shochetim
 ulpan     =>           | ulpanim
 zuz       => zuzzes    | zuzim
@@ -2587,6 +2592,7 @@ mezuzah       =>  mezuzoth
 minnelied     =>  minnelieder
 nachtlokal    =>  nachtlokale
 nebenkern     =>  nebenkerne
+ninja         =>  ninjas      | shinobi
 nockerl       =>  nockerln
 ogle          =>  oglys
 orthoceras    =>  orthocerata
@@ -2699,7 +2705,10 @@ wady           =>  wadies        |  wadys
 zemirah        =>  zemiroth      |  zemirot
 zita           =>  ziti          |  zite
 
-
+# Proper nouns whose owners said they should be pluralized differently
+prius => priuses | prii
+# Not technically correct, but occasionally used.
+prius =>         | priora
 # "General" as a noun (as opposed to a postfix adjective)...
 
 adjutant general    =>   adjutant generals
@@ -2779,19 +2788,24 @@ its     => theirs
 
 # Standard patterns of inflection for other nouns (in increasing order of generality)...
 
+-tto => -tti
+
 -ao =>  -aos |
 -eo =>  -eos |
 -io =>  -ios |
 -oo =>  -oos |
 -uo =>  -uos |
+
 -alf  =>             |  -alves
 -elf  =>             |  -elves
 -olf  =>             |  -olves
+
 -anx  =>  -anxes |  -anges
 -inx  =>  -inxes |  -inges
 -ynx  =>  -ynxes |  -ynges
+
 -arf      =>             |  -arves
--ceps     =>  -ceps      |
+-ceps     =>  -ceps      |  -cepses
 -ch       =>  -ches      |
 -sh       =>  -shes      |
 -eaf      =>  -eaves     |
@@ -2801,16 +2815,19 @@ its     => theirs
 -oe       =>  -oes       |
 -o        =>  -oes       |
 -quy      =>  -quies     |
+
 -ay =>  -ays |
 -ey =>  -eys |
 -iy =>  -iys |
 -oy =>  -oys |
 -uy =>  -uys |
+
 -ss       =>  -sses      |
 -sis  =>             |  -ses
 #-[^s]sis  =>             |  -[^s]ses
 -trix     =>  -trixes    |  -trices
 -us       =>  -uses      |
+-ex       =>  -xes       |  -ices
 -x        =>  -xes       |
 -y        =>  -ies       |
 -z        =>  -zzes      |
