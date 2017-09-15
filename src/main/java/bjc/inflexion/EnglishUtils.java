@@ -21,32 +21,34 @@ package bjc.inflexion;
  */
 public class EnglishUtils {
 	private static String[] smallNums = new String[] { "zero", "one", "two", "three", "four", "five", "six",
-			"seven", "eight", "nine", "ten" };
+	                "seven", "eight", "nine", "ten"
+	                                                 };
 
-	private static String[]	summaryNums	= new String[] { "no", "one", "a couple of", "a few", "several" };
-	private static String[]	endSummaryNums	= new String[] { "no", "one", "a couple of", "a few", "several" };
+	private static String[]     summaryNums     = new String[] { "no", "one", "a couple of", "a few", "several" };
+	private static String[]     endSummaryNums  = new String[] { "no", "one", "a couple of", "a few", "several" };
 
 	private static int[] summaryMap = new int[] {
-			/*
-			 * no
-			 */
-			0,
-			/*
-			 * one
-			 */
-			1,
-			/*
-			 * a couple of
-			 */
-			2,
-			/*
-			 * a few
-			 */
-			3, 3, 3,
-			/*
-			 * several
-			 */
-			4, 4, 4, 4 };
+	        /*
+	         * no
+	         */
+	        0,
+	        /*
+	         * one
+	         */
+	        1,
+	        /*
+	         * a couple of
+	         */
+	        2,
+	        /*
+	         * a few
+	         */
+	        3, 3, 3,
+	        /*
+	         * several
+	         */
+	        4, 4, 4, 4
+	};
 
 	/**
 	 * Convert small integers to words.

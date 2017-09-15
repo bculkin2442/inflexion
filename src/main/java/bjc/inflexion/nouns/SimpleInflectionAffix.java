@@ -25,7 +25,8 @@ import java.util.regex.Pattern;
  *
  */
 public class SimpleInflectionAffix implements InflectionAffix {
-	private static final String TOSTRING_FMT = "SimpleInflectionAffix [affixTemplate=%s, affixMatcher=%s]";
+	private static final String TOSTRING_FMT =
+	        "SimpleInflectionAffix [affixTemplate=%s, affixMatcher=%s]";
 
 	private final String affixTmplate;
 
@@ -85,7 +86,9 @@ public class SimpleInflectionAffix implements InflectionAffix {
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) return true;
+
 		if (obj == null) return false;
+
 		if (!(obj instanceof SimpleInflectionAffix)) return false;
 
 		final SimpleInflectionAffix other = (SimpleInflectionAffix) obj;

@@ -26,20 +26,21 @@ import java.util.regex.Pattern;
  *
  */
 public class CompoundNounInflection implements NounInflection {
-	private static final String TOSTRING_FMT = "CompoundNounInflection [compoundMatcher=%s, singularPattern=%s,"
-			+ " modernPluralPattern=%s, classicalPluralPattern=%s, hasPreposition=%s]";
+	private static final String TOSTRING_FMT =
+	        "CompoundNounInflection [compoundMatcher=%s, singularPattern=%s,"
+	        + " modernPluralPattern=%s, classicalPluralPattern=%s, hasPreposition=%s]";
 	/*
 	 * Data stores for use.
 	 */
-	private final Nouns		nunDB;
-	private final Prepositions	pepositionDB;
+	private final Nouns         nunDB;
+	private final Prepositions  pepositionDB;
 
 	private final Pattern cmpoundMatcher;
 
 	private final String sigularPattern;
 
-	private final String	mdernPluralPattern;
-	private final String	clasicalPluralPattern;
+	private final String        mdernPluralPattern;
+	private final String        clasicalPluralPattern;
 
 	/*
 	 * Whether or not this inflection takes a preposition.
@@ -64,8 +65,10 @@ public class CompoundNounInflection implements NounInflection {
 	 * @param hasScrtch
 	 */
 	public CompoundNounInflection(final Nouns nounDB, final Prepositions prepositionDB,
-			final Pattern compoundMatcher, final String singularPattern, final String modernPluralPattern,
-			final String classicalPluralPattern, final boolean hasPreposition, final boolean hasScrtch) {
+	                              final Pattern compoundMatcher, final String singularPattern,
+	                              final String modernPluralPattern,
+	                              final String classicalPluralPattern, final boolean hasPreposition,
+	                              final boolean hasScrtch) {
 		nunDB = nounDB;
 		pepositionDB = prepositionDB;
 		cmpoundMatcher = compoundMatcher;
@@ -116,7 +119,7 @@ public class CompoundNounInflection implements NounInflection {
 
 		if (haPreposition && hasScratch)
 			return String.format(sigularPattern, actNoun.singular(), matcher.group("preposition"),
-					matcher.group("scratch"));
+			                     matcher.group("scratch"));
 		else if (hasScratch)
 			return String.format(sigularPattern, actNoun.singular(), matcher.group("scratch"));
 		else if (haPreposition)
@@ -129,11 +132,12 @@ public class CompoundNounInflection implements NounInflection {
 		final Matcher matcher = cmpoundMatcher.matcher(singular);
 		final Noun actNoun = getNoun(matcher);
 
-		final String patt = mdernPluralPattern == null ? clasicalPluralPattern : mdernPluralPattern;
+		final String patt = mdernPluralPattern == null ? clasicalPluralPattern :
+		                    mdernPluralPattern;
 
 		if (haPreposition && hasScratch)
 			return String.format(patt, actNoun.plural(), matcher.group("preposition"),
-					matcher.group("scratch"));
+			                     matcher.group("scratch"));
 		else if (hasScratch)
 			return String.format(patt, actNoun.plural(), matcher.group("scratch"));
 		else if (haPreposition)
@@ -149,12 +153,15 @@ public class CompoundNounInflection implements NounInflection {
 		final Noun actNoun = getNoun(matcher);
 
 		if (haPreposition && hasScratch)
-			return String.format(mdernPluralPattern, actNoun.modernPlural(), matcher.group("preposition"),
-					matcher.group("scratch"));
+			return String.format(mdernPluralPattern, actNoun.modernPlural(),
+			                     matcher.group("preposition"),
+			                     matcher.group("scratch"));
 		else if (hasScratch)
-			return String.format(mdernPluralPattern, actNoun.modernPlural(), matcher.group("scratch"));
+			return String.format(mdernPluralPattern, actNoun.modernPlural(),
+			                     matcher.group("scratch"));
 		else if (haPreposition)
-			return String.format(mdernPluralPattern, actNoun.modernPlural(), matcher.group("preposition"));
+			return String.format(mdernPluralPattern, actNoun.modernPlural(),
+			                     matcher.group("preposition"));
 		else return String.format(mdernPluralPattern, actNoun.modernPlural());
 	}
 
@@ -167,13 +174,13 @@ public class CompoundNounInflection implements NounInflection {
 
 		if (haPreposition && hasScratch)
 			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
-					matcher.group("preposition"), matcher.group("scratch"));
+			                     matcher.group("preposition"), matcher.group("scratch"));
 		else if (hasScratch)
 			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
-					matcher.group("scratch"));
+			                     matcher.group("scratch"));
 		else if (haPreposition)
 			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
-					matcher.group("preposition"));
+			                     matcher.group("preposition"));
 		else return String.format(clasicalPluralPattern, actNoun.classicalPlural());
 	}
 
@@ -189,10 +196,12 @@ public class CompoundNounInflection implements NounInflection {
 		final int prime = 31;
 		int result = 1;
 
-		result = prime * result + (clasicalPluralPattern == null ? 0 : clasicalPluralPattern.hashCode());
+		result = prime * result + (clasicalPluralPattern == null ? 0 :
+		                           clasicalPluralPattern.hashCode());
 		result = prime * result + (cmpoundMatcher == null ? 0 : cmpoundMatcher.hashCode());
 		result = prime * result + (haPreposition ? 1231 : 1237);
-		result = prime * result + (mdernPluralPattern == null ? 0 : mdernPluralPattern.hashCode());
+		result = prime * result + (mdernPluralPattern == null ? 0 :
+		                           mdernPluralPattern.hashCode());
 		result = prime * result + (sigularPattern == null ? 0 : sigularPattern.hashCode());
 
 		return result;
@@ -201,7 +210,9 @@ public class CompoundNounInflection implements NounInflection {
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) return true;
+
 		if (obj == null) return false;
+
 		if (!(obj instanceof CompoundNounInflection)) return false;
 
 		final CompoundNounInflection other = (CompoundNounInflection) obj;
@@ -230,6 +241,6 @@ public class CompoundNounInflection implements NounInflection {
 	@Override
 	public String toString() {
 		return String.format(TOSTRING_FMT, cmpoundMatcher, sigularPattern, mdernPluralPattern,
-				clasicalPluralPattern, haPreposition);
+		                     clasicalPluralPattern, haPreposition);
 	}
 }

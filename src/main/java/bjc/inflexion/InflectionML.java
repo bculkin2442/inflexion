@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import bjc.inflexion.examples.InflexionTester;
 import bjc.inflexion.nouns.InflectionException;
 import bjc.inflexion.nouns.Noun;
 import bjc.inflexion.nouns.Nouns;
@@ -33,18 +32,18 @@ import bjc.inflexion.nouns.Prepositions;
  *
  */
 public class InflectionML {
-	private static final List<String>	ESUB_OPT	= Arrays.asList("a", "s", "w");
-	private static Pattern			FORM_MARKER	= Pattern
-			.compile("<(?<command>[#N])(?<options>[^:]*):(?<text>[^>]*)>");
+	private static final List<String>   ESUB_OPT        = Arrays.asList("a", "s", "w");
+	private static Pattern                      FORM_MARKER     = Pattern
+	                .compile("<(?<command>[#N])(?<options>[^:]*):(?<text>[^>]*)>");
 
 	private static Nouns nounDB;
 
 	static {
 		final Prepositions prepositionDB = new Prepositions();
-		prepositionDB.loadFromStream(InflexionTester.class.getResourceAsStream("/prepositions.txt"));
+		prepositionDB.loadFromStream(InflectionML.class.getResourceAsStream("/prepositions.txt"));
 
 		nounDB = new Nouns(prepositionDB);
-		nounDB.loadFromStream(InflexionTester.class.getResourceAsStream("/nouns.txt"));
+		nounDB.loadFromStream(InflectionML.class.getResourceAsStream("/nouns.txt"));
 	}
 
 	/**
@@ -69,6 +68,7 @@ public class InflectionML {
 			final String text = formMatcher.group("text");
 
 			final Set<String> optionSet = new HashSet<>();
+
 			for (int i = 1; i <= options.length(); i++) {
 				optionSet.add(options.substring(i - 1, i));
 			}
@@ -80,6 +80,7 @@ public class InflectionML {
 						optionSet.remove("e");
 						optionSet.addAll(ESUB_OPT);
 					}
+
 					curCount = Integer.parseInt(text);
 
 					if (optionSet.contains("i")) {
@@ -126,7 +127,7 @@ public class InflectionML {
 					}
 					
 					final boolean shouldOverride = !(rep.equals("no") || rep.equals("a")
-							|| rep.equals("an"));
+					                                 || rep.equals("an"));
 
 					if (optionSet.contains("w") && shouldOverride) {
 						rep = EnglishUtils.smallIntToWord(curCount);
@@ -139,11 +140,14 @@ public class InflectionML {
 					formMatcher.appendReplacement(formBuffer, rep);
 				} catch (final NumberFormatException nfex) {
 					throw new InflectionException("Count setter must take a number as a parameter",
-							nfex);
+					                              nfex);
 				}
+
 				break;
+
 			case "N":
 				final Noun noun = nounDB.getNoun(text);
+
 				if (optionSet.contains("p") || !inflectSingular) {
 					if (optionSet.contains("c")) {
 						formMatcher.appendReplacement(formBuffer, noun.classicalPlural());
@@ -153,7 +157,9 @@ public class InflectionML {
 				} else {
 					formMatcher.appendReplacement(formBuffer, noun.singular());
 				}
+
 				break;
+
 			default:
 				final String msg = String.format("Unknown command '%s'", command);
 

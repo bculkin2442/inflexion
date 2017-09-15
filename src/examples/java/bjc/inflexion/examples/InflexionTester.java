@@ -48,7 +48,8 @@ public class InflexionTester {
 	 */
 	public static void main(final String[] args) {
 		final Prepositions prepositionDB = new Prepositions();
-		prepositionDB.loadFromStream(InflexionTester.class.getResourceAsStream("/prepositions.txt"));
+		prepositionDB.loadFromStream(
+		        InflexionTester.class.getResourceAsStream("/prepositions.txt"));
 
 		final Nouns nounDB = new Nouns(prepositionDB);
 		nounDB.loadFromStream(InflexionTester.class.getResourceAsStream("/nouns.txt"));
@@ -98,7 +99,7 @@ public class InflexionTester {
 			 * Pattern to find noun definition
 			 */
 			final Pattern enNounPattern = Pattern
-					.compile("\\{\\{en-noun([a-z0-9\\|\\-\\[\\]\\?\\!=]*)\\}\\}");
+			                              .compile("\\{\\{en-noun([a-z0-9\\|\\-\\[\\]\\?\\!=]*)\\}\\}");
 
 			final Pattern wordPattern = Pattern.compile("([a-zA-Z\\-]+)");
 
@@ -112,31 +113,42 @@ public class InflexionTester {
 			int wrongNoPlural = 0;
 			int wrongUncountable = 0;
 			boolean basicWord = false;
+
 			while ((line = reader.readLine()) != null) {
 				final Matcher titleMatcher = titlePattern.matcher(line);
+
 				if (titleMatcher.find()) {
 					word = titleMatcher.group(1);
+
 					if (word.startsWith("Wiktionary:")) {
 						continue;
 					}
+
 					basicWord = false;
 					text = 0;
 					continue;
 				}
+
 				final Matcher textMatcher = textPattern.matcher(line);
+
 				if (textMatcher.find()) {
 					text++;
 					continue;
 				}
+
 				final Matcher rankMatcher = rankPattern.matcher(line);
+
 				if (rankMatcher.find()) {
 					basicWord = true;
 					basicCount++;
 				}
+
 				if (text != 1) {
 					continue;
 				}
+
 				final Matcher enNounMatcher = enNounPattern.matcher(line);
+
 				if (enNounMatcher.find()) {
 					// only first
 					/*
@@ -144,18 +156,22 @@ public class InflexionTester {
 					 */
 					text++;
 					count++;
+
 					if (count % 5000 == 0) {
 						System.out.println(count);
 					}
+
 					final String[] rules = enNounMatcher.group(1).split("\\|");
 					final List<String> plurals = new ArrayList<>();
 
 					boolean uncountable = false;
 					boolean noPlural = false;
+
 					for (final String rule : rules) {
 						if (rule.isEmpty()) {
 							continue;
 						}
+
 						if ("-".equals(rule)) {
 							plurals.add(word);
 							uncountable = true;
@@ -171,17 +187,20 @@ public class InflexionTester {
 							noPlural = true;
 						} else {
 							final Matcher matcher = wordPattern.matcher(rule);
+
 							if (matcher.matches()) {
 								plurals.add(rule);
 							}
 						}
 					}
+
 					if (plurals.isEmpty()) {
 						plurals.add(word + "s");
 					}
 
 					final String calculatedPlural = nounDB.getNoun(word).plural();
 					boolean ok = false;
+
 					for (final String plural : plurals) {
 						if (plural.equals(calculatedPlural)) {
 							ok = true;
@@ -193,23 +212,26 @@ public class InflexionTester {
 						if (!uncountable) {
 							wrong++;
 						}
+
 						if (uncountable) {
 							wrongUncountable++;
 						} else if (noPlural) {
 							wrongNoPlural++;
 						}
+
 						if (basicWord) {
 							System.out.println("basic word: " + word + " got: "
-									+ calculatedPlural + ", but expected "
-									+ enNounMatcher.group(1));
+							                   + calculatedPlural + ", but expected "
+							                   + enNounMatcher.group(1));
 							basicWrong++;
 						} else if (!uncountable) {
 							System.out.println(word + " got: " + calculatedPlural
-									+ ", but expected " + enNounMatcher.group(1));
+							                   + ", but expected " + enNounMatcher.group(1));
 						}
 					}
 				}
 			}
+
 			reader.close();
 			compressedStream.close();
 
@@ -222,9 +244,10 @@ public class InflexionTester {
 			System.out.println("Correct: " + correct + "% (" + basicCorrect + "% basic words)");
 			System.out.println("Errors: ");
 			System.out.println("    No plural form specified: " + wrongNoPlural + " ("
-					+ wrongNoPluralPercent + "%)");
-			System.out.println("    Incorrect answer: " + justPlainWrong + " (" + justPlainWrongPercent
-					+ "%)");
+			                   + wrongNoPluralPercent + "%)");
+			System.out.println("    Incorrect answer: " + justPlainWrong + " (" +
+			                   justPlainWrongPercent
+			                   + "%)");
 		} catch (final FileNotFoundException fnfex) {
 			fnfex.printStackTrace();
 		} catch (final IOException ioex) {

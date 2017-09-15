@@ -1,14 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>bjc</groupId>
 	<artifactId>inflexion</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<name>Inflexion</name>
 	<description>Java based implementation of Damian Conway's Lingua::EN::Inflexion module for perl</description>
+
 	<properties>
 		<main.class>bjc.inflexion.examples.InflexionTester</main.class>
 	</properties>
+
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -26,36 +31,44 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.5.0</version>
+
 				<configuration>
 					<executable>java</executable>
+
 					<arguments>
 						<argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n</argument>
 						<argument>-classpath</argument>
 						<classpath />
 						<argument>${main.class}</argument>
 					</arguments>
+
 					<mainClass>${main.class}</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
+
 		<resources>
 			<resource>
 				<directory>data/</directory>
+
 				<includes>
 					<include>**/*.txt</include>
 				</includes>
 			</resource>
 		</resources>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

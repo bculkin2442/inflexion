@@ -22,13 +22,14 @@ package bjc.inflexion.nouns;
  *
  */
 public class IrregularNounInflection implements NounInflection {
-	private static final String TOSTRING_FMT = "IrregularNounInflection [singular=%s, modernPlural=%s,"
-			+ " classicalPlural=%s, preferClassical=%s]";
+	private static final String TOSTRING_FMT =
+	        "IrregularNounInflection [singular=%s, modernPlural=%s,"
+	        + " classicalPlural=%s, preferClassical=%s]";
 
 	private final String singular;
 
-	private final String	modernPlural;
-	private final String	classicalPlural;
+	private final String        modernPlural;
+	private final String        classicalPlural;
 
 	private final boolean preferClassical;
 
@@ -48,9 +49,11 @@ public class IrregularNounInflection implements NounInflection {
 	 *                Whether the classical form should be preferred if it
 	 *                is available.
 	 */
-	public IrregularNounInflection(final String singlar, final String modrnPlural, final String classiclPlural,
-			final boolean prefrClassical) {
+	public IrregularNounInflection(final String singlar, final String modrnPlural,
+	                               final String classiclPlural,
+	                               final boolean prefrClassical) {
 		if (singlar == null) throw new NullPointerException("Singular form must not be null");
+
 		if (modrnPlural == null && classiclPlural == null)
 			throw new NullPointerException("One of modern/classical plural forms must not be null");
 
@@ -79,7 +82,7 @@ public class IrregularNounInflection implements NounInflection {
 			return false;
 		else {
 			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'", noun,
-					this);
+			                                 this);
 
 			throw new InflectionException(msg);
 		}
@@ -93,7 +96,7 @@ public class IrregularNounInflection implements NounInflection {
 			return true;
 		else {
 			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'", noun,
-					this);
+			                                 this);
 
 			throw new InflectionException(msg);
 		}
@@ -106,8 +109,9 @@ public class IrregularNounInflection implements NounInflection {
 		else if (matchesPlural(plural))
 			return singular;
 		else {
-			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'", plural,
-					this);
+			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'",
+			                                 plural,
+			                                 this);
 
 			throw new InflectionException(msg);
 		}
@@ -120,8 +124,9 @@ public class IrregularNounInflection implements NounInflection {
 		else if (matchesPlural(singlar))
 			return getPlural();
 		else {
-			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'", singlar,
-					this);
+			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'",
+			                                 singlar,
+			                                 this);
 
 			throw new InflectionException(msg);
 		}
@@ -143,7 +148,8 @@ public class IrregularNounInflection implements NounInflection {
 
 	@Override
 	public String toString() {
-		return String.format(TOSTRING_FMT, singular, modernPlural, classicalPlural, preferClassical);
+		return String.format(TOSTRING_FMT, singular, modernPlural, classicalPlural,
+		                     preferClassical);
 	}
 
 	@Override
@@ -161,7 +167,9 @@ public class IrregularNounInflection implements NounInflection {
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) return true;
+
 		if (obj == null) return false;
+
 		if (!(obj instanceof IrregularNounInflection)) return false;
 
 		final IrregularNounInflection other = (IrregularNounInflection) obj;
