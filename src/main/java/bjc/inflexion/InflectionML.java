@@ -96,13 +96,6 @@ public class InflectionML {
 						inflectSingular = true;
 					}
 
-					/*
-					 * Break out of switch.
-					 */
-					if (optionSet.contains("d")) {
-						formMatcher.appendReplacement(formBuffer, "");
-						break;
-					}
 
 					String rep = text;
 
@@ -120,10 +113,18 @@ public class InflectionML {
 
 					if (optionSet.contains("a")) {
 						/*
-						 * TODO implement a/an for nouns
+						 * @TODO implement a/an for nouns
 						 */
 					}
 
+					/*
+					 * Break out of switch.
+					 */
+					if (optionSet.contains("d")) {
+						formMatcher.appendReplacement(formBuffer, rep);
+						break;
+					}
+					
 					final boolean shouldOverride = !(rep.equals("no") || rep.equals("a")
 							|| rep.equals("an"));
 
