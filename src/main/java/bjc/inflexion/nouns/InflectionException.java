@@ -19,19 +19,19 @@ package bjc.inflexion.nouns;
  * Exception thrown when something goes wrong with inflection.
  *
  * @author EVE
- *
  */
 public class InflectionException extends RuntimeException {
+	/* Version ID for exception. */
 	private static final long serialVersionUID = 5680541587449153748L;
 
 	/**
 	 * Create a new inflection exception with the given message and cause.
 	 *
 	 * @param message
-	 *                The message of the exception.
+	 * 	The message of the exception.
 	 *
 	 * @param cause
-	 *                The cause of the exception.
+	 * 	The cause of the exception.
 	 */
 	public InflectionException(final String message, final Throwable cause) {
 		super(message, cause);
@@ -41,7 +41,7 @@ public class InflectionException extends RuntimeException {
 	 * Create a new inflection exception with the given message.
 	 *
 	 * @param message
-	 *                The message of the exception.
+	 * 	The message of the exception.
 	 */
 	public InflectionException(final String message) {
 		super(message);

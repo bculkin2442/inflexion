@@ -22,27 +22,28 @@ import java.util.regex.Pattern;
  * Simple implementation of {@link InflectionAffix}
  *
  * @author EVE
- *
  */
 public class SimpleInflectionAffix implements InflectionAffix {
+	/* Format string for toString. */
 	private static final String TOSTRING_FMT =
 	        "SimpleInflectionAffix [affixTemplate=%s, affixMatcher=%s]";
 
+	/* Affix template. */
 	private final String affixTmplate;
-
+	/* Affix matching. */
 	private final Pattern affixMtcher;
 
 	/**
 	 * Create a new inflection affix.
 	 *
 	 * @param affixTemplate
-	 *                The template for applying the affix, Should be a
-	 *                printf-style format string with a single string blank.
+	 * 	The template for applying the affix, Should be a printf-style
+	 * 	format string with a single string blank.
 	 *
 	 * @param affixMatcher
-	 *                The regular expression that matches the affix on
-	 *                strings. The 'stem' or word should be placed in a
-	 *                named capturing group named 'stem'.
+	 * 	The regular expression that matches the affix on strings. The
+	 * 	'stem' or word should be placed in a named capturing group named
+	 * 	'stem'.
 	 */
 	public SimpleInflectionAffix(final String affixTemplate, final Pattern affixMatcher) {
 		affixTmplate = affixTemplate;

@@ -19,23 +19,23 @@ package bjc.inflexion.nouns;
  * A noun attached to an inflection.
  *
  * @author EVE
- *
  */
 public class Noun {
+	/* Format string for toString. */
 	private static final String TOSTRING_FMT = "Noun [word=%s, inflection=%s]";
-
+	/* The word itself. */
 	private final String word;
-
+	/* Its inflection. */
 	private final NounInflection inflection;
 
 	/**
 	 * Create a new noun from a word and inflection.
 	 *
 	 * @param wrd
-	 *                The word for the noun.
+	 * 	The word for the noun.
 	 *
 	 * @param inflction
-	 *                The inflection for the word.
+	 * 	The inflection for the word.
 	 */
 	public Noun(final String wrd, final NounInflection inflction) {
 		word = wrd;
@@ -45,7 +45,8 @@ public class Noun {
 	/**
 	 * Get the input noun.
 	 *
-	 * @return The noun, as input.
+	 * @return
+	 * 	The noun, as input.
 	 */
 	public String getWord() {
 		return word;
@@ -54,7 +55,8 @@ public class Noun {
 	/**
 	 * Get the inflection for this noun.
 	 *
-	 * @return The inflection for this noun.
+	 * @return
+	 * 	The inflection for this noun.
 	 */
 	public NounInflection getInflection() {
 		return inflection;
@@ -63,7 +65,8 @@ public class Noun {
 	/**
 	 * Check if this noun is singular.
 	 *
-	 * @return Whether or not the noun is singular.
+	 * @return
+	 * 	Whether or not the noun is singular.
 	 */
 	public boolean isSingular() {
 		return inflection.isSingular(word);
@@ -72,7 +75,8 @@ public class Noun {
 	/**
 	 * Check if this noun is plural.
 	 *
-	 * @return Whether or not this noun is plural.
+	 * @return
+	 * 	Whether or not this noun is plural.
 	 */
 	public boolean isPlural() {
 		return inflection.isPlural(word);
@@ -81,7 +85,8 @@ public class Noun {
 	/**
 	 * Get the singular form of this noun.
 	 *
-	 * @return The singular form of this noun.
+	 * @return
+	 * 	The singular form of this noun.
 	 */
 	public String singular() {
 		return inflection.singularize(word);
@@ -90,7 +95,8 @@ public class Noun {
 	/**
 	 * Get the plural form of this noun.
 	 *
-	 * @return The plural form of this noun.
+	 * @return
+	 * 	The plural form of this noun.
 	 */
 	public String plural() {
 		return inflection.pluralize(word);
@@ -104,7 +110,8 @@ public class Noun {
 	/**
 	 * Get the modern plural form of this noun.
 	 *
-	 * @return The modern plural form of this noun.
+	 * @return
+	 * 	The modern plural form of this noun.
 	 */
 	public String modernPlural() {
 		return inflection.pluralizeModern(word);
@@ -113,7 +120,8 @@ public class Noun {
 	/**
 	 * Get the classical plural form of this noun.
 	 *
-	 * @return The classical plural form of this noun.
+	 * @return
+	 * 	The classical plural form of this noun.
 	 */
 	public String classicalPlural() {
 		return inflection.pluralizeClassical(word);

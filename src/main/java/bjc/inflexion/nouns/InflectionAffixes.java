@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
  * Utility methods for constructing inflection affixes.
  *
  * @author EVE
- *
  */
 public class InflectionAffixes {
 	/*
@@ -48,9 +47,10 @@ public class InflectionAffixes {
 	 * Create an affix that's a word by itself.
 	 *
 	 * @param suffix
-	 *                The suffix to use.
+	 * 	The suffix to use.
 	 *
-	 * @return A affix that represents the suffix.
+	 * @return
+	 * 	A affix that represents the suffix.
 	 */
 	public static InflectionAffix complete(final String suffix) {
 		final Pattern patt = Pattern.compile(String.format(COMPLETE_PATT_FMT, suffix));
@@ -62,9 +62,10 @@ public class InflectionAffixes {
 	 * Create an affix that's not a word by itself.
 	 *
 	 * @param suffix
-	 *                The suffix to use.
+	 * 	The suffix to use.
 	 *
-	 * @return An affix that represents the suffix.
+	 * @return
+	 * 	An affix that represents the suffix.
 	 */
 	public static InflectionAffix incomplete(final String suffix) {
 		final Pattern patt = Pattern.compile(String.format(INCOMPLETE_PATT_FMT, suffix));

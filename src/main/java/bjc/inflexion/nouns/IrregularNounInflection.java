@@ -19,35 +19,39 @@ package bjc.inflexion.nouns;
  * Implementation of {@link NounInflection} for irregular nouns.
  *
  * @author EVE
- *
  */
 public class IrregularNounInflection implements NounInflection {
+	/* Format string for toString. */
 	private static final String TOSTRING_FMT =
 	        "IrregularNounInflection [singular=%s, modernPlural=%s,"
 	        + " classicalPlural=%s, preferClassical=%s]";
 
+	/* The singular form. */
 	private final String singular;
 
-	private final String        modernPlural;
-	private final String        classicalPlural;
+	/* The modern plural form. */
+	private final String modernPlural;
+	/* The classical plural form. */
+	private final String classicalPlural;
 
+	/* Whether to prefer the classical form or not. */
 	private final boolean preferClassical;
 
 	/**
 	 * Create a new irregular noun inflection.
 	 *
 	 * @param singlar
-	 *                The singular form of the noun.
+	 * 	The singular form of the noun.
 	 *
 	 * @param modrnPlural
-	 *                The modern plural of the noun.
+	 * 	The modern plural of the noun.
 	 *
 	 * @param classiclPlural
-	 *                The classical plural of the noun.
+	 * 	The classical plural of the noun.
 	 *
 	 * @param prefrClassical
-	 *                Whether the classical form should be preferred if it
-	 *                is available.
+	 * 	Whether the classical form should be preferred if it is
+	 * 	available.
 	 */
 	public IrregularNounInflection(final String singlar, final String modrnPlural,
 	                               final String classiclPlural,
@@ -65,22 +69,24 @@ public class IrregularNounInflection implements NounInflection {
 
 	@Override
 	public boolean matches(final String noun) {
-		if (noun.equalsIgnoreCase(singular))
+		if (noun.equalsIgnoreCase(singular)) {
 			return true;
-		else if (noun.equalsIgnoreCase(modernPlural))
+		} else if (noun.equalsIgnoreCase(modernPlural)) {
 			return true;
-		else if (noun.equalsIgnoreCase(classicalPlural))
+		} else if (noun.equalsIgnoreCase(classicalPlural)) {
 			return true;
-		else return false;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
 	public boolean isSingular(final String noun) {
-		if (noun.equalsIgnoreCase(singular))
+		if (noun.equalsIgnoreCase(singular)) {
 			return true;
-		else if (matchesPlural(noun))
+		} else if (matchesPlural(noun)) {
 			return false;
-		else {
+		} else {
 			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'", noun,
 			                                 this);
 
@@ -90,11 +96,11 @@ public class IrregularNounInflection implements NounInflection {
 
 	@Override
 	public boolean isPlural(final String noun) {
-		if (noun.equalsIgnoreCase(singular))
+		if (noun.equalsIgnoreCase(singular)) {
 			return false;
-		else if (matchesPlural(noun))
+		} else if (matchesPlural(noun)) {
 			return true;
-		else {
+		} else {
 			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'", noun,
 			                                 this);
 
@@ -104,11 +110,11 @@ public class IrregularNounInflection implements NounInflection {
 
 	@Override
 	public String singularize(final String plural) {
-		if (plural.equalsIgnoreCase(singular))
+		if (plural.equalsIgnoreCase(singular)) {
 			return singular;
-		else if (matchesPlural(plural))
+		} else if (matchesPlural(plural)) {
 			return singular;
-		else {
+		} else {
 			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'",
 			                                 plural,
 			                                 this);
@@ -119,11 +125,11 @@ public class IrregularNounInflection implements NounInflection {
 
 	@Override
 	public String pluralize(final String singlar) {
-		if (singlar.equalsIgnoreCase(singlar))
+		if (singlar.equalsIgnoreCase(singlar)) {
 			return getPlural();
-		else if (matchesPlural(singlar))
+		} else if (matchesPlural(singlar)) {
 			return getPlural();
-		else {
+		} else {
 			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'",
 			                                 singlar,
 			                                 this);
@@ -132,16 +138,20 @@ public class IrregularNounInflection implements NounInflection {
 		}
 	}
 
+	/* Get the plural form. */
 	private String getPlural() {
 		if (preferClassical) {
 			if (classicalPlural == null) return modernPlural;
 
 			return classicalPlural;
-		} else if (modernPlural == null)
+		} else if (modernPlural == null) {
 			return classicalPlural;
-		else return modernPlural;
+		} else {
+			return modernPlural;
+		}
 	}
 
+	/* Check if something matches the plural forms. */
 	private boolean matchesPlural(final String noun) {
 		return noun.equalsIgnoreCase(modernPlural) || noun.equalsIgnoreCase(classicalPlural);
 	}

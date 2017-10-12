@@ -19,16 +19,16 @@ package bjc.inflexion.nouns;
  * Interface for inflecting nouns.
  *
  * @author EVE
- *
  */
 public interface NounInflection {
 	/**
 	 * Check if a noun matches this inflection.
 	 *
 	 * @param noun
-	 *                The noun to check on this inflection.
+	 * 	The noun to check on this inflection.
 	 *
-	 * @return Whether or not the noun belongs to the inflection.
+	 * @return
+	 * 	Whether or not the noun belongs to the inflection.
 	 */
 	public boolean matches(String noun);
 
@@ -36,12 +36,13 @@ public interface NounInflection {
 	 * Check if a noun for this inflection is singular or not.
 	 *
 	 * @param noun
-	 *                The noun to check for singularity.
+	 * 	The noun to check for singularity.
 	 *
-	 * @return Whether or not the noun is singular.
+	 * @return
+	 * 	Whether or not the noun is singular.
 	 *
 	 * @throws InflectionException
-	 *                 If the noun isn't part of this inflection.
+	 * 	If the noun isn't part of this inflection.
 	 */
 	public boolean isSingular(String noun);
 
@@ -49,12 +50,13 @@ public interface NounInflection {
 	 * Check if a noun for this inflection is plural or not.
 	 *
 	 * @param noun
-	 *                The noun to check for plurality.
+	 * 	The noun to check for plurality.
 	 *
-	 * @return Whether or not the noun is plural.
+	 * @return
+	 * 	Whether or not the noun is plural.
 	 *
 	 * @throws InflectionException
-	 *                 If the noun isn't part of this inflection.
+	 * 	If the noun isn't part of this inflection.
 	 */
 	public boolean isPlural(String noun);
 
@@ -62,12 +64,13 @@ public interface NounInflection {
 	 * Convert a singular noun to a plural noun.
 	 *
 	 * @param plural
-	 *                The plural noun to inflect to a singular form.
+	 * 	The plural noun to inflect to a singular form.
 	 *
-	 * @return The singular form of the noun.
+	 * @return
+	 * 	The singular form of the noun.
 	 *
 	 * @throws InflectionException
-	 *                 If the noun isn't part of the inflection.
+	 * 	If the noun isn't part of the inflection.
 	 */
 	public String singularize(String plural);
 
@@ -75,12 +78,13 @@ public interface NounInflection {
 	 * Convert a singular noun to a plural noun.
 	 *
 	 * @param singular
-	 *                The singular noun to inflect to a plural form.
+	 * 	The singular noun to inflect to a plural form.
 	 *
-	 * @return The plural form of the noun.
+	 * @return
+	 * 	The plural form of the noun.
 	 *
 	 * @throws InflectionException
-	 *                 If the noun isn't part of the inflection.
+	 * 	If the noun isn't part of the inflection.
 	 */
 	public String pluralize(String singular);
 
@@ -88,12 +92,13 @@ public interface NounInflection {
 	 * Convert a singular noun to a modern plural noun.
 	 *
 	 * @param singular
-	 *                The singular noun to inflect to a modern plural form.
+	 * 	The singular noun to inflect to a modern plural form.
 	 *
-	 * @return The modern plural form of the noun.
+	 * @return
+	 * 	The modern plural form of the noun.
 	 *
 	 * @throws InflectionException
-	 *                 If the noun isn't part of the inflection.
+	 * 	If the noun isn't part of the inflection.
 	 */
 	public String pluralizeModern(String singular);
 
@@ -101,13 +106,13 @@ public interface NounInflection {
 	 * Convert a singular noun to a classical plural noun.
 	 *
 	 * @param singular
-	 *                The singular noun to inflect to a classical plural
-	 *                form.
+	 * 	The singular noun to inflect to a classical plural form.
 	 *
-	 * @return The classical plural form of the noun.
+	 * @return
+	 * 	The classical plural form of the noun.
 	 *
 	 * @throws InflectionException
-	 *                 If the noun isn't part of the inflection.
+	 * 	If the noun isn't part of the inflection.
 	 */
 	public String pluralizeClassical(String singular);
 }

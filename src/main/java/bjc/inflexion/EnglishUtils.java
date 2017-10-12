@@ -16,37 +16,27 @@
 package bjc.inflexion;
 
 /**
- * @author student
+ * General utils for dealing with english.
  *
+ * @author student
  */
 public class EnglishUtils {
-	private static String[] smallNums = new String[] { "zero", "one", "two", "three", "four", "five", "six",
-	                "seven", "eight", "nine", "ten"
-	                                                 };
+	private static String[] smallNums = new String[] { 
+		"zero", "one", "two", "three", "four", "five", "six", "seven",
+			"eight", "nine", "ten" };
 
-	private static String[]     summaryNums     = new String[] { "no", "one", "a couple of", "a few", "several" };
-	private static String[]     endSummaryNums  = new String[] { "no", "one", "a couple of", "a few", "several" };
+	private static String[] summaryNums     = new String[] { "no", "one", "a couple of", "a few", "several" };
 
 	private static int[] summaryMap = new int[] {
-	        /*
-	         * no
-	         */
+	        /* no */
 	        0,
-	        /*
-	         * one
-	         */
+	        /* one */
 	        1,
-	        /*
-	         * a couple of
-	         */
+	        /* a couple of */
 	        2,
-	        /*
-	         * a few
-	         */
+	        /* a few */
 	        3, 3, 3,
-	        /*
-	         * several
-	         */
+	        /* several */
 	        4, 4, 4, 4
 	};
 
@@ -54,9 +44,10 @@ public class EnglishUtils {
 	 * Convert small integers to words.
 	 *
 	 * @param num
-	 *                The number to convert.
+	 * 	The number to convert.
 	 *
-	 * @return The word for the number, if it's less than ten.
+	 * @return
+	 * 	The word for the number, if it's less than ten.
 	 */
 	public static String smallIntToWord(final int num) {
 		if (num >= 0 && num <= 10) return smallNums[num];
@@ -68,17 +59,16 @@ public class EnglishUtils {
 	 * Summarize an integer.
 	 *
 	 * @param num
-	 *                The number to summarize.
+	 * 	The number to summarize.
 	 *
 	 * @param atEnd
-	 *                Whether or not the integer is at the end of a string.
+	 * 	Whether or not the integer is at the end of a string.
 	 *
-	 * @return A string summarizing the integer.
+	 * @return
+	 * 	A string summarizing the integer.
 	 */
 	public static String intSummarize(final int num, final boolean atEnd) {
-		final String[] nums = atEnd ? endSummaryNums : summaryNums;
-
-		if (num >= 0 && num < 10) return nums[summaryMap[num]];
+		if (num >= 0 && num < 10) return summaryNums[summaryMap[num]];
 
 		return "many";
 	}

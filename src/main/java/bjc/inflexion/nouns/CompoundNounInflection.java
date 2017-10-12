@@ -26,57 +26,69 @@ import java.util.regex.Pattern;
  *
  */
 public class CompoundNounInflection implements NounInflection {
+	/* Format for toString. */
 	private static final String TOSTRING_FMT =
-	        "CompoundNounInflection [compoundMatcher=%s, singularPattern=%s,"
-	        + " modernPluralPattern=%s, classicalPluralPattern=%s, hasPreposition=%s]";
-	/*
-	 * Data stores for use.
-	 */
+	        "CompoundNounInflection [compoundMatcher=%s, singularPattern=%s, modernPluralPattern=%s, classicalPluralPattern=%s, hasPreposition=%s]";
+	/* Data stores for use. */
 	private final Nouns         nunDB;
 	private final Prepositions  pepositionDB;
 
+	/* The pattern for compound matching. */
 	private final Pattern cmpoundMatcher;
 
+	/* The pattern for singular matching. */
 	private final String sigularPattern;
 
-	private final String        mdernPluralPattern;
-	private final String        clasicalPluralPattern;
+	/* The patterns for plural matching. */
+	private final String mdernPluralPattern;
+	private final String clasicalPluralPattern;
 
-	/*
-	 * Whether or not this inflection takes a preposition.
-	 */
+	/* Whether or not this inflection takes a preposition. */
 	private final boolean haPreposition;
 
-	/*
-	 * Whether or not there is a scratch word in place.
-	 */
+	/* Whether or not there is a scratch word in place. */
 	private final boolean hasScratch;
 
 	/**
-	 * TODO fill in documentation.
+	 * Create a new compound noun inflection.
 	 *
 	 * @param nounDB
+	 * 	The database of nouns to lookup.
+	 *
 	 * @param prepositionDB
+	 * 	The database of prepositions to lookup.
+	 *
 	 * @param compoundMatcher
+	 * 	The matcher for the compound noun.
+	 *
 	 * @param singularPattern
+	 * 	The pattern for a singular form.
+	 *
 	 * @param modernPluralPattern
+	 * 	The pattern for a modern plural form.
+	 *
 	 * @param classicalPluralPattern
+	 * 	The pattern for a classical plural form.
+	 * 
 	 * @param hasPreposition
+	 * 	Whether or not this inflection uses a preposition.
+	 *
 	 * @param hasScrtch
+	 * 	Whether or not this inflection has a scratch word.
 	 */
 	public CompoundNounInflection(final Nouns nounDB, final Prepositions prepositionDB,
 	                              final Pattern compoundMatcher, final String singularPattern,
 	                              final String modernPluralPattern,
 	                              final String classicalPluralPattern, final boolean hasPreposition,
 	                              final boolean hasScrtch) {
-		nunDB = nounDB;
-		pepositionDB = prepositionDB;
-		cmpoundMatcher = compoundMatcher;
-		sigularPattern = singularPattern;
-		mdernPluralPattern = modernPluralPattern;
+		nunDB                 = nounDB;
+		pepositionDB          = prepositionDB;
+		cmpoundMatcher        = compoundMatcher;
+		sigularPattern        = singularPattern;
+		mdernPluralPattern    = modernPluralPattern;
 		clasicalPluralPattern = classicalPluralPattern;
-		haPreposition = hasPreposition;
-		hasScratch = hasScrtch;
+		haPreposition         = hasPreposition;
+		hasScratch            = hasScrtch;
 	}
 
 	@Override
@@ -99,7 +111,7 @@ public class CompoundNounInflection implements NounInflection {
 	@Override
 	public boolean isSingular(final String noun) {
 		final Matcher matcher = cmpoundMatcher.matcher(noun);
-		final Noun actNoun = nunDB.getNoun(matcher.group("noun"));
+		final Noun actNoun    = nunDB.getNoun(matcher.group("noun"));
 
 		return actNoun.isSingular();
 	}
@@ -107,7 +119,7 @@ public class CompoundNounInflection implements NounInflection {
 	@Override
 	public boolean isPlural(final String noun) {
 		final Matcher matcher = cmpoundMatcher.matcher(noun);
-		final Noun actNoun = nunDB.getNoun(matcher.group("noun"));
+		final Noun actNoun    = nunDB.getNoun(matcher.group("noun"));
 
 		return actNoun.isPlural();
 	}
@@ -115,34 +127,38 @@ public class CompoundNounInflection implements NounInflection {
 	@Override
 	public String singularize(final String plural) {
 		final Matcher matcher = cmpoundMatcher.matcher(plural);
-		final Noun actNoun = getNoun(matcher);
+		final Noun actNoun    = getNoun(matcher);
 
-		if (haPreposition && hasScratch)
+		if (haPreposition && hasScratch) {
 			return String.format(sigularPattern, actNoun.singular(), matcher.group("preposition"),
 			                     matcher.group("scratch"));
-		else if (hasScratch)
+		} else if (hasScratch) {
 			return String.format(sigularPattern, actNoun.singular(), matcher.group("scratch"));
-		else if (haPreposition)
+		} else if (haPreposition) {
 			return String.format(sigularPattern, actNoun.singular(), matcher.group("preposition"));
-		else return String.format(sigularPattern, actNoun.singular());
+		} else {
+			return String.format(sigularPattern, actNoun.singular());
+		}
 	}
 
 	@Override
 	public String pluralize(final String singular) {
 		final Matcher matcher = cmpoundMatcher.matcher(singular);
-		final Noun actNoun = getNoun(matcher);
+		final Noun actNoun    = getNoun(matcher);
 
 		final String patt = mdernPluralPattern == null ? clasicalPluralPattern :
 		                    mdernPluralPattern;
 
-		if (haPreposition && hasScratch)
+		if (haPreposition && hasScratch) {
 			return String.format(patt, actNoun.plural(), matcher.group("preposition"),
 			                     matcher.group("scratch"));
-		else if (hasScratch)
+		} else if (hasScratch) {
 			return String.format(patt, actNoun.plural(), matcher.group("scratch"));
-		else if (haPreposition)
+		} else if (haPreposition) {
 			return String.format(patt, actNoun.plural(), matcher.group("preposition"));
-		else return String.format(patt, actNoun.plural());
+		} else {
+			return String.format(patt, actNoun.plural());
+		}
 	}
 
 	@Override
@@ -150,19 +166,21 @@ public class CompoundNounInflection implements NounInflection {
 		if (mdernPluralPattern == null) return pluralizeClassical(singular);
 
 		final Matcher matcher = cmpoundMatcher.matcher(singular);
-		final Noun actNoun = getNoun(matcher);
+		final Noun actNoun    = getNoun(matcher);
 
-		if (haPreposition && hasScratch)
+		if (haPreposition && hasScratch) {
 			return String.format(mdernPluralPattern, actNoun.modernPlural(),
 			                     matcher.group("preposition"),
 			                     matcher.group("scratch"));
-		else if (hasScratch)
+		} else if (hasScratch) {
 			return String.format(mdernPluralPattern, actNoun.modernPlural(),
 			                     matcher.group("scratch"));
-		else if (haPreposition)
+		} else if (haPreposition) {
 			return String.format(mdernPluralPattern, actNoun.modernPlural(),
 			                     matcher.group("preposition"));
-		else return String.format(mdernPluralPattern, actNoun.modernPlural());
+		} else {
+			return String.format(mdernPluralPattern, actNoun.modernPlural());
+		}
 	}
 
 	@Override
@@ -170,20 +188,23 @@ public class CompoundNounInflection implements NounInflection {
 		if (clasicalPluralPattern == null) return pluralizeModern(singular);
 
 		final Matcher matcher = cmpoundMatcher.matcher(singular);
-		final Noun actNoun = getNoun(matcher);
+		final Noun actNoun    = getNoun(matcher);
 
-		if (haPreposition && hasScratch)
+		if (haPreposition && hasScratch) {
 			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
 			                     matcher.group("preposition"), matcher.group("scratch"));
-		else if (hasScratch)
+		} else if (hasScratch) {
 			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
 			                     matcher.group("scratch"));
-		else if (haPreposition)
+		} else if (haPreposition) {
 			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
 			                     matcher.group("preposition"));
-		else return String.format(clasicalPluralPattern, actNoun.classicalPlural());
+		} else {
+			return String.format(clasicalPluralPattern, actNoun.classicalPlural());
+		}
 	}
 
+	/* Get the noun for a matcher. */
 	private Noun getNoun(final Matcher matcher) {
 		matcher.matches();
 

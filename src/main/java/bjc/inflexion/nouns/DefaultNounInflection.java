@@ -19,7 +19,6 @@ package bjc.inflexion.nouns;
  * Default noun inflection for english nouns.
  *
  * @author EVE
- *
  */
 public class DefaultNounInflection implements NounInflection {
 	@Override
@@ -39,11 +38,13 @@ public class DefaultNounInflection implements NounInflection {
 
 	@Override
 	public String singularize(final String plural) {
-		if (plural.endsWith("ses"))
+		if (plural.endsWith("ses")) {
 			return plural.substring(0, plural.length() - 3);
-		else if (plural.endsWith("s"))
+		} else if (plural.endsWith("s")) {
 			return plural.substring(0, plural.length() - 1);
-		else return plural;
+		} else {
+			return plural;
+		}
 	}
 
 	@Override
