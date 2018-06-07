@@ -1,2 +1,3 @@
 # inflexion
-Java implementation of Damian Conway's pluralization algorithm
+
+Java implementation of Damian Conway's Lingua::EN::Inflexion algorithm

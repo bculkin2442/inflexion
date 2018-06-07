@@ -1,6 +1,4 @@
-/**
- * (C) Copyright 2017 Benjamin Culkin.
- *
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,9 +13,11 @@
  */
 package bjc.inflexion;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +45,8 @@ public class InflectionML {
 	private static Pattern FORM_MARKER =
 		Pattern.compile("<(?<command>[#N])(?<options>[^:]*):(?<text>[^>]*)>");
 
+	private static Pattern AN_MARKER = Pattern.compile("\\{an(\\d+)\\}");
+
 	/* The database of nouns. */
 	private static Nouns nounDB;
 
@@ -66,13 +68,18 @@ public class InflectionML {
 	 * @return 
 	 * 	The inflected string.
 	 */
-	public static String inflect(final String form) {
-		final Matcher formMatcher = FORM_MARKER.matcher(form);
-
-		final StringBuffer formBuffer = new StringBuffer();
+	public static String inflect(String form) {
+		Matcher formMatcher = FORM_MARKER.matcher(form);
+		StringBuffer formBuffer = new StringBuffer();
 
 		int curCount = 1;
+
 		boolean inflectSingular = true;
+
+		int anCount = 0;
+		List<String> anVals = new ArrayList<>();
+
+		boolean pendingAN = false;
 
 		while (formMatcher.find()) {
 			final String command = formMatcher.group("command");
@@ -129,9 +136,12 @@ public class InflectionML {
 					}
 
 					if (optionSet.contains("a")) {
-						/* :InflectionML
-						 *	 Implement a/an for nouns.
-						 */
+						if (curCount == 1) {
+							anCount += 1;
+							rep = "{an" + anCount + "}";
+
+							pendingAN = true;
+						}
 					}
 
 					/* Break out of switch. */
@@ -140,10 +150,7 @@ public class InflectionML {
 						break;
 					}
 					
-					final boolean shouldOverride = 
-						!(rep.equals("no") ||
-						  rep.equals("a")  ||
-						  rep.equals("an")    );
+					final boolean shouldOverride = !(rep.equals("no") || rep.matches("\\{an\\d+\\}"));
 
 					if (optionSet.contains("w") && shouldOverride) {
 						rep = EnglishUtils.smallIntToWord(curCount);
@@ -162,15 +169,25 @@ public class InflectionML {
 			case "N":
 				final Noun noun = nounDB.getNoun(text);
 
+				String nounVal;
+
 				if (optionSet.contains("p") || !inflectSingular) {
 					if (optionSet.contains("c")) {
-						formMatcher.appendReplacement(formBuffer, noun.classicalPlural());
+						nounVal = noun.classicalPlural();
 					} else {
-						formMatcher.appendReplacement(formBuffer, noun.modernPlural());
+						nounVal = noun.modernPlural();
 					}
 				} else {
-					formMatcher.appendReplacement(formBuffer, noun.singular());
+					nounVal = noun.singular();
 				}
+
+				formMatcher.appendReplacement(formBuffer, nounVal);
+				if(pendingAN) {
+					anVals.add(EnglishUtils.pickIndefinite(nounVal));
+
+					pendingAN = false;
+				}
+
 				break;
 			default:
 				final String msg = String.format("Unknown command '%s'", command);
@@ -180,6 +197,17 @@ public class InflectionML {
 		}
 
 		formMatcher.appendTail(formBuffer);
+
+		String res = formBuffer.toString();
+		formBuffer = new StringBuffer();
+
+		Matcher anMat = AN_MARKER.matcher(res);
+
+		Iterator<String> anItr = anVals.iterator();
+		while(anMat.find()) {
+			anMat.appendReplacement(formBuffer, anItr.next());
+		}
+		anMat.appendTail(formBuffer);
 
 		return formBuffer.toString();
 	}

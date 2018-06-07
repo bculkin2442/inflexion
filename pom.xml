@@ -5,13 +5,13 @@
 
 	<groupId>bjc</groupId>
 	<artifactId>inflexion</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 
 	<name>Inflexion</name>
 	<description>Java based implementation of Damian Conway's Lingua::EN::Inflexion module for perl</description>
 
 	<properties>
-		<main.class>bjc.inflexion.examples.InflexionTester</main.class>
+		<main.class>bjc.inflexion.examples.IndefTester</main.class>
 	</properties>
 
 	<licenses>

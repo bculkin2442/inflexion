@@ -560,6 +560,7 @@ topos      =>  topoi
 absis       =>                |  absides
 aphis       =>                |  aphides
 apsis       =>                |  apsides
+aspis       =>                |  aspides
 caryopsis   =>                |  caryopsides
 chrysalis   =>  chrysalises   |  chrysalides
 cinclis     =>                |  cinclides
