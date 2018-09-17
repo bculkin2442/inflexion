@@ -175,7 +175,7 @@ public class InflectionML {
 					if (optionSet.contains("c")) {
 						nounVal = noun.classicalPlural();
 					} else {
-						nounVal = noun.modernPlural();
+						nounVal = noun.plural();
 					}
 				} else {
 					nounVal = noun.singular();

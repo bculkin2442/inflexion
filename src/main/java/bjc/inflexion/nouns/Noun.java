@@ -88,6 +88,8 @@ public class Noun {
 	 * 	The singular form of this noun.
 	 */
 	public String singular() {
+		if (isSingular()) return word;
+
 		return inflection.singularize(word);
 	}
 
@@ -98,6 +100,8 @@ public class Noun {
 	 * 	The plural form of this noun.
 	 */
 	public String plural() {
+		if (isPlural()) return word;
+
 		return inflection.pluralize(word);
 	}
 
@@ -113,6 +117,14 @@ public class Noun {
 	 * 	The modern plural form of this noun.
 	 */
 	public String modernPlural() {
+		if (isPlural()) {
+			// @NOTE 9/16/18
+			//
+			// Not sure if we're in modern/classical plural. Think
+			// if there's a better way to do this
+			return inflection.pluralizeModern(inflection.singularize(word));
+		}
+
 		return inflection.pluralizeModern(word);
 	}
 
@@ -123,6 +135,14 @@ public class Noun {
 	 * 	The classical plural form of this noun.
 	 */
 	public String classicalPlural() {
+		if (isPlural()) {
+			// @NOTE 9/16/18
+			//
+			// Not sure if we're in modern/classical plural. Think
+			// if there's a better way to do this
+			return inflection.pluralizeModern(inflection.singularize(word));
+		}
+
 		return inflection.pluralizeClassical(word);
 	}
 }
