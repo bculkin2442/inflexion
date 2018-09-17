@@ -13,6 +13,7 @@
  */
 package bjc.inflexion;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -28,16 +29,16 @@ public class EnglishUtils {
 	private static String[] summaryNums     = new String[] { "no", "one", "a couple of", "a few", "several" };
 
 	private static int[] summaryMap = new int[] {
-	        /* no */
-	        0,
-	        /* one */
-	        1,
-	        /* a couple of */
-	        2,
-	        /* a few */
-	        3, 3, 3,
-	        /* several */
-	        4, 4, 4, 4
+		/* no */
+		0,
+			/* one */
+			1,
+			/* a couple of */
+			2,
+			/* a few */
+			3, 3, 3,
+			/* several */
+			4, 4, 4, 4
 	};
 
 	/**
@@ -73,67 +74,84 @@ public class EnglishUtils {
 		return "many";
 	}
 
-	private static Pattern AN_ORD = Pattern.compile("(?i)\\A[aefhilmnorsx]-?th\\Z");
-	private static Pattern A_ORD  = Pattern.compile("(?i)\\A[bcdgjkpqtuvwyz]-?th\\Z");
-	private static Pattern EXP_AN = Pattern.compile("(?i)\\A(?:euler|hour(?!i)|heir|honest|hono)");
-	private static Pattern SIN_AN = Pattern.compile("(?i)\\A[aefhilmnorst]\\Z");
-	private static Pattern SIN_A  = Pattern.compile("(?i)\\A[bcdgjkpqtuvwyz]\\Z");
 
-	private static Pattern ABBREV_AN = Pattern.compile("\\A(?!FJO|[HLMNS]Y|RY[EQ]|SQU|(F[LR]?|[HL]|MN?|N|RH?|S[CHKLMNPTVW]?|X(YL)?)[AEIOU])[FHLMNRSX][A-Z]");
+	public static String pickIndefinite(String phrase) {
+		Pattern pattern;
+		Matcher matcher;
+		String word, lowercaseWord;
 
-	private static Pattern IN_Y_AN = Pattern.compile("(?i)\\Ay(?:b[lor]|cl[ea]|fere|gg|p[ios]|rou|tt)");
+		if (phrase.length() == 0) {
+			return "a";
+		}
 
-	private static Pattern ABBREV_C2 = Pattern.compile("(?i)\\A[aefhilmnorsx][.-]");
-	private static Pattern ABBREV_C3 = Pattern.compile("(?i)\\A[a-z][.-]");
+		// Getting the first word 
+		pattern = Pattern.compile("(\\w+)\\s*.*");
+		matcher = pattern.matcher(phrase);
+		if(matcher.matches() == true) {
+			word = matcher.group(1);
+		} else {
+			return "an";
+		}
 
-	private static Pattern CONSONANT = Pattern.compile("(?i)\\A[^aeiouy]");
+		lowercaseWord = word.toLowerCase();
 
-	private static Pattern SPECVOWEL_C1 = Pattern.compile("(?i)\\Ae[uw]");
-	private static Pattern SPECVOWEL_C2 = Pattern.compile("(?i)\\Aonc?e\b");
-	private static Pattern SPECVOWEL_C3 = Pattern.compile("(?i)\\Auni(?:[^nmd]|mo)");
-	private static Pattern SPECVOWEL_C4 = Pattern.compile("(?i)\\Aut[th]");
-	private static Pattern SPECVOWEL_C5 = Pattern.compile("(?i)\\Au[bcfhjkqrst][aeiou]");
+		// Specific start of words that should be preceded by 'an'
+		String [] altCases = { "euler", "heir", "honest", "hono" };
+		for (String altCase : altCases) {
+			if (lowercaseWord.startsWith(altCase) == true) {
+				return "an";
+			}
+		}
 
-	private static Pattern SPECCAP_C1 = Pattern.compile("\\AU[NK][AIEO]?");
+		if (lowercaseWord.startsWith("hour") == true && lowercaseWord.startsWith("houri") == false) {
+			return "an";
+		}
 
-	private static Pattern VOWEL = Pattern.compile("(?i)\\A[aeiou]\\Z");
 
-	public static String pickIndefinite(String word) {
-		// Handle ordinal forms
-		if(A_ORD.matcher(word).find()) return "a";
-		if(AN_ORD.matcher(word).find()) return "an";
+		// Single letter word which should be preceded by 'an'
+		if (lowercaseWord.length() == 1) {
+			if ("aedhilmnorsx".indexOf(lowercaseWord) >= 0) {
+				return "an";
+			} else {
+				return "a";
+			}
+		}
 
-		// Handle special cases
-		if(EXP_AN.matcher(word).find()) return "an";
-		if(SIN_AN.matcher(word).find()) return "an";
-		if(SIN_A.matcher(word).find()) return "a";
+		// Capital words which should likely be preceded by 'an'
+		if (word.matches("(?!FJO|[HLMNS]Y.|RY[EO]|SQU|(F[LR]?|[HL]|MN?|N|RH?|S[CHKLMNPTVW]?|X(YL)?)[AEIOU])[FHLMNRSX][A-Z]")) {
+			return "an";
+		}
 
-		// Handle abbreviations
-		if(ABBREV_AN.matcher(word).find()) return "an";
-		if(ABBREV_C2.matcher(word).find()) return "an";
-		if(ABBREV_C3.matcher(word).find()) return "a";
+		// Special cases where a word that begins with a vowel should be preceded by 'a'
+		String [] regexes = { "^e[uw]", "^onc?e\\b", "^uni([^nmd]|mo)", "^u[bcfhjkqrst][aeiou]" };
 
-		// Handle consonants
-		if(CONSONANT.matcher(word).find()) return "a";
+		for (String regex : regexes) {
+			if (lowercaseWord.matches(regex+".*") == true) {
+				return "a";
+			}
+		}
 
-		// Handle special vowel forms
-		if(SPECVOWEL_C1.matcher(word).find()) return "a";
-		if(SPECVOWEL_C2.matcher(word).find()) return "a";
-		if(SPECVOWEL_C3.matcher(word).find()) return "a";
-		if(SPECVOWEL_C4.matcher(word).find()) return "an";
-		if(SPECVOWEL_C5.matcher(word).find()) return "a";
+		// Special capital words (UK, UN)
+		if (word.matches("^U[NK][AIEO].*") == true) {
+			return "a";
+		} else if (word == word.toUpperCase()) {
+			if ("aedhilmnorsx".indexOf(lowercaseWord.substring(0, 1)) >= 0) {
+				return "an";
+			} else {
+				return "a";
+			}
+		}
 
-		// Handle special capitals
-		if(SPECCAP_C1.matcher(word).find()) return "a";
+		// Basic method of words that begin with a vowel being preceded by 'an'
+		if ("aeiou".indexOf(lowercaseWord.substring(0, 1)) >= 0) {
+			return "an";
+		}
 
-		// Handle vowels
-		if(VOWEL.matcher(word).find()) return "an";
+		// Instances where y followed by specific letters is preceded by 'an'
+		if (lowercaseWord.matches("^y(b[lor]|cl[ea]|fere|gg|p[ios]|rou|tt).*")) {
+			return "an";
+		}
 
-		// Handle Y (before certain consonants, it implies a
-		// (unnaturalized) "I" sound)
-		if(IN_Y_AN.matcher(word).find()) return "an";
-
-		// Guess "A"
 		return "a";
 	}
 }
