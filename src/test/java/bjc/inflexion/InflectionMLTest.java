@@ -8,7 +8,7 @@ import static bjc.inflexion.InflectionML.inflect;
 
 public class InflectionMLTest {
 	@Test
-	public void testNumDirective() {
+	public void testML() {
 		assertEquals("no results", inflect("<#n:0> <N:results>"));
 		assertEquals("7 results",  inflect("<#n:7> <N:results>"));
 
@@ -23,5 +23,8 @@ public class InflectionMLTest {
 
 		assertEquals("an outcome", inflect("<#a:1> <N:outcomes>"));
 		assertEquals("3 outcomes", inflect("<#a:3> <N:outcomes>"));
+
+		assertEquals("5 things", inflect("<#a:5> <Noun:things>"));
+		assertEquals("a thing", inflect("<#An:1> <Noun:things>"));
 	}
 }

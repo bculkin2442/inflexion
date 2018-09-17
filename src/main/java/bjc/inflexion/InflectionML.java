@@ -88,8 +88,26 @@ public class InflectionML {
 
 			final Set<String> optionSet = new HashSet<>();
 
-			for (int i = 1; i <= options.length(); i++) {
-				optionSet.add(options.substring(i - 1, i));
+			boolean doCaseFold = false;
+
+			if (!options.equals("")) {
+				if (options.matches("(?:[a-z]*[A-Z]+[a-z])+")) {
+					doCaseFold = true;
+				}
+
+				for (int i = 0; i < options.length(); i++) {
+					char ci    = options.charAt(i);
+					String opt = Character.toString(ci);
+
+					if (doCaseFold) {
+						if (Character.isUpperCase(ci))
+							opt = opt.toLowerCase();
+						else
+							continue;
+					}
+
+					optionSet.add(opt);
+				}
 			}
 
 			switch (command) {
