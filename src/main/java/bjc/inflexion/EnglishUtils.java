@@ -74,7 +74,11 @@ public class EnglishUtils {
 		return "many";
 	}
 
-
+	/**
+	 * Pick an indefinite article ('a' or 'an') for a phrase.
+	 * @param phrase The phrase to pick an article for.
+	 * @return The article to use for the phrase.
+	 */
 	public static String pickIndefinite(String phrase) {
 		Pattern pattern;
 		Matcher matcher;
@@ -112,9 +116,9 @@ public class EnglishUtils {
 		if (lowercaseWord.length() == 1) {
 			if ("aedhilmnorsx".indexOf(lowercaseWord) >= 0) {
 				return "an";
-			} else {
-				return "a";
 			}
+			
+			return "a";
 		}
 
 		// Capital words which should likely be preceded by 'an'
@@ -137,9 +141,9 @@ public class EnglishUtils {
 		} else if (word == word.toUpperCase()) {
 			if ("aedhilmnorsx".indexOf(lowercaseWord.substring(0, 1)) >= 0) {
 				return "an";
-			} else {
-				return "a";
 			}
+			
+			return "a";
 		}
 
 		// Basic method of words that begin with a vowel being preceded by 'an'

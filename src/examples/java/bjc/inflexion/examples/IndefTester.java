@@ -4,7 +4,16 @@ import java.util.Scanner;
 
 import bjc.inflexion.EnglishUtils;
 
+/**
+ * Test class for checking indefinite articles
+ * @author bjculkin
+ *
+ */
 public class IndefTester {
+	/**
+	 * Main method.
+	 * @param args Unused CLI args.
+	 */
 	public static void main(String[] args) {
 		Scanner scn = new Scanner(System.in);
 
