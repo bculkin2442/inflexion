@@ -15,8 +15,10 @@ package bjc.inflexion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -33,7 +35,7 @@ import bjc.inflexion.nouns.Prepositions;
  * 	Lingua::EN:Inflexion
  */
 /**
- * Implementation of a simple format language for inflections. 
+ * Implementation of a simple format language for inflections.
  *
  * @author student
  */
@@ -42,8 +44,7 @@ public class InflectionML {
 	private static final List<String> ESUB_OPT = Arrays.asList("a", "s", "w");
 
 	/* The regex that marks an inflection form. */
-	private static Pattern FORM_MARKER =
-		Pattern.compile("<(?<command>[#N])(?<options>[^:]*):(?<text>[^>]*)>");
+	private static Pattern FORM_MARKER = Pattern.compile("<(?<command>[#N])(?<options>[^:]*):(?<text>[^>]*)>");
 
 	private static Pattern AN_MARKER = Pattern.compile("\\{an(\\d+)\\}");
 
@@ -63,10 +64,9 @@ public class InflectionML {
 	 * Apply inflection to marked forms in the string.
 	 *
 	 * @param form
-	 * 	The string to inflect.
+	 *                The string to inflect.
 	 *
-	 * @return 
-	 * 	The inflected string.
+	 * @return The inflected string.
 	 */
 	public static String inflect(String form) {
 		Matcher formMatcher = FORM_MARKER.matcher(form);
@@ -84,38 +84,76 @@ public class InflectionML {
 		while (formMatcher.find()) {
 			final String command = formMatcher.group("command");
 			final String options = formMatcher.group("options");
-			final String text    = formMatcher.group("text");
+			final String text = formMatcher.group("text");
 
 			final Set<String> optionSet = new HashSet<>();
 
 			boolean doCaseFold = false;
+
+			final Map<Character, Integer> numOpts = new HashMap<>();
+			numOpts.put('w', 11);
+			numOpts.put('o', Integer.MAX_VALUE);
+			numOpts.put('f', 0);
 
 			if (!options.equals("")) {
 				if (options.matches("(?:[a-z]*[A-Z]+[a-z])+")) {
 					doCaseFold = true;
 				}
 
-				for (int i = 0; i < options.length(); i++) {
-					char ci    = options.charAt(i);
-					String opt = Character.toString(ci);
+				char prevOption = ' ';
 
-					if (doCaseFold) {
-						if (Character.isUpperCase(ci))
-							opt = opt.toLowerCase();
-						else
-							continue;
+				StringBuilder currNum = new StringBuilder();
+
+				for (int i = 0; i < options.length(); i++) {
+					char ci = options.charAt(i);
+
+					if (Character.isDigit(ci)) {
+						currNum.append(ci);
+						continue;
 					}
 
+					if (currNum.length() > 0) {
+						numOpts.put(prevOption, Integer.parseInt(currNum.toString()));
+
+						currNum = new StringBuilder();
+					}
+
+					String opt = Character.toString(ci);
+
+					// @TODO Ben Culkin 10/14/18
+					//
+					// There is some weird bug that I think is related to case folding,
+					// where having options with a capitalized letter followed by more
+					// than 1 lowercase letter gets ignored.
+					if (doCaseFold) {
+						if (Character.isUpperCase(ci)) {
+							System.err.printf("Case-folding '%c'\n", ci);
+
+							opt = opt.toLowerCase();
+						} else {
+
+							System.err.printf("Ignoring '%c' due to case folding\n", ci);
+							continue;
+						}
+					}
+
+					prevOption = ci;
 					optionSet.add(opt);
+				}
+
+				if (currNum.length() > 0) {
+					numOpts.put(prevOption, Integer.parseInt(currNum.toString()));
+
+					currNum = new StringBuilder();
 				}
 			}
 
 			switch (command) {
 			case "#":
-				/* @NOTE
-				 * 	These should maybe be moved into their
-				 * 	own function. This will also allow the
-				 * 	use of custom inflection forms.
+				/*
+				 * @NOTE These should maybe be moved into their
+				 * own function. This will also allow the use of
+				 * custom inflection forms.
 				 */
 				try {
 					if (optionSet.contains("e")) {
@@ -164,24 +202,51 @@ public class InflectionML {
 
 					/* Break out of switch. */
 					if (optionSet.contains("d")) {
-						formMatcher.appendReplacement(formBuffer, rep);
+						formMatcher.appendReplacement(formBuffer, "");
 						break;
 					}
-					
-					final boolean shouldOverride = !(rep.equals("no") || rep.matches("\\{an\\d+\\}"));
+
+					boolean shouldOverride = true;
+					if (rep.equals("no") || rep.matches("\\{an\\d+\\}")) {
+						shouldOverride = false;
+					}
 
 					if (optionSet.contains("w") && shouldOverride) {
-						rep = EnglishUtils.smallIntToWord(curCount);
+						rep = NumberUtils.toCardinal(curCount, numOpts.get('w'));
+
+					}
+
+					if (optionSet.contains("o") && shouldOverride) {
+						if (optionSet.contains("w")) {
+							if (curCount < numOpts.get('w'))
+								rep = NumberUtils.toOrdinal(curCount, numOpts.get('o'),
+										true);
+							else
+								rep = NumberUtils.toOrdinal(curCount, numOpts.get('o'),
+										false);
+						} else {
+							rep = NumberUtils.toOrdinal(curCount, numOpts.get('o'), false);
+						}
+
+						if (curCount < numOpts.get('o')) {
+							// Respect english usage of ordinals
+							curCount = 1;
+							inflectSingular = true;
+						}
 					}
 
 					if (optionSet.contains("f") && shouldOverride) {
-						rep = EnglishUtils.intSummarize(curCount, false);
+						rep = NumberUtils.summarizeNumber(curCount, numOpts.get('f') != 0);
 					}
+
+					numOpts.put('o', Integer.MAX_VALUE);
+					numOpts.put('w', 11);
+					numOpts.put('f', 0);
 
 					formMatcher.appendReplacement(formBuffer, rep);
 				} catch (final NumberFormatException nfex) {
 					throw new InflectionException("Count setter must take a number as a parameter",
-					                              nfex);
+							nfex);
 				}
 				break;
 			case "N":
@@ -200,7 +265,7 @@ public class InflectionML {
 				}
 
 				formMatcher.appendReplacement(formBuffer, nounVal);
-				if(pendingAN) {
+				if (pendingAN) {
 					anVals.add(EnglishUtils.pickIndefinite(nounVal));
 
 					pendingAN = false;
@@ -222,7 +287,7 @@ public class InflectionML {
 		Matcher anMat = AN_MARKER.matcher(res);
 
 		Iterator<String> anItr = anVals.iterator();
-		while(anMat.find()) {
+		while (anMat.find()) {
 			anMat.appendReplacement(formBuffer, anItr.next());
 		}
 		anMat.appendTail(formBuffer);
@@ -234,13 +299,12 @@ public class InflectionML {
 	 * Alias method to format a string, then inflect it.
 	 *
 	 * @param format
-	 * 	The combined format/inflection string.
+	 *                The combined format/inflection string.
 	 *
 	 * @param objects
-	 * 	The parameters for the format string.
+	 *                The parameters for the format string.
 	 *
-	 * @return
-	 * 	The string, formatted &amp; inflected.
+	 * @return The string, formatted &amp; inflected.
 	 */
 	public static String iprintf(final String format, final Object... objects) {
 		return inflect(String.format(format, objects));

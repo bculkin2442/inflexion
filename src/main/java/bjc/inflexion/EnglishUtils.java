@@ -22,58 +22,6 @@ import java.util.regex.Pattern;
  * @author student
  */
 public class EnglishUtils {
-	private static String[] smallNums = new String[] { 
-		"zero", "one", "two", "three", "four", "five", "six", "seven",
-			"eight", "nine", "ten" };
-
-	private static String[] summaryNums     = new String[] { "no", "one", "a couple of", "a few", "several" };
-
-	private static int[] summaryMap = new int[] {
-		/* no */
-		0,
-			/* one */
-			1,
-			/* a couple of */
-			2,
-			/* a few */
-			3, 3, 3,
-			/* several */
-			4, 4, 4, 4
-	};
-
-	/**
-	 * Convert small integers to words.
-	 *
-	 * @param num
-	 * 	The number to convert.
-	 *
-	 * @return
-	 * 	The word for the number, if it's less than ten.
-	 */
-	public static String smallIntToWord(final int num) {
-		if (num >= 0 && num <= 10) return smallNums[num];
-
-		return Integer.toString(num);
-	}
-
-	/**
-	 * Summarize an integer.
-	 *
-	 * @param num
-	 * 	The number to summarize.
-	 *
-	 * @param atEnd
-	 * 	Whether or not the integer is at the end of a string.
-	 *
-	 * @return
-	 * 	A string summarizing the integer.
-	 */
-	public static String intSummarize(final int num, final boolean atEnd) {
-		if (num >= 0 && num < 10) return summaryNums[summaryMap[num]];
-
-		return "many";
-	}
-
 	/**
 	 * Pick an indefinite article ('a' or 'an') for a phrase.
 	 * @param phrase The phrase to pick an article for.

@@ -20,8 +20,6 @@ package bjc.inflexion.nouns;
  * @author EVE
  */
 public class Noun {
-	/* Format string for toString. */
-	private static final String TOSTRING_FMT = "Noun [word=%s, inflection=%s]";
 	/* The word itself. */
 	private final String word;
 	/* Its inflection. */
@@ -82,6 +80,25 @@ public class Noun {
 	}
 
 	/**
+	 * Check whether or not this noun is uninflected (does not change in singular/plural).
+	 * @return Whether or not the noun is uninflected.
+	 */
+	public boolean isUninflected() {
+		String singlar = singular();
+		
+		if (singlar.equals(modernPlural()) || singlar.equals(classicalPlural())) return true;
+		
+		return false;
+	}
+	
+	/**
+	 * Check if this noun has differing modern/classical plural forms.
+	 * @return Whether this noun has differing plural forms.
+	 */
+	public boolean isDifferingPlural() {
+		return modernPlural().equals(classicalPlural());
+	}
+	/**
 	 * Get the singular form of this noun.
 	 *
 	 * @return
@@ -107,7 +124,7 @@ public class Noun {
 
 	@Override
 	public String toString() {
-		return String.format(TOSTRING_FMT, word, inflection);
+		return String.format("Noun [word=%s, inflection=%s]", word, inflection);
 	}
 
 	/**
