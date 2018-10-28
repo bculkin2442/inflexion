@@ -31,8 +31,11 @@ import bjc.inflexion.nouns.Prepositions;
 
 /*
  * @TODO 10/11/17 Ben Culkin :InflectionML
- * 	Complete the implementation of this from the documentation for
- * 	Lingua::EN:Inflexion
+ * 	
+ * Complete the implementation of this from the documentation for Lingua::EN:Inflexion.
+ * 
+ * ADDENDA 10/25/18
+ * 	Everything that doesn't require doing verbs is done.
  */
 /**
  * Implementation of a simple format language for inflections.
