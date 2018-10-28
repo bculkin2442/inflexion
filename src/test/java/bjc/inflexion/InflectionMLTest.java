@@ -1,11 +1,10 @@
 package bjc.inflexion;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import static bjc.inflexion.InflectionMLTest.InflectPair.pair;
 import static bjc.inflexion.InflectionML.inflect;
+import static bjc.inflexion.InflectionMLTest.InflectPair.pair;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 /**
  * Tests for inflection markup.

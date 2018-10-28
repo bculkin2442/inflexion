@@ -14,6 +14,11 @@
  */
 package bjc.inflexion;
 
+import static bjc.inflexion.InflectionString.InflectionDirective.literal;
+import static bjc.inflexion.InflectionString.InflectionDirective.noun;
+import static bjc.inflexion.InflectionString.InflectionDirective.numeric;
+import static bjc.inflexion.InflectionString.InflectionDirective.variable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,11 +27,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import bjc.inflexion.InflectionString.InflectionDirective.NounOptions;
+import bjc.inflexion.InflectionString.InflectionDirective.NumericOptions;
 import bjc.inflexion.nouns.Noun;
 import bjc.inflexion.nouns.Nouns;
 import bjc.inflexion.nouns.Prepositions;
-
-import static bjc.inflexion.InflectionString.InflectionDirective.*;
 
 /**
  * A compiled inflection markup string
