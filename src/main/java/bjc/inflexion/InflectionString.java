@@ -69,7 +69,11 @@ public class InflectionString {
 			/**
 			 * Prints an inflected noun.
 			 */
-			NOUN
+			NOUN,
+			/**
+			 * Represents a sequence of directives.
+			 */
+			SEQ
 		}
 
 		/**
@@ -419,6 +423,11 @@ public class InflectionString {
 		public NounOptions nounOpts = new NounOptions();
 
 		/**
+		 * The directives contained in a sequence.
+		 */
+		public List<InflectionDirective> listDir;
+		
+		/**
 		 * Create a new inflection directive.
 		 * 
 		 * @param type
@@ -477,6 +486,28 @@ public class InflectionString {
 			default:
 				throw new IllegalArgumentException(
 						"Unhandled or wrong arguments (1 number) for directive type " + type);
+
+			}
+		}
+		
+		/**
+		 * Create a new inflection directive.
+		 * 
+		 * @param type
+		 *                The type of the directive.
+		 * @param num
+		 *                The number value for the directive.
+		 */
+		public InflectionDirective(DirectiveType type, List<InflectionDirective> listDir) {
+			this.type = type;
+
+			switch (type) {
+			case SEQ:
+				this.listDir = listDir;
+				break;
+			default:
+				throw new IllegalArgumentException(
+						"Unhandled or wrong arguments (1 list of directives) for directive type " + type);
 
 			}
 		}
@@ -541,6 +572,14 @@ public class InflectionString {
 			return new InflectionDirective(DirectiveType.NOUN, strang);
 		}
 
+		public static InflectionDirective seq(List<InflectionDirective> list) {
+			return new InflectionDirective(DirectiveType.SEQ, list);	
+		}
+		
+		public static InflectionDirective seq(InflectionDirective arr) {
+			return new InflectionDirective(DirectiveType.SEQ, Arrays.asList(arr));	
+		}
+		
 		/**
 		 * Set the numeric options for this directive.
 		 * 
