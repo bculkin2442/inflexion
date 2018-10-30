@@ -18,6 +18,7 @@ import static bjc.inflexion.InflectionString.InflectionDirective.literal;
 import static bjc.inflexion.InflectionString.InflectionDirective.noun;
 import static bjc.inflexion.InflectionString.InflectionDirective.numeric;
 import static bjc.inflexion.InflectionString.InflectionDirective.variable;
+import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -426,7 +427,7 @@ public class InflectionString {
 		 * The directives contained in a sequence.
 		 */
 		public List<InflectionDirective> listDir;
-		
+
 		/**
 		 * Create a new inflection directive.
 		 * 
@@ -489,14 +490,14 @@ public class InflectionString {
 
 			}
 		}
-		
+
 		/**
 		 * Create a new inflection directive.
 		 * 
 		 * @param type
 		 *                The type of the directive.
-		 * @param num
-		 *                The number value for the directive.
+		 * @param listDir
+		 *                The directive list value for the directive.
 		 */
 		public InflectionDirective(DirectiveType type, List<InflectionDirective> listDir) {
 			this.type = type;
@@ -507,7 +508,8 @@ public class InflectionString {
 				break;
 			default:
 				throw new IllegalArgumentException(
-						"Unhandled or wrong arguments (1 list of directives) for directive type " + type);
+						"Unhandled or wrong arguments (1 list of directives) for directive type "
+								+ type);
 
 			}
 		}
@@ -572,14 +574,28 @@ public class InflectionString {
 			return new InflectionDirective(DirectiveType.NOUN, strang);
 		}
 
+		/**
+		 * Create a sequenced set of directives.
+		 * 
+		 * @param list
+		 *                The directives to sequence.
+		 * @return A sequence directive.
+		 */
 		public static InflectionDirective seq(List<InflectionDirective> list) {
-			return new InflectionDirective(DirectiveType.SEQ, list);	
+			return new InflectionDirective(DirectiveType.SEQ, list);
 		}
-		
-		public static InflectionDirective seq(InflectionDirective arr) {
-			return new InflectionDirective(DirectiveType.SEQ, Arrays.asList(arr));	
+
+		/**
+		 * Create a sequenced set of directives.
+		 * 
+		 * @param arr
+		 *                The directives to sequence.
+		 * @return A sequence directive.
+		 */
+		public static InflectionDirective seq(InflectionDirective... arr) {
+			return new InflectionDirective(DirectiveType.SEQ, asList(arr));
 		}
-		
+
 		/**
 		 * Set the numeric options for this directive.
 		 * 
@@ -631,7 +647,7 @@ public class InflectionString {
 	 * String we were formed from.
 	 */
 	private String rawString;
-	
+
 	/**
 	 * Create a new empty inflection string.
 	 */
@@ -649,7 +665,7 @@ public class InflectionString {
 		this();
 
 		rawString = inp;
-		
+
 		int curPos = 0;
 
 		List<String> parseErrors = new ArrayList<>();
@@ -769,8 +785,10 @@ public class InflectionString {
 		boolean pendingAn = false;
 
 		List<String> anVals = new ArrayList<>();
-		
-		for (InflectionDirective dir : dirs) {
+
+		QueuedIterator<InflectionDirective> itrDirs = new QueuedIterator<>(dirs);
+		Iterable<InflectionDirective> itrb = () -> itrDirs;
+		for (InflectionDirective dir : itrb) {
 			switch (dir.type) {
 			case LITERAL:
 				sb.append(dir.litString);
@@ -784,8 +802,8 @@ public class InflectionString {
 					throw new IllegalArgumentException("Unbound variable " + vName);
 				}
 
-				break;
 			}
+				break;
 			case NUMERIC: {
 				int actNum;
 
@@ -816,7 +834,7 @@ public class InflectionString {
 					}
 
 					if (opts.zeroNo && curNum == 0) rep = "no";
-					
+
 					if (opts.article && curNum == 1) {
 						anNum += 1;
 						rep = "{an" + anNum + "}";
@@ -861,11 +879,11 @@ public class InflectionString {
 					sb.append(rep);
 				}
 
-				break;
 			}
+			break;
 			case NOUN: {
 				String actNoun;
-				
+
 				if (dir.isVRef) {
 					Object val = vars.get(dir.litString);
 
@@ -877,7 +895,7 @@ public class InflectionString {
 				} else {
 					actNoun = dir.litString;
 				}
-				
+
 				final Noun noun = nounDB.getNoun(actNoun);
 
 				String nounVal;
@@ -900,29 +918,34 @@ public class InflectionString {
 				}
 			}
 				break;
+			case SEQ:
+				itrDirs.before(dir.listDir);
+				break;
 			default:
 				throw new IllegalArgumentException("Unhandled directive type " + dir.type);
 			}
 		}
 
 		String res = sb.toString();
-		
+
 		StringBuffer work = new StringBuffer();
-		
+
 		Matcher anMat = AN_MARKER.matcher(res);
-		
+
 		Iterator<String> anItr = anVals.iterator();
 		while (anMat.find()) {
 			anMat.appendReplacement(work, anItr.next());
 		}
 		anMat.appendTail(work);
-		
+
 		return work.toString();
 	}
-	
+
 	@Override
 	public String toString() {
-		if (rawString != null) return rawString;
-		else return super.toString();
+		if (rawString != null)
+			return rawString;
+		else
+			return super.toString();
 	}
 }
