@@ -141,12 +141,22 @@ public class InflectionString {
 		}
 
 		/**
+		 * Empty base class for directive options.
+		 * 
+		 * @author bjculkin
+		 *
+		 */
+		public static class Options {
+			// Empty Base Class
+		}
+
+		/**
 		 * Options for a numeric directive.
 		 * 
 		 * @author bjculkin
 		 *
 		 */
-		public static class NumericOptions {
+		public static class NumericOptions extends Options {
 			/**
 			 * Increment the numeric value before doing anything
 			 * with it.
@@ -379,7 +389,7 @@ public class InflectionString {
 		 * @author bjculkin
 		 *
 		 */
-		public static class NounOptions {
+		public static class NounOptions extends Options {
 			/**
 			 * Use the classical inflection for the noun.
 			 */
@@ -482,14 +492,9 @@ public class InflectionString {
 		public boolean isVRef = false;
 
 		/**
-		 * The options for a numeric directive.
+		 * The options for a directive.
 		 */
-		public NumericOptions numOpts = new NumericOptions();
-
-		/**
-		 * The options for a noun directive.
-		 */
-		public NounOptions nounOpts = new NounOptions();
+		public Options opts;
 
 		/**
 		 * The directives contained in a sequence.
@@ -523,6 +528,18 @@ public class InflectionString {
 		public InflectionDirective(DirectiveType type, String strang) {
 			this.type = type;
 
+			// Set default options.
+			switch (type) {
+			case NUMERIC:
+				this.opts = new NumericOptions();
+				break;
+			case NOUN:
+				this.opts = new NounOptions();
+				break;
+			default:
+				// No options for these types
+			}
+
 			switch (type) {
 			case LITERAL:
 			case VARIABLE:
@@ -551,6 +568,7 @@ public class InflectionString {
 			switch (type) {
 			case NUMERIC:
 				this.numNumber = num;
+				this.opts = new NumericOptions();
 				break;
 			default:
 				throw new IllegalArgumentException(
@@ -672,7 +690,9 @@ public class InflectionString {
 		 * @return The directive.
 		 */
 		public InflectionDirective options(NumericOptions numOpts) {
-			this.numOpts = numOpts;
+			if (type != DirectiveType.NUMERIC) throw new IllegalArgumentException(
+					"Directive type " + type + " does not take numeric options");
+			this.opts = numOpts;
 
 			return this;
 		}
@@ -685,7 +705,9 @@ public class InflectionString {
 		 * @return The directive.
 		 */
 		public InflectionDirective options(NounOptions nounOpts) {
-			this.nounOpts = nounOpts;
+			if (type != DirectiveType.NOUN) throw new IllegalArgumentException(
+					"Directive type " + type + " does not take noun options");
+			this.opts = nounOpts;
 
 			return this;
 		}
@@ -890,7 +912,7 @@ public class InflectionString {
 
 				curNum = actNum;
 				{
-					NumericOptions opts = dir.numOpts;
+					NumericOptions opts = (NumericOptions) dir.opts;
 					String rep = Integer.toString(curNum);
 
 					if (opts.increment) curNum += opts.incrementAmt;
@@ -949,8 +971,10 @@ public class InflectionString {
 				}
 
 			}
-			break;
+				break;
 			case NOUN: {
+				NounOptions nounOpts = (NounOptions) dir.opts;
+
 				String actNoun;
 
 				if (dir.isVRef) {
@@ -969,8 +993,8 @@ public class InflectionString {
 
 				String nounVal;
 
-				if (dir.nounOpts.plural || !inflectSingular) {
-					if (dir.nounOpts.classical) {
+				if (nounOpts.plural || !inflectSingular) {
+					if (nounOpts.classical) {
 						nounVal = noun.classicalPlural();
 					} else {
 						nounVal = noun.plural();
