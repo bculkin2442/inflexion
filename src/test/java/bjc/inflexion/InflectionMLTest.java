@@ -27,7 +27,9 @@ public class InflectionMLTest {
 				pair("1 index was found", 1, "was"), pair("99 indexes were found", 99, "were"));
 
 		// Check fancier inflection
-		assertInflects("<#wnc:%d> <Noun:indexes> %s found", pair("no indexes were found", 0, "were"),
+		// 
+		// There was a 'c' option attached to the '#' directive, but I have no recollection of what that should've done.
+		assertInflects("<#wn:%d> <Noun:indexes> %s found", pair("no indexes were found", 0, "were"),
 				pair("one index was found", 1, "was"), pair("99 indexes were found", 99, "were"));
 
 		// Check count inflection
@@ -116,7 +118,11 @@ public class InflectionMLTest {
 				pair("1 index was found", 1, "was"), pair("99 indexes were found", 99, "were"));
 
 		// Check fancier inflection
-		assertCInflects("<#wnc:$1> <Noun:indexes> $2 found", pair("no indexes were found", 0, "were"),
+		//
+		// There was a 'c' option attached to the '#' directive, but I have no recollection of what that should've done.
+		//
+		// As for the mixed-case options, the directive type can't be mixed case.
+		assertCInflects("<#wn:$1> <N:indexes> $2 found", pair("no indexes were found", 0, "were"),
 				pair("one index was found", 1, "was"), pair("99 indexes were found", 99, "were"));
 
 		// Check count inflection

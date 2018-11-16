@@ -21,6 +21,7 @@ import static bjc.inflexion.InflectionString.InflectionDirective.variable;
 import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +42,68 @@ import bjc.inflexion.nouns.Prepositions;
  *
  */
 public class InflectionString {
+	/**
+	 * Exception thrown if the string we are attempting to compile has
+	 * invalid syntax.
+	 * 
+	 * @author bjculkin
+	 *
+	 */
+	public class InflectionFormatException extends RuntimeException {
+		private static final long serialVersionUID = -5306003088746525691L;
+
+		/**
+		 * The string we attempted to parse.
+		 */
+		public final String inp;
+		/**
+		 * The errors we encountered parsing the string.
+		 */
+		public final List<String> parseErrors;
+
+		/**
+		 * Create a new format exception.
+		 * 
+		 * @param inp
+		 *                The string we are attempting to compile
+		 * @param parseErrors
+		 *                The errors we encountered parsing the string.
+		 */
+		public InflectionFormatException(String inp, List<String> parseErrors) {
+			this.inp = inp;
+			// Can't modify the list of parse errors.
+			this.parseErrors = Collections.unmodifiableList(parseErrors);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Throwable#toString()
+		 */
+		@Override
+		public String toString() {
+			boolean doBrief = false;
+
+			if (doBrief) return String.format("Encountered errors attempting to parse string %s",
+					parseErrors.size(), inp);
+
+			StringBuilder sb = new StringBuilder(parseErrors.size());
+			sb.append("Encountered errors attempting to parse the following string:\n\t");
+			sb.append(inp);
+			sb.append("\nErrors:");
+			for (int i = 0; i < parseErrors.size(); i++) {
+				String msg = parseErrors.get(i);
+				sb.append("\n\t");
+				sb.append(msg);
+			}
+			sb.append("\n(total of ");
+			sb.append(parseErrors.size());
+			sb.append(" errors)");
+
+			return sb.toString();
+		}
+	}
+
 	/**
 	 * Represents a directive in a inflection string.
 	 * 
@@ -166,17 +229,12 @@ public class InflectionString {
 			 * Corresponds to the 'f' option.
 			 */
 			public boolean summarize;
+
 			/**
 			 * Mark the summarization as occurring at the end of the
 			 * string, regardless of its current position.
 			 */
 			public boolean atEnd = false;
-
-			// Emit error message
-			private static String error(int curPos, int i, String msg, Object... props) {
-				return String.format("%s (at position %d in # directive starting at %d)",
-						String.format(msg, props), curPos + i, curPos);
-			}
 
 			/**
 			 * Create a new set of numeric options from a string.
@@ -266,7 +324,7 @@ public class InflectionString {
 			}
 
 			/**
-			 * 
+			 * Create a blank set of numeric options.
 			 */
 			public NumericOptions() {
 			}
@@ -307,6 +365,11 @@ public class InflectionString {
 							"Option '%c' does not take a numeric parameter (value %s)",
 							prevOption, currNum));
 				}
+			}
+
+			// Emit error message
+			private static String error(int curPos, int i, String msg, Object... props) {
+				return InflectionDirective.error("#", curPos, i, msg, props);
 			}
 		}
 
@@ -375,16 +438,21 @@ public class InflectionString {
 			}
 
 			/**
-			 * 
+			 * Create an empty set of noun options.
 			 */
 			public NounOptions() {
 			}
 
 			// Emit error message
 			private static String error(int curPos, int i, String msg, Object... props) {
-				return String.format("%s (at position %d in N directive starting at %d)",
-						String.format(msg, props), curPos + i, curPos);
+				return InflectionDirective.error("N", curPos, i, msg, props);
 			}
+		}
+
+		// Emit error message
+		private static String error(String dir, int curPos, int i, String msg, Object... props) {
+			return String.format("%s (at position %d in %s directive starting at position %d)",
+					String.format(msg, props), curPos + i, dir, curPos);
 		}
 
 		/**
@@ -740,6 +808,7 @@ public class InflectionString {
 			curPos += strang.length();
 		}
 
+		if (!parseErrors.isEmpty()) throw new InflectionFormatException(inp, parseErrors);
 	}
 
 	// Emit an error message
