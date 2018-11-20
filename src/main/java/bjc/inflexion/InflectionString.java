@@ -56,6 +56,7 @@ public class InflectionString {
 		 * The string we attempted to parse.
 		 */
 		public final String inp;
+
 		/**
 		 * The errors we encountered parsing the string.
 		 */
@@ -713,6 +714,108 @@ public class InflectionString {
 		}
 	}
 
+	/**
+	 * Performs the parsing of directives from a string.
+	 * @author bjculkin
+	 */
+	public class DirectiveIterator implements Iterator<String> {
+		private String strang;
+		private int pos;
+
+		/**
+		 * Create a new directive iterator over a string.
+		 *
+		 * @param strang
+		 * 	The string to parse directives from.
+		 */
+		public DirectiveIterator(String strang) {
+			this.strang = strang;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return pos < strang.length();
+		}
+
+		@Override
+		public String next() {
+			if (!hasNext()) return null;
+
+			// Directive nesting level
+			int level   = 0;
+			int prevPos = pos;;
+
+			char prevChar = ' ';
+			boolean parsingVar = false;
+
+			for (pos = pos; pos < strang.length(); pos++) {
+				// Backslash escapes a character
+				if (prevChar == '\\') continue;
+
+				char c = strang.charAt(pos);
+				switch (c) {
+				case '<':
+					// Stop parsing at the start of a
+					// directive, unless the directive is
+					// the first thing in the string.
+					if (level == 0 && prevPos != pos) {
+						return strang.substring(prevPos, pos);
+					}
+					level += 1;
+					break;
+				case '>':
+					// :ErrorHandling 11/19/18
+					if (level == 0) throw new IllegalArgumentException(
+							"Attempted to close inflection directive without one open at position " + prevPos + " in string '" + strang + "', current token is '" + strang.substring(prevPos, pos) + "'");
+					// Denest a level
+					level = Math.max(0, level - 1);
+					// Stop parsing at the end of a
+					// directive.
+					if (level == 0) {
+						// Advance past the '>'
+						pos += 1;
+
+						return strang.substring(prevPos, pos);
+
+					}
+					break;
+				case '$':
+					// Ignore v-refs when inside a directive
+					if (level > 0) break;
+					// Stop parsing if this isn't at the
+					// start of a string
+					if (prevPos != pos) return strang.substring(prevPos, pos);
+					parsingVar = true;
+					break;
+				case ' ':
+					// If we're parsing a v-ref, this
+					// finishes it.
+					if (parsingVar) return strang.substring(prevPos, pos);
+					break;
+				default:
+					// Do nothing for ordinary characters
+					break;
+				}
+			}
+
+			/* @TODO 11/19/18 Ben Culkin :ErrorHandling
+			 * Do something better than this exception, if possible.
+			 *
+			 * In the rest of the inflection string code, we use the
+			 * whole 'list of errors/warnings' thing. Is there a way
+			 * to do something similiar here?
+			 */
+			if (level > 0) throw new IllegalArgumentException("Unclosed inflection directive, starting at position " + prevPos + " in string '" + strang + "'");
+
+			return strang.substring(prevPos, pos);
+		}
+	}
+
+	// Create an iterable from an iterator
+	private static Iterable<String> I(Iterator<String> itr) {
+		return () -> itr;
+	}
+
 	// Marker for finding articles to replace
 	private static Pattern AN_MARKER = Pattern.compile("\\{an(\\d+)\\}");
 
@@ -761,16 +864,14 @@ public class InflectionString {
 		List<String> parseErrors = new ArrayList<>();
 
 		// Split input on spaces, preserving the delimiters
-		for (String strang : inp.split("(?<=\\s+)|(?=\\s+)")) {
+		// for (String strang : inp.split("(?<=\\s+)|(?=\\s+)")) {
+		for (String strang : I(new DirectiveIterator(inp))) {
 			InflectionDirective dir = literal("<ERRROR>");
 
 			// Variables start with $
 			if (strang.startsWith("$")) {
 				dir = variable(strang.substring(1));
 				dir.isVRef = true;
-				// A string starting with $ can be escaped
-			} else if (strang.startsWith("\\$")) {
-				dir = literal(strang.substring(2));
 			} else if (strang.startsWith("<") && strang.endsWith(">")) {
 				String dirBody = strang.substring(2, strang.length() - 1);
 
@@ -818,8 +919,6 @@ public class InflectionString {
 					parseErrors.add(error(strang, curPos, "Unhandled directive type %c",
 							strang.charAt(1)));
 				}
-			} else if (strang.startsWith("\\<")) {
-				dir = literal(strang.substring(2));
 			} else {
 				dir = literal(strang);
 			}
