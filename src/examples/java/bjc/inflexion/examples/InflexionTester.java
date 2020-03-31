@@ -48,11 +48,18 @@ public class InflexionTester {
 	 */
 	public static void main(final String[] args) {
 		final Prepositions prepositionDB = new Prepositions();
-		prepositionDB.loadFromStream(
-		        InflexionTester.class.getResourceAsStream("/prepositions.txt"));
+		try (InputStream strim = InflectionML.class.getResourceAsStream("/prepositions.txt")) {
+			prepositionDB.loadFromStream(strim);
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+		}
 
-		final Nouns nounDB = new Nouns(prepositionDB);
-		nounDB.loadFromStream(InflexionTester.class.getResourceAsStream("/nouns.txt"));
+		Nouns nounDB = new Nouns(prepositionDB);
+		try (InputStream strim = InflectionML.class.getResourceAsStream("/nouns.txt")) {
+			nounDB.loadFromStream(strim);
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+		}
 
 		final Scanner scn = new Scanner(System.in);
 

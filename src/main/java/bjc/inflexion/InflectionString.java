@@ -20,6 +20,8 @@ import static bjc.inflexion.InflectionString.InflectionDirective.numeric;
 import static bjc.inflexion.InflectionString.InflectionDirective.variable;
 import static java.util.Arrays.asList;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -743,12 +745,12 @@ public class InflectionString {
 
 			// Directive nesting level
 			int level   = 0;
-			int prevPos = pos;;
+			int prevPos = pos;
 
 			char prevChar = ' ';
 			boolean parsingVar = false;
 
-			for (pos = pos; pos < strang.length(); pos++) {
+			for (; pos < strang.length(); pos++) {
 				// Backslash escapes a character
 				if (prevChar == '\\') continue;
 
@@ -825,10 +827,18 @@ public class InflectionString {
 	/* Load DBs from files. */
 	static {
 		final Prepositions prepositionDB = new Prepositions();
-		prepositionDB.loadFromStream(InflectionML.class.getResourceAsStream("/prepositions.txt"));
+		try (InputStream strim = InflectionML.class.getResourceAsStream("/prepositions.txt")) {
+			prepositionDB.loadFromStream(strim);
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+		}
 
 		nounDB = new Nouns(prepositionDB);
-		nounDB.loadFromStream(InflectionML.class.getResourceAsStream("/nouns.txt"));
+		try (InputStream strim = InflectionML.class.getResourceAsStream("/nouns.txt")) {
+			nounDB.loadFromStream(strim);
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+		}
 	}
 
 	/*
@@ -1137,7 +1147,7 @@ public class InflectionString {
 	public String toString() {
 		if (rawString != null)
 			return rawString;
-		else
-			return super.toString();
+		
+		return super.toString();
 	}
 }

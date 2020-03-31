@@ -13,6 +13,8 @@
  */
 package bjc.inflexion;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -57,10 +59,18 @@ public class InflectionML {
 	/* Load DBs from files. */
 	static {
 		final Prepositions prepositionDB = new Prepositions();
-		prepositionDB.loadFromStream(InflectionML.class.getResourceAsStream("/prepositions.txt"));
+		try (InputStream strim = InflectionML.class.getResourceAsStream("/prepositions.txt")) {
+			prepositionDB.loadFromStream(strim);
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+		}
 
 		nounDB = new Nouns(prepositionDB);
-		nounDB.loadFromStream(InflectionML.class.getResourceAsStream("/nouns.txt"));
+		try (InputStream strim = InflectionML.class.getResourceAsStream("/nouns.txt")) {
+			nounDB.loadFromStream(strim);
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+		}
 	}
 
 	/**
