@@ -24,7 +24,9 @@ import java.util.regex.Pattern;
 public class EnglishUtils {
 	/**
 	 * Pick an indefinite article ('a' or 'an') for a phrase.
-	 * @param phrase The phrase to pick an article for.
+	 * 
+	 * @param phrase
+	 *               The phrase to pick an article for.
 	 * @return The article to use for the phrase.
 	 */
 	public static String pickIndefinite(String phrase) {
@@ -36,10 +38,10 @@ public class EnglishUtils {
 			return "a";
 		}
 
-		// Getting the first word 
+		// Getting the first word
 		pattern = Pattern.compile("(\\w+)\\s*.*");
 		matcher = pattern.matcher(phrase);
-		if(matcher.matches() == true) {
+		if (matcher.matches() == true) {
 			word = matcher.group(1);
 		} else {
 			return "an";
@@ -48,37 +50,42 @@ public class EnglishUtils {
 		lowercaseWord = word.toLowerCase();
 
 		// Specific start of words that should be preceded by 'an'
-		String [] altCases = { "euler", "heir", "honest", "hono" };
+		String[] altCases = {
+				"euler", "heir", "honest", "hono"
+		};
 		for (String altCase : altCases) {
 			if (lowercaseWord.startsWith(altCase) == true) {
 				return "an";
 			}
 		}
 
-		if (lowercaseWord.startsWith("hour") == true && lowercaseWord.startsWith("houri") == false) {
+		if (lowercaseWord.startsWith("hour") == true
+				&& lowercaseWord.startsWith("houri") == false) {
 			return "an";
 		}
-
 
 		// Single letter word which should be preceded by 'an'
 		if (lowercaseWord.length() == 1) {
 			if ("aedhilmnorsx".indexOf(lowercaseWord) >= 0) {
 				return "an";
 			}
-			
+
 			return "a";
 		}
 
 		// Capital words which should likely be preceded by 'an'
-		if (word.matches("(?!FJO|[HLMNS]Y.|RY[EO]|SQU|(F[LR]?|[HL]|MN?|N|RH?|S[CHKLMNPTVW]?|X(YL)?)[AEIOU])[FHLMNRSX][A-Z]")) {
+		if (word.matches(
+				"(?!FJO|[HLMNS]Y.|RY[EO]|SQU|(F[LR]?|[HL]|MN?|N|RH?|S[CHKLMNPTVW]?|X(YL)?)[AEIOU])[FHLMNRSX][A-Z]")) {
 			return "an";
 		}
 
 		// Special cases where a word that begins with a vowel should be preceded by 'a'
-		String [] regexes = { "^e[uw]", "^onc?e\\b", "^uni([^nmd]|mo)", "^u[bcfhjkqrst][aeiou]" };
+		String[] regexes = {
+				"^e[uw]", "^onc?e\\b", "^uni([^nmd]|mo)", "^u[bcfhjkqrst][aeiou]"
+		};
 
 		for (String regex : regexes) {
-			if (lowercaseWord.matches(regex+".*") == true) {
+			if (lowercaseWord.matches(regex + ".*") == true) {
 				return "a";
 			}
 		}
@@ -90,7 +97,7 @@ public class EnglishUtils {
 			if ("aedhilmnorsx".indexOf(lowercaseWord.substring(0, 1)) >= 0) {
 				return "an";
 			}
-			
+
 			return "a";
 		}
 

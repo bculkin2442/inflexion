@@ -26,11 +26,11 @@ import java.util.regex.Pattern;
  */
 public class CompoundNounInflection implements NounInflection {
 	/* Format for toString. */
-	private static final String TOSTRING_FMT =
-	        "CompoundNounInflection [compoundMatcher=%s, singularPattern=%s, modernPluralPattern=%s, classicalPluralPattern=%s, hasPreposition=%s]";
+	private static final String TOSTRING_FMT
+			= "CompoundNounInflection [compoundMatcher=%s, singularPattern=%s, modernPluralPattern=%s, classicalPluralPattern=%s, hasPreposition=%s]";
 	/* Data stores for use. */
-	private final Nouns         nunDB;
-	private final Prepositions  pepositionDB;
+	private final Nouns nunDB;
+	private final Prepositions pepositionDB;
 
 	/* The pattern for compound matching. */
 	private final Pattern cmpoundMatcher;
@@ -52,42 +52,43 @@ public class CompoundNounInflection implements NounInflection {
 	 * Create a new compound noun inflection.
 	 *
 	 * @param nounDB
-	 * 	The database of nouns to lookup.
+	 *                               The database of nouns to lookup.
 	 *
 	 * @param prepositionDB
-	 * 	The database of prepositions to lookup.
+	 *                               The database of prepositions to lookup.
 	 *
 	 * @param compoundMatcher
-	 * 	The matcher for the compound noun.
+	 *                               The matcher for the compound noun.
 	 *
 	 * @param singularPattern
-	 * 	The pattern for a singular form.
+	 *                               The pattern for a singular form.
 	 *
 	 * @param modernPluralPattern
-	 * 	The pattern for a modern plural form.
+	 *                               The pattern for a modern plural form.
 	 *
 	 * @param classicalPluralPattern
-	 * 	The pattern for a classical plural form.
-	 * 
+	 *                               The pattern for a classical plural form.
+	 *
 	 * @param hasPreposition
-	 * 	Whether or not this inflection uses a preposition.
+	 *                               Whether or not this inflection uses a
+	 *                               preposition.
 	 *
 	 * @param hasScrtch
-	 * 	Whether or not this inflection has a scratch word.
+	 *                               Whether or not this inflection has a scratch
+	 *                               word.
 	 */
 	public CompoundNounInflection(final Nouns nounDB, final Prepositions prepositionDB,
-	                              final Pattern compoundMatcher, final String singularPattern,
-	                              final String modernPluralPattern,
-	                              final String classicalPluralPattern, final boolean hasPreposition,
-	                              final boolean hasScrtch) {
-		nunDB                 = nounDB;
-		pepositionDB          = prepositionDB;
-		cmpoundMatcher        = compoundMatcher;
-		sigularPattern        = singularPattern;
-		mdernPluralPattern    = modernPluralPattern;
+			final Pattern compoundMatcher, final String singularPattern,
+			final String modernPluralPattern, final String classicalPluralPattern,
+			final boolean hasPreposition, final boolean hasScrtch) {
+		nunDB = nounDB;
+		pepositionDB = prepositionDB;
+		cmpoundMatcher = compoundMatcher;
+		sigularPattern = singularPattern;
+		mdernPluralPattern = modernPluralPattern;
 		clasicalPluralPattern = classicalPluralPattern;
-		haPreposition         = hasPreposition;
-		hasScratch            = hasScrtch;
+		haPreposition = hasPreposition;
+		hasScratch = hasScrtch;
 	}
 
 	@Override
@@ -97,9 +98,11 @@ public class CompoundNounInflection implements NounInflection {
 		if (matcher.matches()) {
 			final Noun actNoun = nunDB.getNoun(matcher.group("noun"));
 
-			if (actNoun == null) return false;
+			if (actNoun == null)
+				return false;
 
-			if (haPreposition) return pepositionDB.isPreposition(matcher.group("preposition"));
+			if (haPreposition)
+				return pepositionDB.isPreposition(matcher.group("preposition"));
 
 			return true;
 		}
@@ -110,7 +113,7 @@ public class CompoundNounInflection implements NounInflection {
 	@Override
 	public boolean isSingular(final String noun) {
 		final Matcher matcher = cmpoundMatcher.matcher(noun);
-		final Noun actNoun    = nunDB.getNoun(matcher.group("noun"));
+		final Noun actNoun = nunDB.getNoun(matcher.group("noun"));
 
 		return actNoun.isSingular();
 	}
@@ -118,7 +121,7 @@ public class CompoundNounInflection implements NounInflection {
 	@Override
 	public boolean isPlural(final String noun) {
 		final Matcher matcher = cmpoundMatcher.matcher(noun);
-		final Noun actNoun    = nunDB.getNoun(matcher.group("noun"));
+		final Noun actNoun = nunDB.getNoun(matcher.group("noun"));
 
 		return actNoun.isPlural();
 	}
@@ -126,15 +129,17 @@ public class CompoundNounInflection implements NounInflection {
 	@Override
 	public String singularize(final String plural) {
 		final Matcher matcher = cmpoundMatcher.matcher(plural);
-		final Noun actNoun    = getNoun(matcher);
+		final Noun actNoun = getNoun(matcher);
 
 		if (haPreposition && hasScratch) {
-			return String.format(sigularPattern, actNoun.singular(), matcher.group("preposition"),
-			                     matcher.group("scratch"));
+			return String.format(sigularPattern, actNoun.singular(),
+					matcher.group("preposition"), matcher.group("scratch"));
 		} else if (hasScratch) {
-			return String.format(sigularPattern, actNoun.singular(), matcher.group("scratch"));
+			return String.format(sigularPattern, actNoun.singular(),
+					matcher.group("scratch"));
 		} else if (haPreposition) {
-			return String.format(sigularPattern, actNoun.singular(), matcher.group("preposition"));
+			return String.format(sigularPattern, actNoun.singular(),
+					matcher.group("preposition"));
 		} else {
 			return String.format(sigularPattern, actNoun.singular());
 		}
@@ -143,14 +148,14 @@ public class CompoundNounInflection implements NounInflection {
 	@Override
 	public String pluralize(final String singular) {
 		final Matcher matcher = cmpoundMatcher.matcher(singular);
-		final Noun actNoun    = getNoun(matcher);
+		final Noun actNoun = getNoun(matcher);
 
-		final String patt = mdernPluralPattern == null ? clasicalPluralPattern :
-		                    mdernPluralPattern;
+		final String patt
+				= mdernPluralPattern == null ? clasicalPluralPattern : mdernPluralPattern;
 
 		if (haPreposition && hasScratch) {
 			return String.format(patt, actNoun.plural(), matcher.group("preposition"),
-			                     matcher.group("scratch"));
+					matcher.group("scratch"));
 		} else if (hasScratch) {
 			return String.format(patt, actNoun.plural(), matcher.group("scratch"));
 		} else if (haPreposition) {
@@ -162,21 +167,21 @@ public class CompoundNounInflection implements NounInflection {
 
 	@Override
 	public String pluralizeModern(final String singular) {
-		if (mdernPluralPattern == null) return pluralizeClassical(singular);
+		if (mdernPluralPattern == null)
+			return pluralizeClassical(singular);
 
 		final Matcher matcher = cmpoundMatcher.matcher(singular);
-		final Noun actNoun    = getNoun(matcher);
+		final Noun actNoun = getNoun(matcher);
 
 		if (haPreposition && hasScratch) {
 			return String.format(mdernPluralPattern, actNoun.modernPlural(),
-			                     matcher.group("preposition"),
-			                     matcher.group("scratch"));
+					matcher.group("preposition"), matcher.group("scratch"));
 		} else if (hasScratch) {
 			return String.format(mdernPluralPattern, actNoun.modernPlural(),
-			                     matcher.group("scratch"));
+					matcher.group("scratch"));
 		} else if (haPreposition) {
 			return String.format(mdernPluralPattern, actNoun.modernPlural(),
-			                     matcher.group("preposition"));
+					matcher.group("preposition"));
 		} else {
 			return String.format(mdernPluralPattern, actNoun.modernPlural());
 		}
@@ -184,20 +189,21 @@ public class CompoundNounInflection implements NounInflection {
 
 	@Override
 	public String pluralizeClassical(final String singular) {
-		if (clasicalPluralPattern == null) return pluralizeModern(singular);
+		if (clasicalPluralPattern == null)
+			return pluralizeModern(singular);
 
 		final Matcher matcher = cmpoundMatcher.matcher(singular);
-		final Noun actNoun    = getNoun(matcher);
+		final Noun actNoun = getNoun(matcher);
 
 		if (haPreposition && hasScratch) {
 			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
-			                     matcher.group("preposition"), matcher.group("scratch"));
+					matcher.group("preposition"), matcher.group("scratch"));
 		} else if (hasScratch) {
 			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
-			                     matcher.group("scratch"));
+					matcher.group("scratch"));
 		} else if (haPreposition) {
 			return String.format(clasicalPluralPattern, actNoun.classicalPlural(),
-			                     matcher.group("preposition"));
+					matcher.group("preposition"));
 		} else {
 			return String.format(clasicalPluralPattern, actNoun.classicalPlural());
 		}
@@ -216,51 +222,65 @@ public class CompoundNounInflection implements NounInflection {
 		final int prime = 31;
 		int result = 1;
 
-		result = prime * result + (clasicalPluralPattern == null ? 0 :
-		                           clasicalPluralPattern.hashCode());
-		result = prime * result + (cmpoundMatcher == null ? 0 : cmpoundMatcher.hashCode());
+		result = prime * result
+				+ (clasicalPluralPattern == null ? 0 : clasicalPluralPattern.hashCode());
+		result = prime * result
+				+ (cmpoundMatcher == null ? 0 : cmpoundMatcher.hashCode());
 		result = prime * result + (haPreposition ? 1231 : 1237);
-		result = prime * result + (mdernPluralPattern == null ? 0 :
-		                           mdernPluralPattern.hashCode());
-		result = prime * result + (sigularPattern == null ? 0 : sigularPattern.hashCode());
+		result = prime * result
+				+ (mdernPluralPattern == null ? 0 : mdernPluralPattern.hashCode());
+		result = prime * result
+				+ (sigularPattern == null ? 0 : sigularPattern.hashCode());
 
 		return result;
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
+		if (this == obj)
+			return true;
 
-		if (obj == null) return false;
+		if (obj == null)
+			return false;
 
-		if (!(obj instanceof CompoundNounInflection)) return false;
+		if (!(obj instanceof CompoundNounInflection))
+			return false;
 
 		final CompoundNounInflection other = (CompoundNounInflection) obj;
 
 		if (sigularPattern == null) {
-			if (other.sigularPattern != null) return false;
-		} else if (!sigularPattern.equals(other.sigularPattern)) return false;
+			if (other.sigularPattern != null)
+				return false;
+		} else if (!sigularPattern.equals(other.sigularPattern))
+			return false;
 
 		if (clasicalPluralPattern == null) {
-			if (other.clasicalPluralPattern != null) return false;
-		} else if (!clasicalPluralPattern.equals(other.clasicalPluralPattern)) return false;
+			if (other.clasicalPluralPattern != null)
+				return false;
+		} else if (!clasicalPluralPattern.equals(other.clasicalPluralPattern))
+			return false;
 
-		if (haPreposition != other.haPreposition) return false;
+		if (haPreposition != other.haPreposition)
+			return false;
 
 		if (mdernPluralPattern == null) {
-			if (other.mdernPluralPattern != null) return false;
-		} else if (!mdernPluralPattern.equals(other.mdernPluralPattern)) return false;
+			if (other.mdernPluralPattern != null)
+				return false;
+		} else if (!mdernPluralPattern.equals(other.mdernPluralPattern))
+			return false;
 
 		if (cmpoundMatcher == null) {
-			if (other.cmpoundMatcher != null) return false;
-		} else if (!cmpoundMatcher.equals(other.cmpoundMatcher)) return false;
+			if (other.cmpoundMatcher != null)
+				return false;
+		} else if (!cmpoundMatcher.equals(other.cmpoundMatcher))
+			return false;
 
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return String.format(TOSTRING_FMT, cmpoundMatcher, sigularPattern, mdernPluralPattern,
-		                     clasicalPluralPattern, haPreposition);
+		return String.format(TOSTRING_FMT, cmpoundMatcher, sigularPattern,
+				mdernPluralPattern, clasicalPluralPattern, haPreposition);
 	}
 }

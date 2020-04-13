@@ -33,9 +33,9 @@ import bjc.inflexion.nouns.Prepositions;
 
 /*
  * @TODO 10/11/17 Ben Culkin :InflectionML
- * 	
+ *
  * Complete the implementation of this from the documentation for Lingua::EN:Inflexion.
- * 
+ *
  * ADDENDA 10/25/18
  * 	Everything that doesn't require doing verbs is done.
  */
@@ -49,7 +49,8 @@ public class InflectionML {
 	private static final List<String> ESUB_OPT = Arrays.asList("a", "s", "w");
 
 	/* The regex that marks an inflection form. */
-	private static Pattern FORM_MARKER = Pattern.compile("<(?<command>[#N])(?<options>[^:]*):(?<text>[^>]*)>");
+	private static Pattern FORM_MARKER
+			= Pattern.compile("<(?<command>[#N])(?<options>[^:]*):(?<text>[^>]*)>");
 
 	private static Pattern AN_MARKER = Pattern.compile("\\{an(\\d+)\\}");
 
@@ -59,7 +60,8 @@ public class InflectionML {
 	/* Load DBs from files. */
 	static {
 		final Prepositions prepositionDB = new Prepositions();
-		try (InputStream strim = InflectionML.class.getResourceAsStream("/prepositions.txt")) {
+		try (InputStream strim
+				= InflectionML.class.getResourceAsStream("/prepositions.txt")) {
 			prepositionDB.loadFromStream(strim);
 		} catch (IOException ioex) {
 			ioex.printStackTrace();
@@ -77,7 +79,7 @@ public class InflectionML {
 	 * Apply inflection to marked forms in the string.
 	 *
 	 * @param form
-	 *                The string to inflect.
+	 *             The string to inflect.
 	 *
 	 * @return The inflected string.
 	 */
@@ -164,9 +166,8 @@ public class InflectionML {
 			switch (command) {
 			case "#":
 				/*
-				 * @NOTE These should maybe be moved into their
-				 * own function. This will also allow the use of
-				 * custom inflection forms.
+				 * @NOTE These should maybe be moved into their own function. This will
+				 * also allow the use of custom inflection forms.
 				 */
 				try {
 					if (optionSet.contains("e")) {
@@ -238,7 +239,8 @@ public class InflectionML {
 								rep = NumberUtils.toOrdinal(curCount, numOpts.get('o'),
 										false);
 						} else {
-							rep = NumberUtils.toOrdinal(curCount, numOpts.get('o'), false);
+							rep = NumberUtils.toOrdinal(curCount, numOpts.get('o'),
+									false);
 						}
 
 						if (curCount < numOpts.get('o')) {
@@ -249,7 +251,8 @@ public class InflectionML {
 					}
 
 					if (optionSet.contains("f") && shouldOverride) {
-						rep = NumberUtils.summarizeNumber(curCount, numOpts.get('f') != 0);
+						rep = NumberUtils.summarizeNumber(curCount,
+								numOpts.get('f') != 0);
 					}
 
 					numOpts.put('o', Integer.MAX_VALUE);
@@ -258,8 +261,8 @@ public class InflectionML {
 
 					formMatcher.appendReplacement(formBuffer, rep);
 				} catch (final NumberFormatException nfex) {
-					throw new InflectionException("Count setter must take a number as a parameter",
-							nfex);
+					throw new InflectionException(
+							"Count setter must take a number as a parameter", nfex);
 				}
 				break;
 			case "N":

@@ -37,10 +37,9 @@ public class Prepositions {
 	 * Check if a word is a preposition.
 	 *
 	 * @param word
-	 * 	The word as a preposition.
+	 *             The word as a preposition.
 	 *
-	 * @return
-	 * 	Whether or not the word is a preposition.
+	 * @return Whether or not the word is a preposition.
 	 */
 	public boolean isPreposition(final String word) {
 		return prepositions.contains(word);
@@ -50,7 +49,7 @@ public class Prepositions {
 	 * Load the contents of the stream into this DB.
 	 *
 	 * @param stream
-	 * 	The stream to load from.
+	 *               The stream to load from.
 	 */
 	public void loadFromStream(final InputStream stream) {
 		try (Scanner scn = new Scanner(stream)) {

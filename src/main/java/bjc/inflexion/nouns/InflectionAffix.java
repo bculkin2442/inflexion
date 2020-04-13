@@ -24,10 +24,9 @@ public interface InflectionAffix {
 	 * Check if a word has this affix.
 	 *
 	 * @param word
-	 * 	The word to check.
+	 *             The word to check.
 	 *
-	 * @return
-	 * 	Whether or not the word has the affix.
+	 * @return Whether or not the word has the affix.
 	 */
 	boolean hasAffix(String word);
 
@@ -35,10 +34,9 @@ public interface InflectionAffix {
 	 * Remove the affix from a word.
 	 *
 	 * @param word
-	 * 	The word to remove the affix from.
+	 *             The word to remove the affix from.
 	 *
-	 * @return
-	 * 	The word with the affix removed.
+	 * @return The word with the affix removed.
 	 */
 	String deaffix(String word);
 
@@ -46,10 +44,9 @@ public interface InflectionAffix {
 	 * Apply this affix to a word.
 	 *
 	 * @param word
-	 * 	The word to apply the affix to.
+	 *             The word to apply the affix to.
 	 *
-	 * @return
-	 * 	The word with the affix applied.
+	 * @return The word with the affix applied.
 	 */
 	String affix(String word);
 }

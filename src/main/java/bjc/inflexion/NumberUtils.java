@@ -2,26 +2,26 @@ package bjc.inflexion;
 
 /**
  * A variety of functions for doing useful stuff with numbers.
- * 
+ *
  * @author EVE
  *
  */
 public class NumberUtils {
 	/*
 	 * @TODO 2/12/18 Ben Culkin :RomanExpansion
-	 * 
-	 * Use U+305 for large roman numerals, as well as excels 'concise'
-	 * numerals (as implemented by roman()).
+	 *
+	 * Use U+305 for large roman numerals, as well as excels 'concise' numerals (as
+	 * implemented by roman()).
 	 */
 
 	/**
 	 * Convert a number into a roman numeral.
-	 * 
+	 *
 	 * @param number
 	 *                The number to convert.
 	 * @param classic
-	 *                Whether to use classic roman numerals (use IIII
-	 *                instead of IV, and such).
+	 *                Whether to use classic roman numerals (use IIII instead of IV,
+	 *                and such).
 	 * @return The number as a roman numeral.
 	 */
 	public static String toRoman(long number, boolean classic) {
@@ -29,7 +29,9 @@ public class NumberUtils {
 
 		long currNumber = number;
 
-		if (currNumber == 0) { return "N"; }
+		if (currNumber == 0) {
+			return "N";
+		}
 
 		if (currNumber < 0) {
 			currNumber *= -1;
@@ -130,9 +132,13 @@ public class NumberUtils {
 		return work.toString();
 	}
 
-	private static String[] summaryNums = new String[] { "no", "one", "a couple of", "a few", "several" };
+	private static String[] summaryNums = new String[] {
+			"no", "one", "a couple of", "a few", "several"
+	};
 
-	private static String[] summaryNumsEnd = new String[] { "none", "one", "a couple", "a few", "several" };
+	private static String[] summaryNumsEnd = new String[] {
+			"none", "one", "a couple", "a few", "several"
+	};
 
 	private static int[] summaryMap = new int[] {
 			/* no */
@@ -144,22 +150,24 @@ public class NumberUtils {
 			/* a few */
 			3, 3, 3,
 			/* several */
-			4, 4, 4, 4 };
+			4, 4, 4, 4
+	};
 
 	/**
 	 * Summarize an integer.
 	 *
 	 * @param num
-	 *                The number to summarize.
+	 *              The number to summarize.
 	 *
 	 * @param atEnd
-	 *                Whether or not the integer is at the end of a string.
+	 *              Whether or not the integer is at the end of a string.
 	 *
 	 * @return A string summarizing the integer.
 	 */
 	public static String summarizeNumber(final long num, final boolean atEnd) {
 		if (num >= 0 && num < 10) {
-			if (atEnd) return summaryNumsEnd[summaryMap[(int) num]];
+			if (atEnd)
+				return summaryNumsEnd[summaryMap[(int) num]];
 
 			return summaryNums[summaryMap[(int) num]];
 		}
@@ -169,53 +177,59 @@ public class NumberUtils {
 
 	/**
 	 * Convert a number into a cardinal number, up to a threshold.
-	 * 
+	 *
 	 * @param number
-	 *                The number to convert
+	 *               The number to convert
 	 * @param thresh
-	 *                The threshold to stop at.
+	 *               The threshold to stop at.
 	 * @return The number as a cardinal.
 	 */
 	public static String toCardinal(long number, long thresh) {
-		if (number < thresh) return toCardinal(number, null);
+		if (number < thresh)
+			return toCardinal(number, null);
 
 		return Long.toString(number);
 	}
 
 	/**
 	 * Convert a number into a cardinal number.
-	 * 
+	 *
 	 * @param number
-	 *                The number to convert
+	 *               The number to convert
 	 * @return The number as a cardinal.
 	 */
 	public static String toCardinal(long number) {
 		return toCardinal(number, null);
 	}
 
-	private static String[] cardinals = new String[] { "zero", "one", "two", "three", "four", "five", "six",
-			"seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
-			"sixteen", "seventeen", "eighteen", "nineteen", "twenty", };
+	private static String[] cardinals = new String[] {
+			"zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
+			"nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+			"sixteen", "seventeen", "eighteen", "nineteen", "twenty",
+	};
 
 	/**
 	 * Convert a number into a cardinal number.
-	 * 
+	 *
 	 * @param number
-	 *                The number to convert to a cardinal.
+	 *               The number to convert to a cardinal.
 	 * @param custom
-	 *                The customizations to use.
+	 *               The customizations to use.
 	 * @return The number as a cardinal.
 	 */
 	public static String toCardinal(long number, CardinalState custom) {
 		if (custom != null) {
 			String res = custom.handleCustom(number);
 
-			if (res != null) return res;
+			if (res != null)
+				return res;
 		}
 
-		if (number < 0) return "negative " + toCardinal(number * -1, custom);
+		if (number < 0)
+			return "negative " + toCardinal(number * -1, custom);
 
-		if (number <= 20) return cardinals[(int) number];
+		if (number <= 20)
+			return cardinals[(int) number];
 
 		if (number < 100) {
 			if (number % 10 == 0) {
@@ -252,7 +266,8 @@ public class NumberUtils {
 			long numHundreds = number / 100;
 			long rest = number % 100;
 
-			return toCardinal(numHundreds, custom) + " hundred and " + toCardinal(rest, custom);
+			return toCardinal(numHundreds, custom) + " hundred and "
+					+ toCardinal(rest, custom);
 		}
 
 		long MILLION = (long) (Math.pow(10, 6));
@@ -260,7 +275,8 @@ public class NumberUtils {
 			long numThousands = number / 1000;
 			long rest = number % 1000;
 
-			return toCardinal(numThousands, custom) + " thousand, " + toCardinal(rest, custom);
+			return toCardinal(numThousands, custom) + " thousand, "
+					+ toCardinal(rest, custom);
 		}
 
 		long BILLION = (long) (Math.pow(10, 9));
@@ -268,7 +284,8 @@ public class NumberUtils {
 			long numMillions = number / MILLION;
 			long rest = number % MILLION;
 
-			return toCardinal(numMillions, custom) + " million, " + toCardinal(rest, custom);
+			return toCardinal(numMillions, custom) + " million, "
+					+ toCardinal(rest, custom);
 		}
 
 		long TRILLION = (long) (Math.pow(10, 12));
@@ -276,7 +293,8 @@ public class NumberUtils {
 			long numBillions = number / BILLION;
 			long rest = number % BILLION;
 
-			return toCardinal(numBillions, custom) + " billion, " + toCardinal(rest, custom);
+			return toCardinal(numBillions, custom) + " billion, "
+					+ toCardinal(rest, custom);
 		}
 
 		throw new IllegalArgumentException(
@@ -285,11 +303,11 @@ public class NumberUtils {
 
 	/**
 	 * Convert a number into an ordinal, up to a certain value.
-	 * 
+	 *
 	 * @param number
-	 *                The number to convert to an ordinal.
+	 *               The number to convert to an ordinal.
 	 * @param thresh
-	 *                The threshold value to stop converting at.
+	 *               The threshold value to stop converting at.
 	 * @return The number as an ordinal.
 	 */
 	public static String toOrdinal(long number, long thresh) {
@@ -298,27 +316,28 @@ public class NumberUtils {
 
 	/**
 	 * Convert a number into an ordinal, up to a certain value.
-	 * 
+	 *
 	 * @param number
-	 *                The number to convert to an ordinal.
+	 *                 The number to convert to an ordinal.
 	 * @param thresh
-	 *                The threshold value to stop converting at.
+	 *                 The threshold value to stop converting at.
 	 * @param longForm
-	 *                Whether or not to use long-form ordinals (zeroth,
-	 *                first, etc.) instead of (0th, 1st, etc.)
+	 *                 Whether or not to use long-form ordinals (zeroth, first,
+	 *                 etc.) instead of (0th, 1st, etc.)
 	 * @return The number as an ordinal.
 	 */
 	public static String toOrdinal(long number, long thresh, boolean longForm) {
-		if (number < thresh) return toOrdinal(number, longForm);
+		if (number < thresh)
+			return toOrdinal(number, longForm);
 
 		return Long.toString(number);
 	}
 
 	/**
 	 * Convert a number into an ordinal.
-	 * 
+	 *
 	 * @param number
-	 *                The number to convert to an ordinal.
+	 *               The number to convert to an ordinal.
 	 * @return The number as an ordinal.
 	 */
 	public static String toOrdinal(long number) {
@@ -327,16 +346,18 @@ public class NumberUtils {
 
 	/**
 	 * Convert a number into an ordinal.
-	 * 
+	 *
 	 * @param number
-	 *                The number to convert to an ordinal.
+	 *                 The number to convert to an ordinal.
 	 * @param longForm
-	 *                Whether or not to use long-form ordinals (zeroth,
-	 *                first, etc.) instead of (0th, 1st, etc.)
+	 *                 Whether or not to use long-form ordinals (zeroth, first,
+	 *                 etc.) instead of (0th, 1st, etc.)
 	 * @return The number as an ordinal.
 	 */
 	public static String toOrdinal(long number, boolean longForm) {
-		if (number < 0) { return "minus " + toOrdinal(number, longForm); }
+		if (number < 0) {
+			return "minus " + toOrdinal(number, longForm);
+		}
 
 		if (longForm) {
 			if (number < 20) {
@@ -415,7 +436,8 @@ public class NumberUtils {
 				}
 
 				long numPostfix = number % 10;
-				return toCardinal(number - numPostfix) + "-" + toOrdinal(numPostfix, longForm);
+				return toCardinal(number - numPostfix) + "-"
+						+ toOrdinal(numPostfix, longForm);
 			}
 		}
 
@@ -423,7 +445,9 @@ public class NumberUtils {
 		long tens = procNum / 10;
 		long ones = procNum % 10;
 
-		if (tens == 1) { return Long.toString(number) + "th"; }
+		if (tens == 1) {
+			return Long.toString(number) + "th";
+		}
 
 		switch ((int) ones) {
 		case 1:
@@ -462,27 +486,30 @@ public class NumberUtils {
 
 	/**
 	 * Convert a number into a commafied string.
-	 * 
+	 *
 	 * @param val
-	 *                The number to convert.
+	 *                      The number to convert.
 	 * @param mincols
-	 *                The minimum number of columns to use.
+	 *                      The minimum number of columns to use.
 	 * @param padchar
-	 *                The padding char to use.
+	 *                      The padding char to use.
 	 * @param commaInterval
-	 *                The interval to place commas at.
+	 *                      The interval to place commas at.
 	 * @param commaChar
-	 *                The character to use as a comma
+	 *                      The character to use as a comma
 	 * @param signed
-	 *                Whether or not to always display a sign
+	 *                      Whether or not to always display a sign
 	 * @param radix
-	 *                The radix to use
+	 *                      The radix to use
 	 * @return The number as a commafied string.
 	 */
-	public static String toCommaString(long val, int mincols, char padchar, int commaInterval, char commaChar,
-			boolean signed, int radix) {
-		if (radix > radixChars.length) { throw new IllegalArgumentException(String.format(
-				"Radix %d is larger than largest supported radix %d", radix, radixChars.length)); }
+	public static String toCommaString(long val, int mincols, char padchar,
+			int commaInterval, char commaChar, boolean signed, int radix) {
+		if (radix > radixChars.length) {
+			throw new IllegalArgumentException(
+					String.format("Radix %d is larger than largest supported radix %d",
+							radix, radixChars.length));
+		}
 
 		StringBuilder work = new StringBuilder();
 
@@ -512,7 +539,8 @@ public class NumberUtils {
 
 		if (isNeg)
 			work.append("-");
-		else if (signed) work.append("+");
+		else if (signed)
+			work.append("+");
 
 		work.reverse();
 
@@ -521,8 +549,7 @@ public class NumberUtils {
 		 *
 		 * Should we have some way to specify how to pad?
 		 *
-		 * By this, I mean specify padding direction (left, right,
-		 * balanced...)
+		 * By this, I mean specify padding direction (left, right, balanced...)
 		 */
 		StringBuilder pad = new StringBuilder();
 
@@ -536,9 +563,9 @@ public class NumberUtils {
 				// behavior, or if something is wrong with the
 				// example case in the menu
 				// if (commaInterval != 0 && padCount != 0) {
-				// 	if (Character.isDigit(padchar) && padCount % commaInterval == 0)
-				// 		pad.append(commaChar);
-				// 	else
+				// if (Character.isDigit(padchar) && padCount % commaInterval == 0)
+				// pad.append(commaChar);
+				// else
 				pad.append(padchar);
 				// }
 
@@ -551,7 +578,7 @@ public class NumberUtils {
 
 	/**
 	 * Convert a number to a normal commafied string.
-	 * 
+	 *
 	 * @param val
 	 *                The value to convert.
 	 * @param mincols
@@ -564,7 +591,8 @@ public class NumberUtils {
 	 *                The radix to use.
 	 * @return The number as a normal commafied string.
 	 */
-	public static String toNormalString(long val, int mincols, char padchar, boolean signed, int radix) {
+	public static String toNormalString(long val, int mincols, char padchar,
+			boolean signed, int radix) {
 		return toCommaString(val, mincols, padchar, 0, ',', signed, radix);
 	}
 }

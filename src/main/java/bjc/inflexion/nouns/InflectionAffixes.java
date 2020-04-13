@@ -25,8 +25,8 @@ public class InflectionAffixes {
 	/*
 	 * Template for 'complete' affix patterns.
 	 *
-	 * Match the start of the word, followed by zero or more word
-	 * characters, followed by the suffix, then the end of the string.
+	 * Match the start of the word, followed by zero or more word characters,
+	 * followed by the suffix, then the end of the string.
 	 *
 	 * The word is in a capturing group named 'stem'.
 	 */
@@ -46,10 +46,9 @@ public class InflectionAffixes {
 	 * Create an affix that's a word by itself.
 	 *
 	 * @param suffix
-	 * 	The suffix to use.
+	 *               The suffix to use.
 	 *
-	 * @return
-	 * 	A affix that represents the suffix.
+	 * @return A affix that represents the suffix.
 	 */
 	public static InflectionAffix complete(final String suffix) {
 		final Pattern patt = Pattern.compile(String.format(COMPLETE_PATT_FMT, suffix));
@@ -61,10 +60,9 @@ public class InflectionAffixes {
 	 * Create an affix that's not a word by itself.
 	 *
 	 * @param suffix
-	 * 	The suffix to use.
+	 *               The suffix to use.
 	 *
-	 * @return
-	 * 	An affix that represents the suffix.
+	 * @return An affix that represents the suffix.
 	 */
 	public static InflectionAffix incomplete(final String suffix) {
 		final Pattern patt = Pattern.compile(String.format(INCOMPLETE_PATT_FMT, suffix));
