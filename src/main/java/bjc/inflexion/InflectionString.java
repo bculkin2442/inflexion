@@ -88,7 +88,7 @@ public class InflectionString {
 			boolean doBrief = false;
 
 			if (doBrief)
-				return String.format("Encountered errors attempting to parse string %s",
+				return String.format("Encountered %d errors attempting to parse string %s",
 						parseErrors.size(), inp);
 
 			StringBuilder sb = new StringBuilder(parseErrors.size());

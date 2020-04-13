@@ -111,7 +111,7 @@ public class CategoricalNounInflection implements NounInflection {
 			return singular.affix(classicalPlural.deaffix(plural));
 		} else {
 			final String msg = String
-					.format("Noun '%s' doesn't belong to this inflection", plural, this);
+					.format("Noun '%s' doesn't belong to this (%s) inflection", plural, this);
 
 			throw new InflectionException(msg);
 		}
@@ -128,7 +128,7 @@ public class CategoricalNounInflection implements NounInflection {
 			return singlar;
 		} else {
 			final String msg = String
-					.format("Noun '%s' doesn't belong to this inflection", singlar, this);
+					.format("Noun '%s' doesn't belong to this (%s) inflection", singlar, this);
 
 			throw new InflectionException(msg);
 		}

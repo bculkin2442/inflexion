@@ -124,7 +124,7 @@ public class IrregularNounInflection implements NounInflection {
 
 	@Override
 	public String pluralize(final String singlar) {
-		if (singlar.equalsIgnoreCase(singlar)) {
+		if (singular.equalsIgnoreCase(singlar)) {
 			return getPlural();
 		} else if (matchesPlural(singlar)) {
 			return getPlural();

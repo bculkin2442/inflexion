@@ -93,7 +93,7 @@ public class EnglishUtils {
 		// Special capital words (UK, UN)
 		if (word.matches("^U[NK][AIEO].*") == true) {
 			return "a";
-		} else if (word == word.toUpperCase()) {
+		} else if (word.equals(word.toUpperCase())) {
 			if ("aedhilmnorsx".indexOf(lowercaseWord.substring(0, 1)) >= 0) {
 				return "an";
 			}
