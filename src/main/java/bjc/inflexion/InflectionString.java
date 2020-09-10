@@ -20,6 +20,8 @@ import static bjc.inflexion.InflectionString.InflectionDirective.numeric;
 import static bjc.inflexion.InflectionString.InflectionDirective.variable;
 import static java.util.Arrays.asList;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,15 +39,15 @@ import bjc.inflexion.nouns.Prepositions;
 
 /**
  * A compiled inflection markup string
- * 
+ *
  * @author bjculkin
  *
  */
 public class InflectionString {
 	/**
-	 * Exception thrown if the string we are attempting to compile has
-	 * invalid syntax.
-	 * 
+	 * Exception thrown if the string we are attempting to compile has invalid
+	 * syntax.
+	 *
 	 * @author bjculkin
 	 *
 	 */
@@ -64,11 +66,11 @@ public class InflectionString {
 
 		/**
 		 * Create a new format exception.
-		 * 
+		 *
 		 * @param inp
-		 *                The string we are attempting to compile
+		 *                    The string we are attempting to compile
 		 * @param parseErrors
-		 *                The errors we encountered parsing the string.
+		 *                    The errors we encountered parsing the string.
 		 */
 		public InflectionFormatException(String inp, List<String> parseErrors) {
 			this.inp = inp;
@@ -78,15 +80,16 @@ public class InflectionString {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Throwable#toString()
 		 */
 		@Override
 		public String toString() {
 			boolean doBrief = false;
 
-			if (doBrief) return String.format("Encountered errors attempting to parse string %s",
-					parseErrors.size(), inp);
+			if (doBrief)
+				return String.format("Encountered %d errors attempting to parse string %s",
+						parseErrors.size(), inp);
 
 			StringBuilder sb = new StringBuilder(parseErrors.size());
 			sb.append("Encountered errors attempting to parse the following string:\n\t");
@@ -107,14 +110,14 @@ public class InflectionString {
 
 	/**
 	 * Represents a directive in a inflection string.
-	 * 
+	 *
 	 * @author bjculkin
 	 *
 	 */
 	public static final class InflectionDirective {
 		/**
 		 * The type of the directive in the inflection string.
-		 * 
+		 *
 		 * @author bjculkin
 		 *
 		 */
@@ -143,7 +146,7 @@ public class InflectionString {
 
 		/**
 		 * Empty base class for directive options.
-		 * 
+		 *
 		 * @author bjculkin
 		 *
 		 */
@@ -153,112 +156,108 @@ public class InflectionString {
 
 		/**
 		 * Options for a numeric directive.
-		 * 
+		 *
 		 * @author bjculkin
 		 *
 		 */
 		public static class NumericOptions extends Options {
 			/**
-			 * Increment the numeric value before doing anything
-			 * with it.
-			 * 
+			 * Increment the numeric value before doing anything with it.
+			 *
 			 * Corresponds to the 'i' option.
 			 */
 			public boolean increment;
 			/**
 			 * Amount to increase the value by.
-			 * 
+			 *
 			 * Attached to the 'i' option.
 			 */
 			public int incrementAmt = 1;
 
 			/**
 			 * Treat zero as singular.
-			 * 
-			 * Doesn't correspond directly to the 's' option, but
-			 * splitting between singular zero and using 'no' for
-			 * zero is useful.
+			 *
+			 * Doesn't correspond directly to the 's' option, but splitting between
+			 * singular zero and using 'no' for zero is useful.
 			 */
 			public boolean singular;
 
 			/**
 			 * Print zero as 'no'.
-			 * 
+			 *
 			 * Corresponds to 'n' option.
 			 */
 			public boolean zeroNo;
 
 			/**
 			 * Print 'a'/'an' for one.
-			 * 
+			 *
 			 * Corresponds to 'a' option.
 			 */
 			public boolean article;
 
 			/**
 			 * Don't print any text.
-			 * 
+			 *
 			 * Corresponds to 'd' option.
 			 */
 			public boolean nonPrint;
 
 			/**
 			 * Print the number as a cardinal.
-			 * 
+			 *
 			 * Corresponds to 'w' option.
 			 */
 			public boolean cardinal;
 			/**
-			 * Threshold for when to stop printing the number as a
-			 * cardinal.
-			 * 
+			 * Threshold for when to stop printing the number as a cardinal.
+			 *
 			 * Attached to the 'w' and 'o' options.
 			 */
 			public int cardinalThresh = 11;
 
 			/**
 			 * Print the number as an ordinal.
-			 * 
+			 *
 			 * Corresponds to the 'o' option.
 			 */
 			public boolean ordinal;
 			/**
-			 * Threshold for when to stop printing the number as an
-			 * ordinal.
-			 * 
-			 * If the current count is greater than
-			 * 'cardinalThresh', ordinals like 1st and 2nd will be
-			 * printed instead of first and second.
-			 * 
+			 * Threshold for when to stop printing the number as an ordinal.
+			 *
+			 * If the current count is greater than 'cardinalThresh', ordinals like 1st
+			 * and 2nd will be printed instead of first and second.
+			 *
 			 * Attached to the 'o' option.
 			 */
 			public int ordinalThresh = Integer.MAX_VALUE;
 
 			/**
 			 * Summarize a number.
-			 * 
+			 *
 			 * Corresponds to the 'f' option.
 			 */
 			public boolean summarize;
 
 			/**
-			 * Mark the summarization as occurring at the end of the
-			 * string, regardless of its current position.
+			 * Mark the summarization as occurring at the end of the string, regardless of
+			 * its current position.
 			 */
 			public boolean atEnd = false;
 
 			/**
 			 * Create a new set of numeric options from a string.
-			 * 
+			 *
 			 * @param options
-			 *                The string to create options from.
+			 *                    The string to create options from.
 			 * @param curPos
-			 *                The current position into the string.
+			 *                    The current position into the string.
 			 * @param parseErrors
-			 *                The current list of parsing errors.
+			 *                    The current list of parsing errors.
 			 */
 			public NumericOptions(String options, int curPos, List<String> parseErrors) {
-				if (options.equals("")) return;
+				if (options.equals(""))
+					return;
 
 				char prevOption = ' ';
 				StringBuilder currNum = new StringBuilder();
@@ -340,8 +339,8 @@ public class InflectionString {
 			public NumericOptions() {
 			}
 
-			private void parseNumericParam(int curPos, List<String> parseErrors, char prevOption,
-					StringBuilder currNum, int i) {
+			private void parseNumericParam(int curPos, List<String> parseErrors,
+					char prevOption, StringBuilder currNum, int i) {
 				int nVal = 0;
 				try {
 					nVal = Integer.parseInt(currNum.toString());
@@ -386,7 +385,7 @@ public class InflectionString {
 
 		/**
 		 * Options for a noun directive.
-		 * 
+		 *
 		 * @author bjculkin
 		 *
 		 */
@@ -408,16 +407,17 @@ public class InflectionString {
 
 			/**
 			 * Create a new set of noun options from a string.
-			 * 
+			 *
 			 * @param options
-			 *                The string to create options from.
+			 *                    The string to create options from.
 			 * @param curPos
-			 *                The current position into the string.
+			 *                    The current position into the string.
 			 * @param parseErrors
-			 *                The current list of parsing errors.
+			 *                    The current list of parsing errors.
 			 */
 			public NounOptions(String options, int curPos, List<String> parseErrors) {
-				if (options.equals("")) return;
+				if (options.equals(""))
+					return;
 
 				boolean doingCaseFolding = false;
 
@@ -461,8 +461,10 @@ public class InflectionString {
 		}
 
 		// Emit error message
-		private static String error(String dir, int curPos, int i, String msg, Object... props) {
-			return String.format("%s (at position %d in %s directive starting at position %d)",
+		private static String error(String dir, int curPos, int i, String msg,
+				Object... props) {
+			return String.format(
+					"%s (at position %d in %s directive starting at position %d)",
 					String.format(msg, props), curPos + i, dir, curPos);
 		}
 
@@ -473,22 +475,20 @@ public class InflectionString {
 
 		/**
 		 * The string value of the directive.
-		 * 
-		 * Currently, set for literals and variable references, as well
-		 * as nouns.
+		 *
+		 * Currently, set for literals and variable references, as well as nouns.
 		 */
 		public String litString;
 
 		/**
 		 * The integer value of the directive.
-		 * 
+		 *
 		 * Currently set for numeric values.
 		 */
 		public int numNumber;
 
 		/**
-		 * Is this directives body referencing a variable instead of a
-		 * literal?
+		 * Is this directives body referencing a variable instead of a literal?
 		 */
 		public boolean isVRef = false;
 
@@ -504,9 +504,9 @@ public class InflectionString {
 
 		/**
 		 * Create a new inflection directive.
-		 * 
+		 *
 		 * @param type
-		 *                The type of the directive.
+		 *             The type of the directive.
 		 */
 		public InflectionDirective(DirectiveType type) {
 			this.type = type;
@@ -520,11 +520,11 @@ public class InflectionString {
 
 		/**
 		 * Create a new inflection directive.
-		 * 
+		 *
 		 * @param type
-		 *                The type of the directive.
+		 *               The type of the directive.
 		 * @param strang
-		 *                The string value for the directive.
+		 *               The string value for the directive.
 		 */
 		public InflectionDirective(DirectiveType type, String strang) {
 			this.type = type;
@@ -550,18 +550,19 @@ public class InflectionString {
 				break;
 			default:
 				throw new IllegalArgumentException(
-						"Unhandled or wrong arguments (1 string) for directive type " + type);
+						"Unhandled or wrong arguments (1 string) for directive type "
+								+ type);
 
 			}
 		}
 
 		/**
 		 * Create a new inflection directive.
-		 * 
+		 *
 		 * @param type
-		 *                The type of the directive.
+		 *             The type of the directive.
 		 * @param num
-		 *                The number value for the directive.
+		 *             The number value for the directive.
 		 */
 		public InflectionDirective(DirectiveType type, int num) {
 			this.type = type;
@@ -573,20 +574,22 @@ public class InflectionString {
 				break;
 			default:
 				throw new IllegalArgumentException(
-						"Unhandled or wrong arguments (1 number) for directive type " + type);
+						"Unhandled or wrong arguments (1 number) for directive type "
+								+ type);
 
 			}
 		}
 
 		/**
 		 * Create a new inflection directive.
-		 * 
+		 *
 		 * @param type
 		 *                The type of the directive.
 		 * @param listDir
 		 *                The directive list value for the directive.
 		 */
-		public InflectionDirective(DirectiveType type, List<InflectionDirective> listDir) {
+		public InflectionDirective(DirectiveType type,
+				List<InflectionDirective> listDir) {
 			this.type = type;
 
 			switch (type) {
@@ -603,9 +606,9 @@ public class InflectionString {
 
 		/**
 		 * Create a new literal directive.
-		 * 
+		 *
 		 * @param strang
-		 *                The literal string the directive represents.
+		 *               The literal string the directive represents.
 		 * @return A literal directive for the given string.
 		 */
 		public static InflectionDirective literal(String strang) {
@@ -614,10 +617,9 @@ public class InflectionString {
 
 		/**
 		 * Create a new variable directive.
-		 * 
+		 *
 		 * @param strang
-		 *                The name of the variable to interpolate into
-		 *                the string.
+		 *               The name of the variable to interpolate into the string.
 		 * @return A directive that says to interpolate the given value.
 		 */
 		public static InflectionDirective variable(String strang) {
@@ -626,11 +628,10 @@ public class InflectionString {
 
 		/**
 		 * Create a new numeric directive.
-		 * 
+		 *
 		 * @param num
-		 *                The value of the directive,
-		 * @return A directive that sets the current number to the
-		 *         specific value.
+		 *            The value of the directive,
+		 * @return A directive that sets the current number to the specific value.
 		 */
 		public static InflectionDirective numeric(int num) {
 			return new InflectionDirective(DirectiveType.NUMERIC, num);
@@ -638,12 +639,10 @@ public class InflectionString {
 
 		/**
 		 * Create a new numeric directive.
-		 * 
+		 *
 		 * @param strang
-		 *                The name of a variable that holds the value of
-		 *                the directive,
-		 * @return A directive that sets the current number to the
-		 *         specific value.
+		 *               The name of a variable that holds the value of the directive,
+		 * @return A directive that sets the current number to the specific value.
 		 */
 		public static InflectionDirective numeric(String strang) {
 			return new InflectionDirective(DirectiveType.NUMERIC, strang);
@@ -651,10 +650,9 @@ public class InflectionString {
 
 		/**
 		 * Create a new noun directive.
-		 * 
+		 *
 		 * @param strang
-		 *                The noun, or the name of the variable for the
-		 *                noun.
+		 *               The noun, or the name of the variable for the noun.
 		 * @return A directive that inflects the specified noun.
 		 */
 		public static InflectionDirective noun(String strang) {
@@ -663,9 +661,9 @@ public class InflectionString {
 
 		/**
 		 * Create a sequenced set of directives.
-		 * 
+		 *
 		 * @param list
-		 *                The directives to sequence.
+		 *             The directives to sequence.
 		 * @return A sequence directive.
 		 */
 		public static InflectionDirective seq(List<InflectionDirective> list) {
@@ -674,9 +672,9 @@ public class InflectionString {
 
 		/**
 		 * Create a sequenced set of directives.
-		 * 
+		 *
 		 * @param arr
-		 *                The directives to sequence.
+		 *            The directives to sequence.
 		 * @return A sequence directive.
 		 */
 		public static InflectionDirective seq(InflectionDirective... arr) {
@@ -685,14 +683,15 @@ public class InflectionString {
 
 		/**
 		 * Set the numeric options for this directive.
-		 * 
+		 *
 		 * @param numOpts
 		 *                The numeric options of the directive.
 		 * @return The directive.
 		 */
 		public InflectionDirective options(NumericOptions numOpts) {
-			if (type != DirectiveType.NUMERIC) throw new IllegalArgumentException(
-					"Directive type " + type + " does not take numeric options");
+			if (type != DirectiveType.NUMERIC)
+				throw new IllegalArgumentException(
+						"Directive type " + type + " does not take numeric options");
 			this.opts = numOpts;
 
 			return this;
@@ -700,14 +699,15 @@ public class InflectionString {
 
 		/**
 		 * Set the noun options for this directive.
-		 * 
+		 *
 		 * @param nounOpts
-		 *                The noun options of the directive.
+		 *                 The noun options of the directive.
 		 * @return The directive.
 		 */
 		public InflectionDirective options(NounOptions nounOpts) {
-			if (type != DirectiveType.NOUN) throw new IllegalArgumentException(
-					"Directive type " + type + " does not take noun options");
+			if (type != DirectiveType.NOUN)
+				throw new IllegalArgumentException(
+						"Directive type " + type + " does not take noun options");
 			this.opts = nounOpts;
 
 			return this;
@@ -716,6 +716,7 @@ public class InflectionString {
 
 	/**
 	 * Performs the parsing of directives from a string.
+	 * 
 	 * @author bjculkin
 	 */
 	public class DirectiveIterator implements Iterator<String> {
@@ -726,7 +727,7 @@ public class InflectionString {
 		 * Create a new directive iterator over a string.
 		 *
 		 * @param strang
-		 * 	The string to parse directives from.
+		 *               The string to parse directives from.
 		 */
 		public DirectiveIterator(String strang) {
 			this.strang = strang;
@@ -739,18 +740,20 @@ public class InflectionString {
 
 		@Override
 		public String next() {
-			if (!hasNext()) return null;
+			if (!hasNext())
+				return null;
 
 			// Directive nesting level
-			int level   = 0;
-			int prevPos = pos;;
+			int level = 0;
+			int prevPos = pos;
 
 			char prevChar = ' ';
 			boolean parsingVar = false;
 
-			for (pos = pos; pos < strang.length(); pos++) {
+			for (; pos < strang.length(); pos++) {
 				// Backslash escapes a character
-				if (prevChar == '\\') continue;
+				if (prevChar == '\\')
+					continue;
 
 				char c = strang.charAt(pos);
 				switch (c) {
@@ -765,8 +768,12 @@ public class InflectionString {
 					break;
 				case '>':
 					// :ErrorHandling 11/19/18
-					if (level == 0) throw new IllegalArgumentException(
-							"Attempted to close inflection directive without one open at position " + prevPos + " in string '" + strang + "', current token is '" + strang.substring(prevPos, pos) + "'");
+					if (level == 0)
+						throw new IllegalArgumentException(
+								"Attempted to close inflection directive without one open at position "
+										+ prevPos + " in string '" + strang
+										+ "', current token is '"
+										+ strang.substring(prevPos, pos) + "'");
 					// Denest a level
 					level = Math.max(0, level - 1);
 					// Stop parsing at the end of a
@@ -781,16 +788,19 @@ public class InflectionString {
 					break;
 				case '$':
 					// Ignore v-refs when inside a directive
-					if (level > 0) break;
+					if (level > 0)
+						break;
 					// Stop parsing if this isn't at the
 					// start of a string
-					if (prevPos != pos) return strang.substring(prevPos, pos);
+					if (prevPos != pos)
+						return strang.substring(prevPos, pos);
 					parsingVar = true;
 					break;
 				case ' ':
 					// If we're parsing a v-ref, this
 					// finishes it.
-					if (parsingVar) return strang.substring(prevPos, pos);
+					if (parsingVar)
+						return strang.substring(prevPos, pos);
 					break;
 				default:
 					// Do nothing for ordinary characters
@@ -798,14 +808,17 @@ public class InflectionString {
 				}
 			}
 
-			/* @TODO 11/19/18 Ben Culkin :ErrorHandling
-			 * Do something better than this exception, if possible.
+			/*
+			 * @TODO 11/19/18 Ben Culkin :ErrorHandling Do something better than this
+			 * exception, if possible.
 			 *
-			 * In the rest of the inflection string code, we use the
-			 * whole 'list of errors/warnings' thing. Is there a way
-			 * to do something similiar here?
+			 * In the rest of the inflection string code, we use the whole 'list of
+			 * errors/warnings' thing. Is there a way to do something similiar here?
 			 */
-			if (level > 0) throw new IllegalArgumentException("Unclosed inflection directive, starting at position " + prevPos + " in string '" + strang + "'");
+			if (level > 0)
+				throw new IllegalArgumentException(
+						"Unclosed inflection directive, starting at position " + prevPos
+								+ " in string '" + strang + "'");
 
 			return strang.substring(prevPos, pos);
 		}
@@ -825,10 +838,19 @@ public class InflectionString {
 	/* Load DBs from files. */
 	static {
 		final Prepositions prepositionDB = new Prepositions();
-		prepositionDB.loadFromStream(InflectionML.class.getResourceAsStream("/prepositions.txt"));
+		try (InputStream strim
+				= InflectionML.class.getResourceAsStream("/prepositions.txt")) {
+			prepositionDB.loadFromStream(strim);
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+		}
 
 		nounDB = new Nouns(prepositionDB);
-		nounDB.loadFromStream(InflectionML.class.getResourceAsStream("/nouns.txt"));
+		try (InputStream strim = InflectionML.class.getResourceAsStream("/nouns.txt")) {
+			nounDB.loadFromStream(strim);
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+		}
 	}
 
 	/*
@@ -850,9 +872,9 @@ public class InflectionString {
 
 	/**
 	 * Create a new compiled inflection string.
-	 * 
+	 *
 	 * @param inp
-	 *                The string to compile.
+	 *            The string to compile.
 	 */
 	public InflectionString(String inp) {
 		this();
@@ -876,15 +898,17 @@ public class InflectionString {
 				String dirBody = strang.substring(2, strang.length() - 1);
 
 				int idx = dirBody.indexOf(":");
-				if (idx == -1) parseErrors.add(error(strang, curPos, "Missing body for %c directive",
-						strang.charAt(1)));
+				if (idx == -1)
+					parseErrors.add(error(strang, curPos, "Missing body for %c directive",
+							strang.charAt(1)));
 
 				String options = dirBody.substring(0, idx);
 				dirBody = dirBody.substring(idx + 1);
 
 				switch (strang.charAt(1)) {
 				case '#': {
-					NumericOptions numOpts = new NumericOptions(options, curPos, parseErrors);
+					NumericOptions numOpts
+							= new NumericOptions(options, curPos, parseErrors);
 
 					if (dirBody.startsWith("$")) {
 						dir = numeric(dirBody.substring(1));
@@ -923,27 +947,29 @@ public class InflectionString {
 				dir = literal(strang);
 			}
 
-			if (dir != null) dirs.add(dir);
+			if (dir != null)
+				dirs.add(dir);
 
 			// Bump forward position.
 			curPos += strang.length();
 		}
 
-		if (!parseErrors.isEmpty()) throw new InflectionFormatException(inp, parseErrors);
+		if (!parseErrors.isEmpty())
+			throw new InflectionFormatException(inp, parseErrors);
 	}
 
 	// Emit an error message
 	private static String error(String substr, int curPos, String msg, Object... props) {
-		return String.format("%s (starting at position %d inside part %s)", String.format(msg, props), curPos,
-				substr);
+		return String.format("%s (starting at position %d inside part %s)",
+				String.format(msg, props), curPos, substr);
 	}
 
 	/**
 	 * Execute inflection of the string.
-	 * 
+	 *
 	 * @param vars
-	 *                The variables to insert into the string.
-	 * 
+	 *             The variables to insert into the string.
+	 *
 	 * @return The inflected form of the string.
 	 */
 	public String inflect(Object... vars) {
@@ -959,10 +985,10 @@ public class InflectionString {
 
 	/**
 	 * Execute inflection of the string.
-	 * 
+	 *
 	 * @param vars
-	 *                The variables to insert into the string.
-	 * 
+	 *             The variables to insert into the string.
+	 *
 	 * @return The inflected form of the string.
 	 */
 	public String inflect(Map<String, Object> vars) {
@@ -1014,7 +1040,8 @@ public class InflectionString {
 					NumericOptions opts = (NumericOptions) dir.opts;
 					String rep = Integer.toString(curNum);
 
-					if (opts.increment) curNum += opts.incrementAmt;
+					if (opts.increment)
+						curNum += opts.incrementAmt;
 					if (curNum == 1) {
 						inflectSingular = true;
 					} else if (curNum == 0 && opts.singular) {
@@ -1023,7 +1050,8 @@ public class InflectionString {
 						inflectSingular = false;
 					}
 
-					if (opts.zeroNo && curNum == 0) rep = "no";
+					if (opts.zeroNo && curNum == 0)
+						rep = "no";
 
 					if (opts.article && curNum == 1) {
 						anNum += 1;
@@ -1032,7 +1060,8 @@ public class InflectionString {
 						pendingAn = true;
 					}
 
-					if (opts.nonPrint) break;
+					if (opts.nonPrint)
+						break;
 
 					boolean override = true;
 					if (rep.equals("no") || rep.matches("\\{an\\d+\\}")) {
@@ -1114,7 +1143,8 @@ public class InflectionString {
 				itrDirs.before(dir.listDir);
 				break;
 			default:
-				throw new IllegalArgumentException("Unhandled directive type " + dir.type);
+				throw new IllegalArgumentException(
+						"Unhandled directive type " + dir.type);
 			}
 		}
 
@@ -1137,7 +1167,7 @@ public class InflectionString {
 	public String toString() {
 		if (rawString != null)
 			return rawString;
-		else
-			return super.toString();
+
+		return super.toString();
 	}
 }

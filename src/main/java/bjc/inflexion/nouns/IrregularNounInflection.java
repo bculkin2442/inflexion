@@ -21,9 +21,9 @@ package bjc.inflexion.nouns;
  */
 public class IrregularNounInflection implements NounInflection {
 	/* Format string for toString. */
-	private static final String TOSTRING_FMT =
-	        "IrregularNounInflection [singular=%s, modernPlural=%s,"
-	        + " classicalPlural=%s, preferClassical=%s]";
+	private static final String TOSTRING_FMT
+			= "IrregularNounInflection [singular=%s, modernPlural=%s,"
+					+ " classicalPlural=%s, preferClassical=%s]";
 
 	/* The singular form. */
 	private final String singular;
@@ -40,25 +40,26 @@ public class IrregularNounInflection implements NounInflection {
 	 * Create a new irregular noun inflection.
 	 *
 	 * @param singlar
-	 * 	The singular form of the noun.
+	 *                       The singular form of the noun.
 	 *
 	 * @param modrnPlural
-	 * 	The modern plural of the noun.
+	 *                       The modern plural of the noun.
 	 *
 	 * @param classiclPlural
-	 * 	The classical plural of the noun.
+	 *                       The classical plural of the noun.
 	 *
 	 * @param prefrClassical
-	 * 	Whether the classical form should be preferred if it is
-	 * 	available.
+	 *                       Whether the classical form should be preferred if it is
+	 *                       available.
 	 */
 	public IrregularNounInflection(final String singlar, final String modrnPlural,
-	                               final String classiclPlural,
-	                               final boolean prefrClassical) {
-		if (singlar == null) throw new NullPointerException("Singular form must not be null");
+			final String classiclPlural, final boolean prefrClassical) {
+		if (singlar == null)
+			throw new NullPointerException("Singular form must not be null");
 
 		if (modrnPlural == null && classiclPlural == null)
-			throw new NullPointerException("One of modern/classical plural forms must not be null");
+			throw new NullPointerException(
+					"One of modern/classical plural forms must not be null");
 
 		singular = singlar;
 		modernPlural = modrnPlural;
@@ -86,8 +87,8 @@ public class IrregularNounInflection implements NounInflection {
 		} else if (matchesPlural(noun)) {
 			return false;
 		} else {
-			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'", noun,
-			                                 this);
+			final String msg = String.format(
+					"Noun '%s' doesn't belong to this inflection '%s'", noun, this);
 
 			throw new InflectionException(msg);
 		}
@@ -100,8 +101,8 @@ public class IrregularNounInflection implements NounInflection {
 		} else if (matchesPlural(noun)) {
 			return true;
 		} else {
-			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'", noun,
-			                                 this);
+			final String msg = String.format(
+					"Noun '%s' doesn't belong to this inflection '%s'", noun, this);
 
 			throw new InflectionException(msg);
 		}
@@ -114,9 +115,8 @@ public class IrregularNounInflection implements NounInflection {
 		} else if (matchesPlural(plural)) {
 			return singular;
 		} else {
-			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'",
-			                                 plural,
-			                                 this);
+			final String msg = String.format(
+					"Noun '%s' doesn't belong to this inflection '%s'", plural, this);
 
 			throw new InflectionException(msg);
 		}
@@ -124,14 +124,13 @@ public class IrregularNounInflection implements NounInflection {
 
 	@Override
 	public String pluralize(final String singlar) {
-		if (singlar.equalsIgnoreCase(singlar)) {
+		if (singular.equalsIgnoreCase(singlar)) {
 			return getPlural();
 		} else if (matchesPlural(singlar)) {
 			return getPlural();
 		} else {
-			final String msg = String.format("Noun '%s' doesn't belong to this inflection '%s'",
-			                                 singlar,
-			                                 this);
+			final String msg = String.format(
+					"Noun '%s' doesn't belong to this inflection '%s'", singlar, this);
 
 			throw new InflectionException(msg);
 		}
@@ -140,7 +139,8 @@ public class IrregularNounInflection implements NounInflection {
 	/* Get the plural form. */
 	private String getPlural() {
 		if (preferClassical) {
-			if (classicalPlural == null) return modernPlural;
+			if (classicalPlural == null)
+				return modernPlural;
 
 			return classicalPlural;
 		} else if (modernPlural == null) {
@@ -152,13 +152,14 @@ public class IrregularNounInflection implements NounInflection {
 
 	/* Check if something matches the plural forms. */
 	private boolean matchesPlural(final String noun) {
-		return noun.equalsIgnoreCase(modernPlural) || noun.equalsIgnoreCase(classicalPlural);
+		return noun.equalsIgnoreCase(modernPlural)
+				|| noun.equalsIgnoreCase(classicalPlural);
 	}
 
 	@Override
 	public String toString() {
 		return String.format(TOSTRING_FMT, singular, modernPlural, classicalPlural,
-		                     preferClassical);
+				preferClassical);
 	}
 
 	@Override
@@ -166,7 +167,8 @@ public class IrregularNounInflection implements NounInflection {
 		final int prime = 31;
 		int result = 1;
 
-		result = prime * result + (classicalPlural == null ? 0 : classicalPlural.hashCode());
+		result = prime * result
+				+ (classicalPlural == null ? 0 : classicalPlural.hashCode());
 		result = prime * result + (modernPlural == null ? 0 : modernPlural.hashCode());
 		result = prime * result + (singular == null ? 0 : singular.hashCode());
 
@@ -175,39 +177,50 @@ public class IrregularNounInflection implements NounInflection {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
+		if (this == obj)
+			return true;
 
-		if (obj == null) return false;
+		if (obj == null)
+			return false;
 
-		if (!(obj instanceof IrregularNounInflection)) return false;
+		if (!(obj instanceof IrregularNounInflection))
+			return false;
 
 		final IrregularNounInflection other = (IrregularNounInflection) obj;
 
 		if (singular == null) {
-			if (other.singular != null) return false;
-		} else if (!singular.equals(other.singular)) return false;
+			if (other.singular != null)
+				return false;
+		} else if (!singular.equals(other.singular))
+			return false;
 
 		if (classicalPlural == null) {
-			if (other.classicalPlural != null) return false;
-		} else if (!classicalPlural.equals(other.classicalPlural)) return false;
+			if (other.classicalPlural != null)
+				return false;
+		} else if (!classicalPlural.equals(other.classicalPlural))
+			return false;
 
 		if (modernPlural == null) {
-			if (other.modernPlural != null) return false;
-		} else if (!modernPlural.equals(other.modernPlural)) return false;
+			if (other.modernPlural != null)
+				return false;
+		} else if (!modernPlural.equals(other.modernPlural))
+			return false;
 
 		return true;
 	}
 
 	@Override
 	public String pluralizeModern(final String singlar) {
-		if (modernPlural == null) return pluralizeClassical(singlar);
+		if (modernPlural == null)
+			return pluralizeClassical(singlar);
 
 		return modernPlural;
 	}
 
 	@Override
 	public String pluralizeClassical(final String singlar) {
-		if (classicalPlural == null) return pluralizeModern(singlar);
+		if (classicalPlural == null)
+			return pluralizeModern(singlar);
 
 		return classicalPlural;
 	}

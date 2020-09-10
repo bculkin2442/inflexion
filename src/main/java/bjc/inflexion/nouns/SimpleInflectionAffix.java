@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
  */
 public class SimpleInflectionAffix implements InflectionAffix {
 	/* Format string for toString. */
-	private static final String TOSTRING_FMT =
-	        "SimpleInflectionAffix [affixTemplate=%s, affixMatcher=%s]";
+	private static final String TOSTRING_FMT
+			= "SimpleInflectionAffix [affixTemplate=%s, affixMatcher=%s]";
 
 	/* Affix template. */
 	private final String affixTmplate;
@@ -36,13 +36,13 @@ public class SimpleInflectionAffix implements InflectionAffix {
 	 * Create a new inflection affix.
 	 *
 	 * @param affixTemplate
-	 * 	The template for applying the affix, Should be a printf-style
-	 * 	format string with a single string blank.
+	 *                      The template for applying the affix, Should be a
+	 *                      printf-style format string with a single string blank.
 	 *
 	 * @param affixMatcher
-	 * 	The regular expression that matches the affix on strings. The
-	 * 	'stem' or word should be placed in a named capturing group named
-	 * 	'stem'.
+	 *                      The regular expression that matches the affix on
+	 *                      strings. The 'stem' or word should be placed in a named
+	 *                      capturing group named 'stem'.
 	 */
 	public SimpleInflectionAffix(final String affixTemplate, final Pattern affixMatcher) {
 		affixTmplate = affixTemplate;
@@ -85,21 +85,28 @@ public class SimpleInflectionAffix implements InflectionAffix {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
+		if (this == obj)
+			return true;
 
-		if (obj == null) return false;
+		if (obj == null)
+			return false;
 
-		if (!(obj instanceof SimpleInflectionAffix)) return false;
+		if (!(obj instanceof SimpleInflectionAffix))
+			return false;
 
 		final SimpleInflectionAffix other = (SimpleInflectionAffix) obj;
 
 		if (affixTmplate == null) {
-			if (other.affixTmplate != null) return false;
-		} else if (!affixTmplate.equals(other.affixTmplate)) return false;
+			if (other.affixTmplate != null)
+				return false;
+		} else if (!affixTmplate.equals(other.affixTmplate))
+			return false;
 
 		if (affixMtcher == null) {
-			if (other.affixMtcher != null) return false;
-		} else if (!affixMtcher.equals(other.affixMtcher)) return false;
+			if (other.affixMtcher != null)
+				return false;
+		} else if (!affixMtcher.equals(other.affixMtcher))
+			return false;
 
 		return true;
 	}

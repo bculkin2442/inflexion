@@ -6,13 +6,16 @@ import bjc.inflexion.EnglishUtils;
 
 /**
  * Test class for checking indefinite articles
+ * 
  * @author bjculkin
  *
  */
 public class IndefTester {
 	/**
 	 * Main method.
-	 * @param args Unused CLI args.
+	 * 
+	 * @param args
+	 *             Unused CLI args.
 	 */
 	public static void main(String[] args) {
 		Scanner scn = new Scanner(System.in);
@@ -20,7 +23,7 @@ public class IndefTester {
 		System.out.print("Enter word: ");
 		String word = scn.nextLine().trim();
 
-		while(!word.equals("")) {
+		while (!word.equals("")) {
 			System.out.printf("\t%s %s\n", EnglishUtils.pickIndefinite(word), word);
 
 			System.out.print("Enter word: ");

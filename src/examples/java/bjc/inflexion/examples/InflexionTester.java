@@ -44,15 +44,23 @@ public class InflexionTester {
 	 * Main method.
 	 *
 	 * @param args
-	 *                Unused CLI args.
+	 *             Unused CLI args.
 	 */
 	public static void main(final String[] args) {
 		final Prepositions prepositionDB = new Prepositions();
-		prepositionDB.loadFromStream(
-		        InflexionTester.class.getResourceAsStream("/prepositions.txt"));
+		try (InputStream strim
+				= InflectionML.class.getResourceAsStream("/prepositions.txt")) {
+			prepositionDB.loadFromStream(strim);
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+		}
 
-		final Nouns nounDB = new Nouns(prepositionDB);
-		nounDB.loadFromStream(InflexionTester.class.getResourceAsStream("/nouns.txt"));
+		Nouns nounDB = new Nouns(prepositionDB);
+		try (InputStream strim = InflectionML.class.getResourceAsStream("/nouns.txt")) {
+			nounDB.loadFromStream(strim);
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+		}
 
 		final Scanner scn = new Scanner(System.in);
 
@@ -81,7 +89,8 @@ public class InflexionTester {
 
 		try (InputStream compressedStream = new FileInputStream(fname)) {
 			final InputStream stream = new BZip2CompressorInputStream(compressedStream);
-			final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+			final BufferedReader reader
+					= new BufferedReader(new InputStreamReader(stream));
 
 			/*
 			 * Pattern find word name
@@ -99,7 +108,7 @@ public class InflexionTester {
 			 * Pattern to find noun definition
 			 */
 			final Pattern enNounPattern = Pattern
-			                              .compile("\\{\\{en-noun([a-z0-9\\|\\-\\[\\]\\?\\!=]*)\\}\\}");
+					.compile("\\{\\{en-noun([a-z0-9\\|\\-\\[\\]\\?\\!=]*)\\}\\}");
 
 			final Pattern wordPattern = Pattern.compile("([a-zA-Z\\-]+)");
 
@@ -220,13 +229,13 @@ public class InflexionTester {
 						}
 
 						if (basicWord) {
-							System.out.println("basic word: " + word + " got: "
-							                   + calculatedPlural + ", but expected "
-							                   + enNounMatcher.group(1));
+							System.out.println(
+									"basic word: " + word + " got: " + calculatedPlural
+											+ ", but expected " + enNounMatcher.group(1));
 							basicWrong++;
 						} else if (!uncountable) {
 							System.out.println(word + " got: " + calculatedPlural
-							                   + ", but expected " + enNounMatcher.group(1));
+									+ ", but expected " + enNounMatcher.group(1));
 						}
 					}
 				}
@@ -236,18 +245,20 @@ public class InflexionTester {
 			compressedStream.close();
 
 			final float correct = (count - wrong) * 100 / (float) count;
-			final float basicCorrect = (basicCount - basicWrong) * 100 / (float) basicCount;
+			final float basicCorrect
+					= (basicCount - basicWrong) * 100 / (float) basicCount;
 			final float wrongNoPluralPercent = wrongNoPlural * 100 / (float) count;
 			final int justPlainWrong = wrong - wrongNoPlural;
 			final float justPlainWrongPercent = justPlainWrong * 100 / (float) count;
-			System.out.println("Words checked: " + count + " (" + basicCount + " basic words)");
-			System.out.println("Correct: " + correct + "% (" + basicCorrect + "% basic words)");
+			System.out.println(
+					"Words checked: " + count + " (" + basicCount + " basic words)");
+			System.out.println(
+					"Correct: " + correct + "% (" + basicCorrect + "% basic words)");
 			System.out.println("Errors: ");
 			System.out.println("    No plural form specified: " + wrongNoPlural + " ("
-			                   + wrongNoPluralPercent + "%)");
-			System.out.println("    Incorrect answer: " + justPlainWrong + " (" +
-			                   justPlainWrongPercent
-			                   + "%)");
+					+ wrongNoPluralPercent + "%)");
+			System.out.println("    Incorrect answer: " + justPlainWrong + " ("
+					+ justPlainWrongPercent + "%)");
 		} catch (final FileNotFoundException fnfex) {
 			fnfex.printStackTrace();
 		} catch (final IOException ioex) {

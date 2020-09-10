@@ -48,7 +48,8 @@ public class DefaultNounInflection implements NounInflection {
 
 	@Override
 	public String pluralize(final String singular) {
-		if (singular.endsWith("s")) return singular + "es";
+		if (singular.endsWith("s"))
+			return singular + "es";
 
 		return singular + "s";
 	}
