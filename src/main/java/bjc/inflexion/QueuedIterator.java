@@ -19,7 +19,9 @@ public class QueuedIterator<E> implements Iterator<E> {
 
 	/**
 	 * Static method for constructing iterators.
-	 *
+	 * 
+	 * @param <E> The type of element this iterator iterates over
+	 * 
 	 * @return A queued iterator.
 	 */
 	public static <E> QueuedIterator<E> queued() {
@@ -29,8 +31,10 @@ public class QueuedIterator<E> implements Iterator<E> {
 	/**
 	 * Static method for constructing iterators.
 	 *
-	 * @param itrs
-	 *             The iterators to use.
+	 * @param <E> The type of element this iterator iterates over
+	 * 
+	 * @param itrs The iterators to use.
+	 * 
 	 * @return A queued iterator over the provided iterators.
 	 */
 	@SafeVarargs
@@ -41,8 +45,10 @@ public class QueuedIterator<E> implements Iterator<E> {
 	/**
 	 * Static method for constructing iterators.
 	 *
-	 * @param itrs
-	 *             The iterables to use.
+	 * @param <E> The type of element this iterator iterates over
+	 * 
+	 * @param itrs The iterables to use.
+	 * 
 	 * @return A queued iterator over the provided iterables.
 	 */
 	@SafeVarargs
@@ -50,9 +56,7 @@ public class QueuedIterator<E> implements Iterator<E> {
 		return new QueuedIterator<>(itrs);
 	}
 
-	/**
-	 * Create a new queued iterator that starts blank.
-	 */
+	/** Create a new queued iterator that starts blank. */
 	public QueuedIterator() {
 		pending = new ArrayDeque<>();
 	}
@@ -60,8 +64,7 @@ public class QueuedIterator<E> implements Iterator<E> {
 	/**
 	 * Create a new queued iterator with a set of initial sources.
 	 *
-	 * @param inits
-	 *              The set of initial iterators to use.
+	 * @param inits The set of initial iterators to use.
 	 */
 	@SafeVarargs
 	public QueuedIterator(Iterator<E>... inits) {
