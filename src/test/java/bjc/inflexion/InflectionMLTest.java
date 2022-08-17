@@ -77,7 +77,7 @@ public class InflectionMLTest {
 				pair("Found a few matches", 4), pair("Found several matches", 8),
 				pair("Found many matches", 11));
 
-		assertInflects("Searching for <Np:items>....found <#f1:%d>",
+		assertInflects("Searching for <np:items>....found <#f1:%d>",
 				pair("Searching for items....found none", 0),
 				pair("Searching for items....found one", 1),
 				pair("Searching for items....found a couple", 2),
@@ -109,7 +109,7 @@ public class InflectionMLTest {
 				pair("7 corpuses found", 7, "corpuses"),
 				pair("7 brothers found", 7, "brothers"));
 
-		assertInflects("<#:%d> <Nc:%s> found", pair("7 maxima found", 7, "maximum"),
+		assertInflects("<#:%d> <nc:%s> found", pair("7 maxima found", 7, "maximum"),
 				pair("7 formulae found", 7, "formula"),
 				pair("7 corpora found", 7, "corpus"),
 				pair("7 brethren found", 7, "brother"));
@@ -190,7 +190,7 @@ public class InflectionMLTest {
 
 		// FIXME Don't require spaces to mark out directives.
 		// - Ben Culkin, 10/28/18
-		assertCInflects("Searching for <Np:items> ....found <#f1:$1>",
+		assertCInflects("Searching for <np:items> ....found <#f1:$1>",
 				pair("Searching for items ....found none", 0),
 				pair("Searching for items ....found one", 1),
 				pair("Searching for items ....found a couple", 2),
@@ -222,7 +222,7 @@ public class InflectionMLTest {
 				pair("7 corpuses found", 7, "corpuses"),
 				pair("7 brothers found", 7, "brothers"));
 
-		assertCInflects("<#:$1> <Nc:$2> found", pair("7 maxima found", 7, "maximum"),
+		assertCInflects("<#:$1> <nc:$2> found", pair("7 maxima found", 7, "maximum"),
 				pair("7 formulae found", 7, "formula"),
 				pair("7 corpora found", 7, "corpus"),
 				pair("7 brethren found", 7, "brother"));

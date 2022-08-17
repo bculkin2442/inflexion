@@ -103,7 +103,8 @@ public class InflectionML {
 
 			final Set<String> optionSet = new HashSet<>();
 
-			boolean doCaseFold = false;
+			char ch = command.charAt(0);
+			boolean doCaseFold = Character.isUpperCase(ch);
 
 			final Map<Character, Integer> numOpts = new HashMap<>();
 			numOpts.put('w', 11);
@@ -265,6 +266,7 @@ public class InflectionML {
 							"Count setter must take a number as a parameter", nfex);
 				}
 				break;
+			case "n":
 			case "N":
 				final Noun noun = nounDB.getNoun(text);
 
