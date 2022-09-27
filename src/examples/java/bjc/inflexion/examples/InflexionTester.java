@@ -88,7 +88,10 @@ public class InflexionTester {
 		final String fname = scn.nextLine().trim();
 
 		try (InputStream compressedStream = new FileInputStream(fname)) {
+			// both managed by above stream
+			@SuppressWarnings("resource")
 			final InputStream stream = new BZip2CompressorInputStream(compressedStream);
+			@SuppressWarnings("resource")
 			final BufferedReader reader
 					= new BufferedReader(new InputStreamReader(stream));
 
